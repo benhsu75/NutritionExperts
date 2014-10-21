@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %} Nutrition Experts {% endblock %}
+
+{% block head %}
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/about.css' %}">
+{% endblock %}
+
+{% block body %}
+	<div class="header">
+		<a class="logo" href="#">Nutrition Experts</a>
+		<div class="right-header">
+			<a class="nav-item" href="#">About</a>
+			<a class="nav-item" href="#">Sign Up</a>
+			<a class="nav-item" href="#">Log In</a>
+		</div>
+	</div>
+	<div class="content">
+		<div id="about-menu">
+			<a href="#" class="about-menu-item">About</a>
+			<a href="#" class="about-menu-item">Experts</a>
+			<a href="#" class="about-menu-item">FAQ</a>
+		</div>
+		<div id="general-about-content">
+			<h1>The Expert Opinion on Nutrition Questions</h1>
+			<div id="first-feature">
+				<span>1</span>
+				<span>The discussion starts with a high quality question from people like you</span>
+			</div>
+			<div id="second-feature">
+				<span>2</span>
+				<span>Questions are answered exclusively by vetted Nutrition experts such as PhDs and Dietitians.</span>
+			</div>
+			<div id="third-feature">
+				<span>3</span>
+				<span>Experts can continue discussing and members can join in and ask follow up questions </span>
+			</div>
+		</div>
+	</div>
+	
+{% endblock %}
