@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %} Nutrition Experts {% endblock %}
+
+{% block head %}
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/landing.css' %}">
+{% endblock %}
+
+{% block body %}
+	<div class="header">
+		<a class="logo" href="#">Experts on Nutrition</a>
+		<div class="right-header">
+			<a class="about" href="#">About</a>
+			<a class="signup" href="#">Sign Up</a>
+		</div>
+	</div>
+	<div class="content">
+		<div class="question-box">
+			<span class="question-upvote-count">14</span>
+			<span class="question-text">What are vitamin and mineral deficiencies that vegetarians should be wary of?</span>
+		</div>
+		<div class="question-box">
+			<span class="question-upvote-count">9</span>
+			<span class="question-text">What is the premise behind the ketogenic diet? Are there any (and if so, what are they) potential harms of trying to keto diet?</span>
+		</div>
+	</div>
+	
+{% endblock %}

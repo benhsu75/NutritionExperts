@@ -1,0 +1,90 @@
+.header {
+	height: 60px;
+	background-color:#255CB3;
+	border-bottom: 1px solid gray;
+}
+
+.logo {
+	font-size: 26px;
+	margin-left: 275px;
+	position: relative;
+	top: 25%;
+	color: white;
+	text-shadow: 1px 1px #000000;
+	cursor: pointer;
+	font-family: Helvetica;
+	float: left;
+	text-decoration: none;
+}
+
+.right-header {
+	float: right;
+	font-size: 18px;
+	color: white;
+	text-shadow: 1px 1px #000000;
+	cursor:pointer;
+	height: 100%;
+}
+
+.signup {
+	color: white;
+	position: relative;
+	top: 19px;
+	margin-left: 20px;
+	margin-right: 275px;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.signup:visited, .signup:focus, .signup:active {
+	text-decoration: none;
+	color:white;
+}
+
+.signup:hover {
+	text-decoration: underline;
+}
+
+.about {
+	color: white;
+	position: relative;
+	top: 19px;
+	margin-left: 20px;
+	margin-right: 20px;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.about:visited, .about:focus, .about:active {
+	text-decoration: none;
+	color:white;
+}
+
+.about:hover {
+	text-decoration: underline;
+}
+
+.content {
+	display: block;
+	width: 900px;
+	background-color:white;
+	height:2000px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-top: 50px;
+}
+
+.question-box {
+	color: #010203;
+	padding: 10px 20px;
+}
+
+.question-text {
+
+}
+
+.question-upvote-count {
+
+}
+
+
