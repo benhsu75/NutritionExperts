@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %} {% endblock %}</title>
+
+	{% load staticfiles %}
+	<link rel="shortcut icon" type="image/png" 
+          href="{% static 'mainapp/images/favicon.ico' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/base.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/about.css' %}">
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+	{% block head %}{% endblock %}
+</head>
+
+<body>
+	<div class="header">
+		<div class="right-header-container">
+			<a class="logo" href="/">Nutritious</a>
+		</div>
+	</div>
+	<div class="content">
+		<div id="about-menu">
+			<a href="/about" id="about-nav" class="about-menu-item">About</a>
+			<a href="/mission" id="mission-nav" class="about-menu-item">Mission</a>
+			<a href="/experts" id="experts-nav" class="about-menu-item">Experts</a>
+			<a href="/faq" id="faq-nav" class="about-menu-item">FAQ</a>
+		</div>
+		<div id="back-bar">
+			<div id="back-button" style="display:none;">
+				<img src="{% static 'mainapp/images/back-arrow.png' %}">
+				Back to <span class="back-to-page bold">Experts</span>
+			</div>
+		</div>
+		{% block content %}{% endblock %}
+	</div>
+	
+</body>
+{% block afterscript %}{% endblock %}
+</html>

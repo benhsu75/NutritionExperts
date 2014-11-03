@@ -1,0 +1,43 @@
+{% extends "mainapp/base/base_about.html" %}
+
+{% block title %}Expert | Nutrition Experts{% endblock %}
+
+{% block afterscript %}
+	<script type="text/javascript">
+
+		/* Set correct back-to page */
+		var from_page = {{ from_page | safe }};
+		if(from_page == 0) { // Came from About page
+			$('.back-to-page').text("About");
+		}
+		else if(from_page == 1) { // Came from Experts page
+			$('.back-to-page').text("Experts");
+		}
+
+		$('#back-button').click(function() {
+			history.go(-1);
+		});
+
+
+		/* Hide the about menu and show the back button instead */
+		$('#about-menu').hide();
+		$('#back-button').show();
+	</script>
+{% endblock %}
+
+{% block content %}
+	<div class="content-container">
+		<div class="signup-information">
+			<span class="large-title-text">Are you a nutrition expert?</span><br><br>
+			<p class="signup-text">We are looking for experts like dietitians, professors, researchers, nutrionists, and others to help us build a community of Nutrition knowledge sharing. <span class="bold">Fill in the form and we'll be in contact soon!</span></p>
+		</div>
+		<form class="signup-form">
+			<input type="text" name="first-name" placeholder="First name" class="half-text-field"><div style="width: 8px; display: none;"></div>
+			<input type="text" name="last-name" placeholder="Last name" class="half-text-field">
+			<input type="text" name="email" placeholder="Email address" class="full-text-field">
+			<textarea class="full-text-area" placeholder="Tell us about your nutrition credentials and your academic and professional experience in nutrition. What are your areas of expertise?"></textarea>
+			<textarea class="full-text-area" placeholder="Anything else you want to tell us? Link us to your website, research, or any other information!"></textarea><br><br>
+			<button class="large-submit-button">Send</button>
+		</form>
+	</div>
+{% endblock %}

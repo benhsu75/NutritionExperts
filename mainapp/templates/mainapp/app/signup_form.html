@@ -1,0 +1,28 @@
+{% extends "mainapp/base/base_public.html" %}
+
+{% block title %}Sign Up | Nutrition Experts{% endblock %}
+
+{% block afterscript %}
+	<script type="text/javascript">
+	</script>
+{% endblock %}
+
+{% block content %}
+	<div class="white-content-box">
+		<div class="signup-information">
+			<span class="large-title-text">Join the <span class="bold">Nutritious</span> knowledge community</span><br><br>
+			<p class="signup-text">Signing up allows you to <span class="bold">upvote</span>, <span class="bold">submit a question</span> to be asked, and <span class="bold">join the discussion.</span></p>
+		</div>
+		{% load staticfiles %}
+		<a class="twitter-sign-in" href="#"><img src="{% static 'mainapp/images/sign-in-with-twitter.png' %}"></a>
+		<img src="{% static 'mainapp/images/or-line.png' %}">
+		<form class="signup-form">
+			<input type="text" name="first-name" placeholder="First name" class="half-text-field"><div style="width: 8px; display: none;"></div>
+			<input type="text" name="last-name" placeholder="Last name" class="half-text-field">
+			<input type="text" name="email" placeholder="Email address" class="full-text-field">
+			<input type="text" name="password" placeholder="Password" class="full-text-field">
+			<input type="text" name="confirm-password" placeholder="Confirm password" class="full-text-field"><br><br>
+			<button class="large-submit-button">Next</button>
+		</form>
+	</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Nutritious</title>
+
+	{% load staticfiles %}
+	<link rel="shortcut icon" type="image/png" 
+          href="{% static 'mainapp/images/favicon.ico' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/landing.css' %}">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+
+<body>
+	<div id="landing-header">
+		<a id="logo" href="/">Nutritious</span>
+		<a id="header-item" href="/about">About</a>
+	</div>
+	<div id="landing-blue-section">
+		<span id="begins-text">Health begins with Nutrition, and Nutrition begins with</span>
+		<span id="knowledge-text">Knowledge</span>
+		<form class="landing-submit-email">
+			<input class="email-text-field" type="text" name="emailaddress" placeholder="We're launching soon - enter your email to join the community!">
+			<button class="large-submit-button">Join</button>
+		</form>
+	</div>
+	<div id="landing-white-section">
+		<span id="about-text"><span class="bold">Nutritious</span> is a platform for <span class="bold">relevant, unbiased, and evidence-backed</span> nutrition discourse</span>
+		<div id="information-section">
+			<div class="feature-box">
+				<div class="feature-image"><img id="hand-raise" src="{% static 'mainapp/images/hand-raise.png' %}"></div>
+				<div class="feature-text">The discussion starts with an <span class="bold">intriguing question</span> asked by anyone</div>
+			</div>
+			<div class="feature-box">
+				<div class="feature-image"><img id="brain" src="{% static 'mainapp/images/brain.png' %}"></div>
+				<div class="feature-text">Questions are answered exclusively by <span class="bold">vetted Nutrition experts</span> such as PhDs and Dietitians.</div>
+			</div>
+			<div class="feature-box">
+				<div class="feature-image"><img id="join-discussion" src="{% static 'mainapp/images/join-discussion.png' %}"></div>
+				<div class="feature-text">Community members can then <span class="bold">join the disussion</span> with experts</span></div>
+			</div>
+		</div>
+		<div id="learn-more">
+			<a href="/about" id="learn-more-text">Learn More</a>
+			<img src="{% static 'mainapp/images/chevron.png' %}">
+		</div>
+	</div>
+</body>
+</html>

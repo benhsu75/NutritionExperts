@@ -3,15 +3,25 @@ from django.contrib import admin
 from mainapp import views
 
 urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
+    
+    # App pages
+    url(r'^feed/', views.feed, name="feed"),
 
-    # Landing Page
-    # url(r'^$', views.landing, name="landing"),
+    # Favicon
+    url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/images/favicon.ico'}),
 
     # About pages
-    url(r'^$', views.about, name="about"),
-
-    # Login/Signup
-    # url(r'^$', views.signup, name="signup"),
-
+    url(r'^$', views.landing, name="landing"),
+    url(r'^about/', views.about, name="about"),
+    url(r'^mission/', views.mission, name="mission"),
+    url(r'^experts/', views.experts, name="experts"),
+    url(r'^faq/', views.faq, name="faq"),
+    url(r'^signup_form/', views.signup_form, name="signup_form"),
+    url(r'^signup_profile/', views.signup_profile, name="signup_profile"),
+    url(r'^expert_contact/(?P<from_page>\d+)/$', views.expert_contact, name="expert_contact"),
+    url(r'^expert_contact/', views.expert_contact, name="expert_contact"),
+    url(r'^expert_profile/', views.expert_profile, name="expert_profile"),
+    url(r'^user_profile/', views.user_profile, name="user_profile"),
+    url(r'^expert_update/', views.expert_update, name="expert_update"),
+    url(r'^user_update/', views.user_update, name="user_update"),
 )

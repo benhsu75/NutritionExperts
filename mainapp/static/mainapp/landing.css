@@ -1,90 +1,191 @@
-.header {
-	height: 60px;
-	background-color:#255CB3;
-	border-bottom: 1px solid gray;
+body {
+	font-family: OpenSans;
+	background-color: #FFF;
+	margin: 0;
 }
 
-.logo {
-	font-size: 26px;
-	margin-left: 275px;
-	position: relative;
-	top: 25%;
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+/* HEADER */
+#landing-header {
+	height: 90px;
+}
+
+#landing-header > #logo{
+	font-size: 32px;
+	font-weight: bold;
+	position: absolute;
+	left: 120px;
+	text-decoration: none;
+	color: #34A2B3;
+	margin-top: 21px;
+}
+
+#landing-header > #logo:hover {
+	color: #A5DCE5;
+}
+
+#landing-header > #header-item{
+	font-size: 16px;
+	font-weight: bold;
+	position: absolute;
+	right: 250px;
+	text-decoration: none;
+	color: #34A2B3;
+	margin-top: 38px;
+}
+
+#landing-header > #header-item:hover {
+	color: #A5DCE5;
+}
+
+
+/* MIDDLE */
+#landing-blue-section {
+	background-color: #34A2B3;
+	text-align: center;
+	padding-top:40px;
+	padding-bottom: 40px;
+}
+
+#landing-blue-section > #begins-text {
+	font-size: 36px;
 	color: white;
-	text-shadow: 1px 1px #000000;
-	cursor: pointer;
-	font-family: Helvetica;
-	float: left;
-	text-decoration: none;
-}
-
-.right-header {
-	float: right;
-	font-size: 18px;
-	color: white;
-	text-shadow: 1px 1px #000000;
-	cursor:pointer;
-	height: 100%;
-}
-
-.signup {
-	color: white;
-	position: relative;
-	top: 19px;
-	margin-left: 20px;
-	margin-right: 275px;
-	cursor: pointer;
-	text-decoration: none;
-}
-
-.signup:visited, .signup:focus, .signup:active {
-	text-decoration: none;
-	color:white;
-}
-
-.signup:hover {
-	text-decoration: underline;
-}
-
-.about {
-	color: white;
-	position: relative;
-	top: 19px;
-	margin-left: 20px;
-	margin-right: 20px;
-	cursor: pointer;
-	text-decoration: none;
-}
-
-.about:visited, .about:focus, .about:active {
-	text-decoration: none;
-	color:white;
-}
-
-.about:hover {
-	text-decoration: underline;
-}
-
-.content {
 	display: block;
-	width: 900px;
-	background-color:white;
-	height:2000px;
+}
+
+#landing-blue-section > #knowledge-text {
+	font-weight: bold;
+	font-size: 56px;
+	color: white;
+	display: block;
+	/*margin-top: 10px;*/
+}
+
+.landing-submit-email {
+	margin-top: 35px;
+}
+
+.landing-submit-email > .email-text-field {
+	height:45px; 
+	width: 685px;
+	display: inline-block;
+	font-size: 18px;
+	padding-left: 15px;
+	background-color: white;
+	border: 0px solid #A4AFB1;
+	color: #125660;
+	font-family: OpenSans-Light;
+}
+
+.landing-submit-email > .email-text-field:focus {
+    outline-width: 0;
+}
+
+.landing-submit-email > .large-submit-button {
+	width:120px;
+	color: #195E69;
+	display: inline-block;
+	height: 45px;
+	background-color: #E3E3E3;
+	text-align: center;
+	vertical-align: top;
+	border: #D4D4D4;
+	border-style: solid;
+	border-width: 0px;
+	font-size: 18px;
+	outline-width: 0;
+	font-family: OpenSans-Light;
+}
+
+.landing-submit-email > .large-submit-button:hover {
+    cursor: pointer;
+    background-color: #CECECE;
+}
+
+/* BOTTOM */
+#landing-white-section {
+	text-align: center;
+	padding-bottom: 60px;
+}
+
+#about-text {
+	width: 1050px;
+	display: block;
+	font-size: 44px;
+	color: #364143;
+	margin: 25px auto;
+}
+
+#information-section {
+	margin-top: 10px;
 	margin-left: auto;
 	margin-right: auto;
-	padding-top: 50px;
+	display: inline-block;
 }
 
-.question-box {
-	color: #010203;
-	padding: 10px 20px;
+#information-section > .feature-box {
+	display: inline-block;
+	width: 250px;
+	top: 0;
+	vertical-align: top;
 }
 
-.question-text {
-
+.feature-box > .feature-image {
+	margin-left: auto;
+	margin-right: auto;
 }
 
-.question-upvote-count {
-
+#hand-raise {
+	height: 57px;
 }
 
+#brain {
+	height: 52px;
+}
 
+#join-discussion {
+	height: 50px;
+}
+
+.feature-text {
+	margin-top: 5px;
+	width: 225px;
+	text-align: center;
+	font-size: 16px;
+	color: #364143;
+}
+
+#learn-more {
+	margin-top: 40px;
+	font-size: 24px;
+	font-weight: bold;
+}
+
+#learn-more:hover {
+	cursor: pointer;
+}
+
+#learn-more:hover > #learn-more-text, #learn-more:hover > img {
+	opacity: .5;
+}
+
+#learn-more > img {
+	vertical-align: top;
+	margin-left: 7px;
+	margin-top: 8px;
+}
+
+#learn-more-text, #learn-more-text:visited {
+	vertical-align: top;
+	text-decoration: none;
+	color: #364143;
+}
+
+.bold {
+	font-weight: bold;
+}

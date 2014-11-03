@@ -1,0 +1,25 @@
+{% extends "mainapp/base/base_about.html" %}
+
+{% block title %}About | Nutrition Experts{% endblock %}
+
+{% block afterscript %}
+	<script type="text/javascript">
+		$('#about-nav').addClass('selected');
+	</script>
+{% endblock %}
+
+{% block content %}
+	<div class="content-container">
+		<div class="main-text">We believe that being healthful starts with nutrition, and that good nutrition starts with <span class="bold">knowledge</span></div>
+		<p>
+			Nutritious is a platform to discuss, learn about, and explore nutrition knowledge. It all starts with a question, which is answered by a community of academic and professional experts in nutrition. 
+		</p>
+		<p>If you are someone super passionate about nutrition and want exclusive access to the community, <a href="#" class="text-link">email us</a>.</p>
+		<p>Are you an expert? We’d <a href="/expert_contact/0/" class="text-link">love to talk</a> about how we can change nutrition discourse together.</p>
+		<form id="interest-sign-up">
+			<input class="large-text-field" type="text" name="emailaddress" placeholder="Enter your email to hear when we launch!">
+			<button class="large-submit-button">Submit</button>
+		</form>
+	</div>
+	
+{% endblock %}

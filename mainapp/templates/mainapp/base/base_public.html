@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{% block title %} {% endblock %}</title>
+
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/base.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/about.css' %}">
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+	{% block head %}{% endblock %}
+</head>
+
+<body>
+	<div class="header">
+		<div class="right-header-container">
+			<a class="logo" href="/about">Nutritious</a>
+			<div class="temp-div">
+				<div class="right-header not-logged-in" >
+					<div class="nav-item"><a href="/signup_form">Sign Up</a></div>
+					<div class="nav-item"><a href="/about">About</a></div>
+					<div class="nav-item"><a href="#" class="login-button">Log In</a></div>
+				</div>
+			</div>
+			
+			<div class="right-header logged-in" style="display:none;">
+				<div class="nav-item"><a href="#">Home</a></div>
+				<div class="nav-item"><a href="#">About</a></div>
+				<div class="nav-item account-item">
+					<img class="dropdown-triangle" src="{% static 'mainapp/images/dropdown-triangle.png' %}">
+					<span class="account-name">Chris Jones</span>
+					<img class="account-image" src="{% static 'mainapp/images/chris-jones.png' %}">
+					<div class="account-dropdown" style="display: none;">
+						<div class="dropdown-menu">
+							<a href="#" class="dropdown-item">Profile</a>
+							<a href="#" class="dropdown-item">My Account</a>
+							<div class="dropdown-break"></div>
+							<a href="#" class="dropdown-item">Log Out</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content">
+		{% block content %}{% endblock %}
+	</div>
+
+	<div class="login-lightbox" style="display:none;">
+		<span class="close-lightbox">Close</span>
+		<!-- <span class="login-lightbox-text">Discuss</span> -->
+		<span class="login-logo">Nutritious</span>
+		<form class="lightbox-login-form">
+			<input class="login-text-field" type="text" name="emailaddress" placeholder="Email"><br><br>
+			<input class="login-text-field" type="text" name="password" placeholder="Password"><br><br>
+			<button class="login-submit-button">Log In</button>
+		</form>
+	</div>
+	<div class="login-overlay" style="display:none;">
+	</div>
+</body>
+<script type="text/javascript">
+	$('.login-button').click(function() {
+		$('.login-lightbox').show();
+		$('.login-overlay').show();
+	});
+
+	$('.close-lightbox').click(function() {
+		$('.login-lightbox').hide();
+		$('.login-overlay').hide();
+	});
+
+	$('.login-overlay').click(function() {
+		$('.login-lightbox').hide();
+		$('.login-overlay').hide();
+	});
+
+	$('.nav-item.account-item').click(function(event) {
+		if($('.account-dropdown').is(':visible')) {
+			$('.account-dropdown').hide();
+		}
+		else {
+			$('.account-dropdown').show();
+			event.stopPropagation();
+		}
+		
+	});
+
+	$('body').click(function() {
+		if($('.account-dropdown').is(':visible')) {
+			$('.account-dropdown').hide();
+		}
+	});
+
+</script>
+{% block afterscript %}{% endblock %}
+</html>
