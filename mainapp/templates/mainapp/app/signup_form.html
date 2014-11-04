@@ -15,14 +15,14 @@
 		</div>
 		{% load staticfiles %}
 		<a class="twitter-sign-in" href="#"><img src="{% static 'mainapp/images/sign-in-with-twitter.png' %}"></a>
-		<img src="{% static 'mainapp/images/or-line.png' %}">
+		<img style="margin-bottom: 30px;" src="{% static 'mainapp/images/or-line.png' %}">
 		<form class="signup-form">
 			<input type="text" name="first-name" placeholder="First name" class="half-text-field"><div style="width: 8px; display: none;"></div>
 			<input type="text" name="last-name" placeholder="Last name" class="half-text-field">
 			<input type="text" name="email" placeholder="Email address" class="full-text-field">
 			<input type="text" name="password" placeholder="Password" class="full-text-field">
 			<input type="text" name="confirm-password" placeholder="Confirm password" class="full-text-field"><br><br>
-			<button class="large-submit-button">Next</button>
+			<button class="large-submit-button">Join</button>
 		</form>
 	</div>
 {% endblock %}

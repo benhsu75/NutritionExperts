@@ -125,7 +125,7 @@ body {
 	height: 100%;
 }
 
-.temp-div {
+.wrapper {
 	position: absolute;
 	width: 900px;
 }
@@ -149,7 +149,7 @@ a.logo:hover {
 	color: #D6F2F6;
 }
 
-.temp-div> .right-header {
+.wrapper > .right-header {
 	/*margin-left: 540px;*/
 	position: absolute;
 	right: 0;
@@ -517,6 +517,10 @@ a.logo:hover {
 	font-family: OpenSans-Bold;
 }
 
+.filter-type:hover {
+	text-decoration: underline;
+}
+
 .filter-type {
 	padding-left: 0px;
 	padding-right: 30px;
@@ -540,6 +544,11 @@ a.logo:hover {
 	margin-bottom:10px;
 }
 
+.feed-item:hover {
+	background-color: #DCE0E0;
+	cursor: pointer;
+}
+
 .feed-item > .upvote-item {
 	width: 60px;
 	display: inline-block;
@@ -550,7 +559,7 @@ a.logo:hover {
 }
 
 .feed-item > .upvote-item:hover {
-	opacity: .7;
+	opacity: .5;
 	cursor: pointer;
 }
 
@@ -567,11 +576,13 @@ a.logo:hover {
 .feed-item > .question-text {
 	width: 650px;
 	display: inline-block;
-	font-size: 14px;
+	font-size: 15px;
 	text-align: left;
 	left: 60px;
 	color: #565656;
 	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 .feed-item > .experts-pane {
@@ -588,6 +599,10 @@ a.logo:hover {
 	vertical-align: middle;
 	margin-left: 5px;
 	margin-right: 5px;
+}
+
+.feed-item > .experts-pane > img:hover {
+	opacity: .7;
 }
 
 /* Sign up styles */
@@ -685,11 +700,114 @@ a.logo:hover {
 	display: block;
 }
 
+.twitter-sign-in:hover {
+	opacity: .6;
+}
+
 /* GLOBALS */
 .bold {
 	font-family: OpenSans-Bold;
 }
 
+.semibold {
+	font-family: OpenSans-Semibold;
+}
+
+
+/* EXPERT PROFILE */
+.left-profile-panel {
+	vertical-align: top;
+	display: inline-block;
+	width: 210px;
+	text-align: center;
+	margin-right: 60px;
+}
+
+.right-profile-panel {
+	vertical-align: top;	
+	display: inline-block;
+	width: 550px;
+	text-align: left;
+}
+
+.left-profile-panel > .follow-button {
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #34A2B3;
+	color: white;
+	width: 210px;
+	height: 38px;
+	font-size: 20px;
+	border-radius: 3px;
+	text-align: center;
+	vertical-align: middle;
+	display: table-cell;
+}
+
+.left-profile-panel > .follow-button:hover {
+	opacity: .8;
+}
+
+
+.left-profile-panel > .follow-button:hover {
+	cursor: pointer;
+}
+
+.primary-information {
+	display: block;
+}
+
+.secondary-information {
+	margin-top: 10px;
+	font-size: 18px;
+}
+
+.expert-picture {
+	width:210px;
+	height:210px;
+}
+
+.expert-badge {
+	width: 92px;
+	height: 30px;
+	margin-left: 20px;
+}
+
+.expert-name {
+	font-size: 30px;
+}
+
+.expert-summary {
+	text-align: left;
+	font-size: 16px;
+}
+
+.areas-expertise-label {
+	font-weight: bold;
+	display: block;
+}
+
+.count-section {
+	margin-bottom: 15px;
+}
+
+.count-item {
+	display: inline-block;
+	color: #588F98;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.count-item:hover {
+	opacity: .6;
+	cursor: pointer;
+}
+
+.count-item > .number-count {
+	font-size: 32px;
+	display: block;
+	font-weight: bold;
+}
 
 /* FONTS */
 @font-face {

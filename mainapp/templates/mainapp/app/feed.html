@@ -4,6 +4,13 @@
 
 {% block afterscript %}
 	<script type="text/javascript">
+	$('.filter-type').click(function() {
+		if(!$(this).hasClass('selected')) {
+			$('.filter-type').removeClass('selected');
+			$(this).addClass('selected');
+
+		}
+	});
 	</script>
 {% endblock %}
 
@@ -19,7 +26,7 @@
 				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
 				<span class="vote-count">8</span>
 			</div>
-			<p class="question-text">Is there scientific evidence that a ketogenic diet is particularly effective for fat loss? What are the dangers of forcing your body into ketosis? Test words that are pretty common. Just to increase.</p>
+			<div class="question-text">Is there scientific evidence that a ketogenic diet is particularly effective for fat loss? What are the dangers of forcing your body into ketosis? Test words that are pretty common.</div>
 			<div class="experts-pane">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
@@ -32,7 +39,7 @@
 				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
 				<span class="vote-count">8</span>
 			</div>
-			<p class="question-text">What's the difference between soluble and insoluble fiber?</p>
+			<div class="question-text">What's the difference between soluble and insoluble fiber?</div>
 			<div class="experts-pane">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
@@ -45,7 +52,7 @@
 				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
 				<span class="vote-count">8</span>
 			</div>
-			<p class="question-text">What's the difference between soluble and insoluble fiber?</p>
+			<div class="question-text">What's the difference between soluble and insoluble fiber?</div>
 			<div class="experts-pane">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
@@ -58,7 +65,7 @@
 				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
 				<span class="vote-count">8</span>
 			</div>
-			<p class="question-text">What's the difference between soluble and insoluble fiber?</p>
+			<div class="question-text">What's the difference between soluble and insoluble fiber?</div>
 			<div class="experts-pane">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
@@ -71,7 +78,7 @@
 				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
 				<span class="vote-count">8</span>
 			</div>
-			<p class="question-text">What's the difference between soluble and insoluble fiber?</p>
+			<div class="question-text">What's the difference between soluble and insoluble fiber?</div>
 			<div class="experts-pane">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
@@ -84,7 +91,7 @@
 				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
 				<span class="vote-count">8</span>
 			</div>
-			<p class="question-text">What's the difference between soluble and insoluble fiber?</p>
+			<div class="question-text">What's the difference between soluble and insoluble fiber?</div>
 			<div class="experts-pane">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
@@ -97,7 +104,7 @@
 				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
 				<span class="vote-count">8</span>
 			</div>
-			<p class="question-text">What's the difference between soluble and insoluble fiber?</p>
+			<div class="question-text">What's the difference between soluble and insoluble fiber?</div>
 			<div class="experts-pane">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
@@ -110,7 +117,7 @@
 				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
 				<span class="vote-count">8</span>
 			</div>
-			<p class="question-text">What's the difference between soluble and insoluble fiber?</p>
+			<div class="question-text">What's the difference between soluble and insoluble fiber?</div>
 			<div class="experts-pane">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
@@ -123,72 +130,7 @@
 				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
 				<span class="vote-count">8</span>
 			</div>
-			<p class="question-text">What's the difference between soluble and insoluble fiber?</p>
-			<div class="experts-pane">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-			</div>
-		</div>
-		<div class="feed-item">
-			<div class="upvote-item">
-				{% load staticfiles %}
-				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
-				<span class="vote-count">8</span>
-			</div>
-			<p class="question-text">What's the difference between soluble and insoluble fiber?</p>
-			<div class="experts-pane">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-			</div>
-		</div>
-		<div class="feed-item">
-			<div class="upvote-item">
-				{% load staticfiles %}
-				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
-				<span class="vote-count">8</span>
-			</div>
-			<p class="question-text">What's the difference between soluble and insoluble fiber?</p>
-			<div class="experts-pane">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-			</div>
-		</div>
-		<div class="feed-item">
-			<div class="upvote-item">
-				{% load staticfiles %}
-				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
-				<span class="vote-count">8</span>
-			</div>
-			<p class="question-text">What's the difference between soluble and insoluble fiber?</p>
-			<div class="experts-pane">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-			</div>
-		</div>
-		<div class="feed-item">
-			<div class="upvote-item">
-				{% load staticfiles %}
-				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
-				<span class="vote-count">8</span>
-			</div>
-			<p class="question-text">What's the difference between soluble and insoluble fiber?</p>
-			<div class="experts-pane">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
-			</div>
-		</div>
-		<div class="feed-item">
-			<div class="upvote-item">
-				{% load staticfiles %}
-				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
-				<span class="vote-count">8</span>
-			</div>
-			<p class="question-text">What's the difference between soluble and insoluble fiber?</p>
+			<div class="question-text">What's the difference between soluble and insoluble fiber?</div>
 			<div class="experts-pane">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">

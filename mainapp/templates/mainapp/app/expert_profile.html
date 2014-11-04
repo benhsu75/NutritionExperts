@@ -10,24 +10,36 @@
 {% block content %}
 	<div class="white-content-box">
 		<div class="left-profile-panel">
-			<img class="profile picture" src="">
-			<div class="followers">
-				
+			{% load staticfiles %}
+			<img class="expert-picture" src="{% static 'mainapp/images/expert_image.png' %}">
+			<div class="count-section">
+				<div class="count-item">
+					<span class="number-count">99</span>
+					Followers
+				</div>
+				<div class="count-item">
+					<span class="number-count">26</span>
+					Answers
+				</div>
 			</div>
-			<div class="answers">
-				
-			</div>
-			<button class="follow-button">Follow</button>
+			
+			<div class="follow-button">Follow</div>
 		</div>
 		<div class="right-profile-panel">
-			<span>Bart de Jonghe, Ph.D.</span>
-			<img src="">
-			<a class="website" href=""></a>
+			<div class="primary-information">
+				<span class="expert-name semibold">Bart de Jonghe, Ph.D.</span>
+				<img class="expert-badge" src="{% static 'mainapp/images/expert_badge.png' %}">
+			</div>
+			<div class="secondary-information">
+				<span class="title">Assistant Professor of Nursing</span>,
+				<span class="institution">University of Pennsylvania</span>
+			</div>
+			<a class="website" target="_blank" href="http://www.nursing.upenn.edu/faculty/profile.asp?pid=2960">Website</a>
 			<p class="expert-summary">
-				
+				Dr. De Jonghe received his Ph.D. in Nutritional Sciences from the Pennsylvania State University in 2006, after which he entered a two-year Postdoctoral Fellowship in Neurophysiology at the Monell Chemical Senses Center to study nausea, vomiting and malaise. Dr. De Jonghe’s research focuses on the nutritional, physiological, neuronal, and cellular signaling controls of energy balance with relevance to obesity, type 2 diabetes, and chemotherapy-induced nausea and vomiting.
 			</p>
-			<span class="areas-expertise">Areas of expertise</span>
-			<span>Eating Disorders, Energy Balance, Basic Nutrition</span>
+			<span class="areas-expertise-label">Areas of expertise</span>
+			<span class="">Eating Disorders, Energy Balance, Basic Nutrition</span>
 
 		</div>
 	</div>

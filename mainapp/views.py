@@ -9,7 +9,7 @@ def landing(request):
 	})
 	return HttpResponse(template.render(context))
 
-# ABOUT (4 PAGES)
+# ABOUT (5 PAGES)
 def about(request):
 	template = loader.get_template('mainapp/about/about.html')
 	context = RequestContext(request, {
@@ -48,35 +48,23 @@ def feed(request):
 	})
 	return HttpResponse(template.render(context))
 	
-# Sign up step 1
 def signup_form(request):
 	template = loader.get_template('mainapp/app/signup_form.html')
 	context = RequestContext(request, {
 	})
 	return HttpResponse(template.render(context))
 
-# Sign up step 2
-def signup_profile(request):
-	template = loader.get_template('mainapp/app/signup_profile.html')
-	context = RequestContext(request, {
-	})
-	return HttpResponse(template.render(context))
-
-# Expert profile 
 def expert_profile(request):
 	template = loader.get_template('mainapp/app/expert_profile.html')
 	context = RequestContext(request, {
 	})
 	return HttpResponse(template.render(context))
 
-# User profile 
 def user_profile(request):
 	template = loader.get_template('mainapp/app/user_profile.html')
 	context = RequestContext(request, {
 	})
-	return HttpResponse(template.render(context))
-
-# Discussion 
+	return H
 def discussion(request):
 	template = loader.get_template('mainapp/app/discussion.html')
 	context = RequestContext(request, {
