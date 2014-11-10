@@ -31,4 +31,5 @@ urlpatterns = patterns('',
 
     # API Endpoints
     url(r'^api/email_signup/', endpoints.email_signup, name="email_signup"),
+    url(r'^api/expert_interest_signup/', endpoints.expert_interest_signup, name="expert_interest_signup"),
 )

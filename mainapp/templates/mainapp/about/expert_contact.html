@@ -18,6 +18,88 @@
 			history.go(-1);
 		});
 
+		$('.large-submit-button').click(function() {
+
+			var first_name = $.trim($('#first-name-field').val());
+			if(first_name == "") {
+				$('.alert-bar').removeClass('red green').addClass('red');
+        		$('.alert-bar').fadeIn().delay(2000).fadeOut(1600);
+        		$('.alert-bar').text("Please enter your first name.");
+        		$('.email-text-field').focus();	
+        		return;			
+
+			}
+			var last_name = $.trim($('#last-name-field').val());
+			if(last_name == "") {
+				$('.alert-bar').removeClass('red green').addClass('red');
+        		$('.alert-bar').fadeIn().delay(2000).fadeOut(1600);
+        		$('.alert-bar').text("Please enter your last name.");
+        		$('.email-text-field').focus();				
+        		return;
+			}
+			var email = $.trim($('#email-field').val());
+			if(email == "") {
+				$('.alert-bar').removeClass('red green').addClass('red');
+        		$('.alert-bar').fadeIn().delay(2000).fadeOut(1600);
+        		$('.alert-bar').text("Please enter an email address where we can reach you.");
+        		$('.email-text-field').focus();				
+        		return;
+			}
+			var experience_text = $.trim($('#experience-field').val());
+			if(experience_text == "") {
+				$('.alert-bar').removeClass('red green').addClass('red');
+        		$('.alert-bar').fadeIn().delay(2000).fadeOut(1600);
+        		$('.alert-bar').text("Please enter your relevant experience and information.");
+        		$('.email-text-field').focus();				
+        		return;
+			}
+			var other_text = $.trim($('#other-field').val());
+
+			var data = {
+				'first_name': first_name,
+				'last_name': last_name,
+				'email': email,
+				'experience_text': experience_text,
+				'other_text': other_text
+			};
+
+			/* POST to endpoint */
+			HELPER.post('/api/expert_interest_signup/', data, function(data) {
+				/* Clear the email text field */
+		    	
+		    	/* Handle possibilities */
+		    	var	returnData = JSON.parse(data);
+
+		        if(returnData['status'] == 1) {
+		        	$('.alert-bar').removeClass('red green').addClass('green');
+		        	$('.alert-bar').fadeIn().delay(2000).fadeOut(1600);
+		        	$('.alert-bar').text("Awesome, we're excited to talk to you. You'll hear from us soon!");
+
+		        	/* Remove text from all fields */
+		        	$('#first-name-field').val("");
+		        	$('#last-name-field').val("");
+		        	$('#email-field').val("");
+		        	$('#experience-field').val("");
+		        	$('#other-field').val("");
+		        }
+		        else {
+		        	if(returnData['error'] == 0) { // Invalid email
+		        		$('.alert-bar').removeClass('red green').addClass('red');
+		        		$('.alert-bar').fadeIn().delay(2000).fadeOut(1600);
+		        		$('.alert-bar').text("Invalid email address. Please try again.");
+		        		$('.email-text-field').focus();
+		        	}
+		        }
+			}, function(data) {
+				/* Clear the email text field */
+		    	$('.email-text-field').val("");
+
+		        alert('Error');
+			});
+		});
+
+		/* Handle submit form */
+
 
 		/* Hide the about menu and show the back button instead */
 		$('#about-menu').hide();
@@ -32,12 +114,12 @@
 			<p class="signup-text">We are looking for experts like dietitians, professors, researchers, nutrionists, and others to help us build a community of Nutrition knowledge sharing. <span class="bold">Fill in the form and we'll be in contact soon!</span></p>
 		</div>
 		<form class="signup-form">
-			<input type="text" name="first-name" placeholder="First name" class="half-text-field"><div style="width: 8px; display: none;"></div>
-			<input type="text" name="last-name" placeholder="Last name" class="half-text-field">
-			<input type="text" name="email" placeholder="Email address" class="full-text-field">
-			<textarea class="full-text-area" placeholder="Tell us about your nutrition credentials and your academic and professional experience in nutrition. What are your areas of expertise?"></textarea>
-			<textarea class="full-text-area" placeholder="Anything else you want to tell us? Link us to your website, research, or any other information!"></textarea><br><br>
-			<button class="large-submit-button">Send</button>
+			<input id="first-name-field" type="text" name="first-name" placeholder="First name" class="half-text-field"><div style="width: 8px; display: none;"></div>
+			<input id="last-name-field" type="text" name="last-name" placeholder="Last name" class="half-text-field">
+			<input id="email-field" type="text" name="email" placeholder="Email address" class="full-text-field">
+			<textarea id="experience-field" class="full-text-area" placeholder="Tell us about your nutrition credentials and your academic and professional experience in nutrition. What are your areas of expertise?"></textarea>
+			<textarea id="other-field" class="full-text-area" placeholder="Anything else you want to tell us? Link us to your website, research, or any other information!"></textarea><br><br>
+			<button type="button" class="large-submit-button">Send</button>
 		</form>
 	</div>
 {% endblock %}

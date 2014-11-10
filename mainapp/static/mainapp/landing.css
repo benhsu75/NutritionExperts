@@ -88,10 +88,10 @@ body {
 /* MIDDLE */
 #landing-blue-section {
 	/*background-color: #34A2B3;*/
-	background-image: url('images/stardust.png');
+	background-image: url('images/congruent_outline_blue.png');
 	text-align: center;
-	padding-top:110px;
-	padding-bottom: 40px;
+	padding-top:120px;
+	padding-bottom: 50px;
 }
 
 #landing-blue-section > #begins-text {
@@ -109,7 +109,7 @@ body {
 }
 
 .landing-submit-email {
-	margin-top: 25px;
+	margin-top: 40px;
 	height: 45px;
 }
 
@@ -162,15 +162,15 @@ body {
 }
 
 #about-text {
-	max-width: 1050px;
+	max-width: 800px;
 	display: block;
-	font-size: 32px;
+	font-size: 28px;
 	color: #364143;
 	margin: 25px auto;
 }
 
 #information-section {
-	margin-top: 10px;
+	margin-top: 5px;
 	margin-left: auto;
 	margin-right: auto;
 	display: inline-block;
@@ -178,9 +178,11 @@ body {
 
 #information-section > .feature-box {
 	display: inline-block;
-	width: 250px;
+	width: 210px;
 	top: 0;
 	vertical-align: top;
+	margin-left: 3px;
+	margin-right: 3px;
 }
 
 .feature-box > .feature-image {
@@ -189,34 +191,55 @@ body {
 }
 
 #hand-raise {
-	height: 57px;
-}
-
-#brain {
-	height: 52px;
-}
-
-#join-discussion {
 	height: 50px;
 }
 
+#brain {
+	height: 47px;
+}
+
+#join-discussion {
+	height: 43px;
+}
+
 .feature-text {
-	margin-top: 5px;
-	width: 225px;
+	margin: 5px auto;
+	width: 200px;
 	text-align: center;
-	font-size: 16px;
+	font-size: 15px;
 	color: #364143;
 }
 
 .learn-more {
-	margin-top: 30px;
-	font-size: 28px;
+	margin-top: 15px;
+	font-size: 24px;
 	font-weight: bold;
 	display: inline-block;
 }
 
-#manifesto {
-	margin-top: 0px;
+.manifesto {
+/*	margin-top: 30px;
+*/	font-size: 28px;
+	font-weight: bold;
+	display: inline-block;
+}
+
+.manifesto:hover {
+	cursor: pointer;
+	opacity: .5;
+}
+
+.manifesto > img {
+	vertical-align: center;
+	margin-left: 7px;
+	margin-top: 8px;
+	height: 25px;
+}
+
+.manifesto-text, .manifesto-text:visited {
+	vertical-align: top;
+	text-decoration: none;
+	color: #E1F0F5;
 }
 
 .learn-more:hover {
@@ -224,13 +247,14 @@ body {
 	opacity: .5;
 }
 
-#learn-more > img {
-	vertical-align: top;
+.learn-more > img {
+	vertical-align: center;
 	margin-left: 7px;
 	margin-top: 8px;
+	height: 22px;
 }
 
-#learn-more-text, #learn-more-text:visited {
+.learn-more-text, .learn-more-text:visited {
 	vertical-align: top;
 	text-decoration: none;
 	/*color: #364143;*/
