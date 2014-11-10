@@ -1,0 +1,96 @@
+body {
+	margin: 0 0 0 0;
+	text-align: center;
+}
+
+.fixed-background {
+	position: fixed;
+	height:100%;
+	width: 100%;
+	background-image: url(images/blue-stardust.png);
+	z-index: 0;
+}
+
+.mission-text > p {
+	margin: 0 auto;
+	width: 900px;
+	font-family: OpenSans;
+	font-size: 28px;
+	margin-top: 0;
+	text-align: center;
+	color: white;
+	padding-top: 200px;
+	padding-bottom: 250px;
+	position: relative;
+}
+
+.bold {
+	font-family: OpenSans-Bold;
+}
+
+.link {
+	text-decoration: none; 
+	color: white;
+}
+
+.link:hover {
+	opacity: .5;
+}
+
+#back-bar {
+	position:fixed;
+	left: 30px;
+	top: 30px;
+}
+
+#back-bar:hover {
+	opacity: .8;
+	cursor: pointer;
+}
+
+#back-button {
+	color: white;
+	font-family: OpenSans;
+	font-size: 22px;
+}
+
+#back-button > img {
+	height: 20px;
+	margin-right: 5px;
+}
+
+.back-to-page {
+
+}
+
+/* FONTS */
+@font-face {
+    font-family: OpenSans-Bold;
+    src: url(fonts/OpenSans-Bold.ttf);
+}
+
+@font-face {
+    font-family: OpenSans-Semibold;
+    src: url(fonts/OpenSans-Semibold.ttf);
+}
+
+@font-face {
+	font-family: OpenSans;
+	src: url(fonts/OpenSans-Regular.ttf);
+}
+
+@font-face {
+	font-family: OpenSans-Light;
+	src: url(fonts/OpenSans-Light.ttf);
+}
+
+@font-face {
+	font-family: OpenSans-ExtraBold;
+	src: url(fonts/OpenSans-ExtraBold.ttf);
+}
+
+
+
+
+
+

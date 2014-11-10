@@ -1,5 +1,5 @@
 """
-Django settings for NutritionExperts project.
+Django settings for Nutriosity project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.7/topics/settings/
@@ -30,11 +30,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
+    # 'django.contrib.admin',
+    # 'django.contrib.auth',
+    # 'django.contrib.contenttypes',
+    # 'django.contrib.sessions',
+    # 'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainapp'
 )
@@ -49,9 +49,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'NutritionExperts.urls'
+ROOT_URLCONF = 'Nutriosity.urls'
 
-WSGI_APPLICATION = 'NutritionExperts.wsgi.application'
+WSGI_APPLICATION = 'Nutriosity.wsgi.application'
 
 
 # Database
@@ -59,8 +59,10 @@ WSGI_APPLICATION = 'NutritionExperts.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_db',
+        'USER': 'root',
+        'PASSWORD': 'knowledge'
     }
 }
 

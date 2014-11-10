@@ -2,6 +2,7 @@ body {
 	font-family: OpenSans;
 	background-color: #F9F9F9;
 	padding-bottom: 40px;
+	/*background-image: url('images/stardust_@2X.png')*/
 }
 
 * {
@@ -9,6 +10,34 @@ body {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
+
+/* Alert bar */
+.alert-bar {
+	text-align: center;
+	position: fixed;
+	background-color: white;
+	margin: 0 auto;
+	top: 20px;
+	width: 800px;
+	padding: 5px 60px 5px 60px;
+	border-radius: 4px;
+	font-size: 20px;
+	left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 3;
+}
+.green {
+	border: 2px solid #d6e9c6;
+	background-color: #dff0d8;
+	color: #468847;
+}
+
+.red {
+	color: #b94a48;
+	background-color: #f2dede;
+	border: 2px solid #eed3d7;
+}
+
 
 /* LOGIN */
 .login-logo {
@@ -131,7 +160,6 @@ body {
 }
 
 .right-header-container > a.logo {
-	/*margin-left:-80px;*/
 	color: white;
 	text-decoration: none;
 	font-size: 32px;
@@ -139,8 +167,7 @@ body {
 	
 	position: absolute;               
 	top: 50%;                         
-	transform: translateY(-50%) 
-
+	transform: translateY(-50%);
 }
 
 
@@ -300,6 +327,7 @@ a.logo:hover {
 
 .content-container {
 	margin-top: 20px;
+	/*height: 100%;*/
 	margin-left: auto;
 	margin-right: auto;
 	width: 900px;
@@ -335,6 +363,10 @@ a.logo:hover {
 	font-family: OpenSans-Bold;
 }
 
+.italics {
+	font-style: italic;
+}
+
 .text-link {
 	color: #34ABBD;
 	font-family: OpenSans-Bold;
@@ -358,7 +390,7 @@ a.logo:hover {
 
 .large-text-field {
 	height:40px; 
-	width: 450px;
+	width: 600px;
 	display: inline-block;
 	font-size: 18px;
 	padding-left: 15px;
@@ -376,7 +408,7 @@ a.logo:hover {
 	width:120px;
 	color: white;
 	display: inline-block;
-	height: 42px;
+	height: 40px;
 	background-color: #34A2B3;
 	text-align: center;
 	vertical-align: top;
@@ -830,6 +862,10 @@ a.logo:hover {
 	src: url(fonts/OpenSans-Light.ttf);
 }
 
+@font-face {
+	font-family: OpenSans-ExtraBold;
+	src: url(fonts/OpenSans-ExtraBold.ttf);
+}
 
 
 

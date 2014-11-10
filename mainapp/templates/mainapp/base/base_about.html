@@ -10,6 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/about.css' %}">
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" src="{% static 'mainapp/js/helper.js' %}"></script>
 
 	{% block head %}{% endblock %}
 </head>
@@ -17,8 +18,11 @@
 <body>
 	<div class="header">
 		<div class="right-header-container">
-			<a class="logo" href="/">Nutritious</a>
+			<a class="logo" href="/">Nutriosity</a>
 		</div>
+	</div>
+	<div class="alert-bar red" style="display: none;">
+		Great, stay tuned for updates - we're excited to launch soon!
 	</div>
 	<div class="content">
 		<div id="about-menu">

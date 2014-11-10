@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext, loader
+import json
+from mainapp.models import *
 
 # LANDING
+# Also handles email signup form submit
 def landing(request):
-	template = loader.get_template('mainapp/about/landing.html')
 	context = RequestContext(request, {
 	})
+	template = loader.get_template('mainapp/about/landing.html')
 	return HttpResponse(template.render(context))
 
 # ABOUT (5 PAGES)
@@ -18,6 +21,12 @@ def about(request):
 
 def mission(request):
 	template = loader.get_template('mainapp/about/mission.html')
+	context = RequestContext(request, {
+	})
+	return HttpResponse(template.render(context))
+
+def mission2(request):
+	template = loader.get_template('mainapp/about/mission2.html')
 	context = RequestContext(request, {
 	})
 	return HttpResponse(template.render(context))

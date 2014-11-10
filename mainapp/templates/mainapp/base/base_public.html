@@ -6,8 +6,10 @@
 	{% load staticfiles %}
 	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/base.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/about.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/app.css' %}">
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" src="{% static 'mainapp/js/helper.js' %}"></script>
 
 	{% block head %}{% endblock %}
 </head>
@@ -15,7 +17,7 @@
 <body>
 	<div class="header">
 		<div class="right-header-container">
-			<a class="logo" href="/about">Nutritious</a>
+			<a class="logo" href="/about">Nutriosity</a>
 
 			<div class="wrapper" style="display:none;">
 				<div class="right-header not-logged-in" >
@@ -45,6 +47,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="content">
 		{% block content %}{% endblock %}
 	</div>
@@ -52,7 +55,7 @@
 	<div class="login-lightbox" style="display:none;">
 		<span class="close-lightbox">Close</span>
 		<!-- <span class="login-lightbox-text">Discuss</span> -->
-		<span class="login-logo">Nutritious</span>
+		<span class="login-logo">Nutriosity</span>
 		<form class="lightbox-login-form">
 			<input class="login-text-field" type="text" name="emailaddress" placeholder="Email"><br><br>
 			<input class="login-text-field" type="text" name="password" placeholder="Password"><br><br>
@@ -78,7 +81,7 @@
 		$('.login-overlay').hide();
 	});
 
-	$('.nav-item.account-item').click(function(event) {
+	$('.nav-it-em.account-item').click(function(event) {
 		if($('.account-dropdown').is(':visible')) {
 			$('.account-dropdown').hide();
 		}

@@ -1,0 +1,84 @@
+.discussion-item-container {
+}
+
+.question-content-box {
+	left: 50%;
+	margin: 0 auto;
+	margin-left: -474px;
+	width: 948px;
+	background-color: white;
+	margin-top: 50px;
+	padding: 20px 50px 40px 50px;
+	position: absolute;
+}
+
+.question-content-box > .question-text {
+	color: black;
+	text-align: left;
+	font-size: 24px;
+	font-family: OpenSans-Bold;
+}
+
+.question-content-box > .question-details {
+	margin-top: 10px;
+	color: black;
+	text-align: left;
+	font-size: 14px;
+}
+
+.question-content-box > .asked-by-user {
+	color: black;
+	font-size: 16px;
+	display: inline-block;
+	position: absolute;
+	right: 50px;
+}
+
+.asked-by-user > .asked-by-user-name {
+	font-weight: bold;
+}
+
+.answer-content-box {
+	/*position: absolute;*/
+	width: 948px;
+	margin: 0 auto;
+}
+
+.answer-content-box > .expert-profile {
+
+}
+
+.expert-profile > img {
+	width: 60px;
+
+}
+
+.expert-profile > .expert-description {
+
+}
+
+/* FONTS */
+@font-face {
+    font-family: OpenSans-Bold;
+    src: url(fonts/OpenSans-Bold.ttf);
+}
+
+@font-face {
+    font-family: OpenSans-Semibold;
+    src: url(fonts/OpenSans-Semibold.ttf);
+}
+
+@font-face {
+	font-family: OpenSans;
+	src: url(fonts/OpenSans-Regular.ttf);
+}
+
+@font-face {
+	font-family: OpenSans-Light;
+	src: url(fonts/OpenSans-Light.ttf);
+}
+
+@font-face {
+	font-family: OpenSans-ExtraBold;
+	src: url(fonts/OpenSans-ExtraBold.ttf);
+}

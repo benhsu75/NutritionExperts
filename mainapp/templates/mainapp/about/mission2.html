@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Nutriosity</title>
+
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/mission.css' %}">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+	<div class="fixed-background"></div>
+	<div id="back-bar">
+			<div id="back-button">
+				<img src="{% static 'mainapp/images/white-back-button.png' %}">
+				Back
+			</div>
+		</div>
+	<div class="mission-text">
+		<p style="font-size: 64px">
+			Health starts with nutrition, and nutrition starts with<br>
+			<span class="bold" style="font-size: 92px;">Knowledge</span>
+		</p>
+		<p style="font-size: 48px;">
+			We believe in the power of <span style="font-weight: bold; font-size: 92px;">nutrition knowledge</span>
+		</p>
+		<p style="font-size: 44px">
+			<span style="font-size: 60px;">1) It is <span class="bold" style="font-size:64px;">uniquely important</span></span><br><br>
+			People take nutrition knowledge and apply it to their own bodies - its impact is <span class="bold" style="font-size: 52px;">real</span> and	<span class="bold" style="font-size: 52px;">physical</span>
+		</p>
+
+		<p style="font-size: 44px">
+			<span style="font-size: 64px;">2) It can be <span class="bold">powerful</span></span><br><br>
+			Nutrition knowledge can empower people to <span class="bold" style="font-size: 52px;">make real changes and improve their lives</span>
+		</p>
+
+		<p style="font-size: 60px;">
+			3) But, it's<br>
+			<span class="bold" style="font-size: 150px;">broken</span><br>
+			(and very, very much so)
+		</p>
+		<p style="font-size: 48px;">
+			Nutrition is incredibly complex, personal, and controversial<br><br>
+			The internet is rife with misinformation, who knows what to believe?
+		</p>
+		<p style="font-size: 54px;">
+			So we started thinking...<br>
+			<span style="font-size: 94px; font-weight: bold;">and we wondered...</span>
+		</p>
+		<p style="font-size: 52px;">
+			What if there was a community passionate about <span class="bold" style="font-size: 54px;">evidence-backed, unbiased, and relevant</span> nutrition knowledge?
+		</p>
+		<p style="font-size: 52px;">
+			What if nutrition knowledge was disseminated by those who devote their lives to it - <span class="bold" style="font-size: 54px;">experts like PhDs, dietitians, and researchers</span>?
+		</p>
+		<p style="font-size: 52px;">
+			What if learning and reading about nutrition was <span class="bold" style="font-size: 54px;">simple, beautiful, and easy</span>?<br><br>
+			What if it was <span class="bold" style="font-size: 54px;">democratic</span> - what if <span class="bold" style="font-size: 54px;">anyone</span> could start a discussion?
+		</p>
+		<p style="color: white;">
+			<span style="font-size:124px; font-family: OpenSans-ExtraBold;"><a href="/about" class="link">Nutriosity</a></span> <br>
+			<span style="font-size: 72px; font-weight: bold; ">coming soon...</span>
+		</p>
+	</div>
+</body>
+
+<script type="text/javascript">
+	$('#back-button').click(function() {
+		history.go(-1);
+	});
+</script>
+
+</html>

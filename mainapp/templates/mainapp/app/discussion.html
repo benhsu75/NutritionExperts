@@ -8,7 +8,30 @@
 {% endblock %}
 
 {% block content %}
-	<div class="white-content-box">
+	<div class="discussion-item-container">
+		<div class="question-content-box">
+			<div class="question-text">Is there scientific evidence that a ketogenic diet is particularly effective for fat loss? What are the dangers of forcing your body into ketosis?</div>
+			<div class="question-details">How can advocates of the keto diet claim that eating lots of things like bacon and cheese are healthy? That sounds extremely counter intuitive. What does the science say about this?</div>
+			<div class="asked-by-user">
+				Asked by <span class="asked-by-user-name">Chris Jones</span>
+			</div>
+		</div>
 		
+		<div class="answer-content-box">
+			<div class="expert-profile">
+				{% load staticfiles %}
+				<img src="{% static 'mainapp/images/expert_image.png' %}">
+				<span class="expert-description">Dr. de Jonghe is an Associate Professor of Nutrition at the University of Pennsylvania...</span>
+			</div>
+			<div class="answer-box">
+				<div class="answer-text">
+					A 2003 article published in the "Asia Pacific Journal of Clinical Nutrition" notes that low-carbohydrate diets may increase your risk for kidney damage, osteoporosis, abnormal heartbeat, lipid abnormalities and even sudden death. If your ketogenic diet is high in protein, it could also increase your risk for diabetes, cancer and overall premature mortality if you're middle-aged, but not if you're over 65, according to a March 2014 study published in "Cell Metabolism."
+				</div>
+			</div>
+			<div class="star-container">
+				
+			</div>
+		</div>
 	</div>
+	
 {% endblock %}
