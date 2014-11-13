@@ -1,0 +1,29 @@
+{% extends "mainapp/base/base_public.html" %}
+
+{% block title %}Discuss | Nutrition Experts{% endblock %}
+
+{% block afterscript %}
+	<script type="text/javascript">
+	</script>
+{% endblock %}
+
+{% block content %}
+	<div id="app-back-bar">
+		<div id="app-back-button">
+			{% load staticfiles %}
+			<img src="{% static 'mainapp/images/gray-back-arrow.png' %}">
+			Back to <span class="app-back-to-page bold">Experts</span>
+		</div>
+	</div>
+	<div class="discussion-item-container">
+		<div class="question-content-box">
+			<div class="question-text">Is there scientific evidence that a ketogenic diet is particularly effective for fat loss? What are the dangers of forcing your body into ketosis?</div>
+			<div class="question-details">How can advocates of the keto diet claim that eating lots of things like bacon and cheese are healthy? That sounds extremely counter intuitive. What does the science say about this?</div>
+			<div class="asked-by-user">
+				Asked by <span class="asked-by-user-name">Chris Jones</span>
+			</div>
+		</div>
+		
+	</div>
+	
+{% endblock %}

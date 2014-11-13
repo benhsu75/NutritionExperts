@@ -73,9 +73,16 @@ def user_profile(request):
 	template = loader.get_template('mainapp/app/user_profile.html')
 	context = RequestContext(request, {
 	})
-	return H
+	return HttpResponse(template.render(context))
+
 def discussion(request):
 	template = loader.get_template('mainapp/app/discussion.html')
+	context = RequestContext(request, {
+	})
+	return HttpResponse(template.render(context))
+
+def answer_questions(request):
+	template = loader.get_template('mainapp/app/answer_questions.html')
 	context = RequestContext(request, {
 	})
 	return HttpResponse(template.render(context))

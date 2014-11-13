@@ -24,6 +24,7 @@ body {
 	font-size: 20px;
 	left: 50%;
     transform: translate(-50%, 0);
+    -webkit-transform: translate(-50%, 0);
     z-index: 3;
 }
 .green {
@@ -69,6 +70,7 @@ body {
 
 	top: 40%;
 	transform: translate(0, -50%);
+	-webkit-transform: translate(0, -50%);
 
 	box-shadow: 0px 2px 7px rgba(0,0,0,0.2);
 }
@@ -168,6 +170,7 @@ body {
 	position: absolute;               
 	top: 50%;                         
 	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
 }
 
 
@@ -181,7 +184,6 @@ a.logo:hover {
 	position: absolute;
 	right: 0;
 	margin-top: 12px;
-	/*transform: translate(0, -50%);*/
 }
 
 .right-header > .nav-item {
@@ -530,6 +532,7 @@ a.logo:hover {
 
 .faq-question {
 	font-family: OpenSans-Semibold;
+	color: #125660;
 }
 
 .faq-answer {
@@ -588,6 +591,7 @@ a.logo:hover {
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
 }
 
 .feed-item > .upvote-item:hover {
@@ -615,6 +619,7 @@ a.logo:hover {
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
 }
 
 .feed-item > .experts-pane {
@@ -622,6 +627,7 @@ a.logo:hover {
 	top: 50%;
 	right: 10px;
 	transform: translate(0, -50%);
+	-webkit-transform: translate(0, -50%);
 }
 
 .feed-item > .experts-pane > img {
