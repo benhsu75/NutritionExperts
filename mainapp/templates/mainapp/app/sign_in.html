@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sign In - Nutriosity</title>
+
+	{% load staticfiles %}
+	<link rel="shortcut icon" type="image/png" 
+          href="{% static 'mainapp/images/favicon.ico' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/sign_in.css' %}">
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" src="{% static 'mainapp/js/helper.js' %}"></script>
+
+	<!-- Google Analytics -->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-26640416-2', 'auto');
+	  ga('send', 'pageview');
+
+	</script>
+
+
+</head>
+
+<body>
+	<div class="alert-bar" style="display: none;">
+		Invalid email and/or password. Please try again!
+	</div>
+	<div class="login-box">
+		<div class="logo-area">
+			<span class="logo-text">Nutriosity</span>
+		</div>
+		<form class="login-form">
+			<input class="email-text-field text-field" type="email" placeholder="Email">
+			<input class="password-text-field text-field" type="password" placeholder="Password">
+			<button type="button" class="login-button">Sign In</button>
+		</form>
+	</div>
+</body>
+<script type="text/javascript">
+
+	/* Prevent normal form submit on enter */
+	$('.login-form').bind("keyup keypress", function(e) {
+		var code = e.keyCode || e.which; 
+		if (code  == 13) {               
+			/* Prevent form from being submitted */
+			e.preventDefault();
+
+			/* Click "Join" button */
+			$('.login-button').click();
+
+			return false;
+		}
+	});
+
+	$('.login-button').click(function() {
+		console.log('here');
+		var email = $.trim($('.email-text-field').val());
+		var password = $.trim($('.password-text-field').val());
+
+		var error_flag = false;
+
+		if(email == "") {
+			$('.email-text-field').addClass('error');
+			$('.alert-bar').show();
+			$('.alert-bar').html("Please enter a valid email.");
+			error_flag = true;
+		}
+
+		if(password == "") {
+			$('.password-text-field').addClass('error');
+			$('.alert-bar').show();
+			if(!error_flag) {
+				$('.alert-bar').html("Please enter a valid password.");
+				error_flag = true;
+			}
+		}
+
+		var data = {
+			'email' : email,
+			'password' : password
+		};
+
+		if(!error_flag) {
+			HELPER.post('/api/authenticate_signin/', data, function(data) {
+		    	
+		    	/* Handle possibilities */
+		    	var	returnData = JSON.parse(data);
+
+		        if(returnData['status'] == 1) {
+		        	window.location.href = "/feed/";
+		        }
+		        else {
+		        	$('.alert-bar').show();
+					$('.alert-bar').html("Invalid username and/or password. Please try again!");
+		        }
+			}, function(data) {
+				/* Clear the email text field */
+		    	
+		        // alert('Error');
+			});
+		}
+	});	
+</script>
+</html>

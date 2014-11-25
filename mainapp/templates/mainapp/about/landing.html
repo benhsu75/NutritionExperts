@@ -27,7 +27,7 @@
 	<div id="landing-header">
 		<div id="landing-header-container">
 			<a id="logo" href="/">Nutriosity</span>
-			<a id="header-item" href="/about"><span class="bold">About</span></a>
+			<a id="header-item" href="/about"><span class="">About</span></a>
 		</div>
 	</div>
 	<div class="alert-bar red" style="display: none;">
@@ -96,8 +96,9 @@
 
 	        if(returnData['status'] == 1) {
 	        	$('.alert-bar').removeClass('red green').addClass('green');
-	        	$('.alert-bar').fadeIn().delay(3000).fadeOut(1600);
 	        	$('.alert-bar').text("Great, stay tuned for updates - we're excited to launch soon!");
+	        	$('.alert-bar').fadeIn().delay(3000).fadeOut(1600);
+	        	
 	        	$('.email-text-field').hide();
 	        	$('.large-submit-button').hide();
 	        	$('.manifesto').fadeIn(2000);

@@ -1,0 +1,155 @@
+{% extends "mainapp/base/base_public.html" %}
+
+{% block title %}Ask - Nutriosity{% endblock %}
+
+{% block afterscript %}
+	{% load staticfiles %}
+	<script type="text/javascript">
+		var initialText = "Details - Add background information, clarify the question, or link to relevant research or articles";
+		$(document).ready(function() {
+			$('#summernote').summernote({
+				height: 250,
+				minHeight: 250,             // set minimum height of editor
+  				maxHeight: 700,             // set maximum height of editor
+  				onfocus: function(e) {
+					if($('#summernote').code() == initialText) {
+						$('#summernote').code('');
+					}
+					else {
+
+					}
+				},
+				onblur: function(e) {
+					if($.trim($('#summernote').code()) == "") {
+						$('#summernote').code(initialText);
+					}
+					else {
+
+					}
+				},
+				toolbar: [
+				    ['style', ['bold', 'italic', 'underline', 'clear']],
+				    ['fontsize', ['fontsize']],
+				    ['color', ['color']],
+				    ['para', ['ul', 'ol']],
+				    ['insert', ['picture','link']]
+				  ],
+			});
+		});
+
+		$('.large-submit-button').click(function() {
+			$('.form-alert-bar').css('visibility', 'hidden');
+
+			var title = $.trim($('.title-text-area').val());
+			var details = $.trim($('#summernote').code());
+
+			if(details == initialText) {
+				details = "";
+			}
+
+			var error_flag = false;
+
+			console.log(title);
+			console.log(details);
+
+			if(title.split(" ").length > 30) {
+				error_flag = true;
+				$('.title-text-area').addClass('error-text-field');
+				$('.form-alert-bar').css('visibility', 'visible');
+				$('.form-alert-bar').html("Please enter a shorter question title. Make it concise!");
+			}
+
+			if(title == "") {
+				error_flag = true;
+				$('.title-text-area').addClass('error-text-field');
+				$('.form-alert-bar').css('visibility', 'visible');
+				$('.form-alert-bar').html("Please enter a question title.");
+			}
+
+
+			if(!error_flag) {
+				var data = {
+					'title': JSON.stringify(title),
+					'details': JSON.stringify(details)
+				};
+
+				HELPER.post("/api/post_question/", data, function(data) {
+
+					var returnData = JSON.parse(data);
+
+					if(returnData.status == 1) { // Success
+						window.location.href = "/feed/"
+					}
+					else { // Failure
+						if(returnData.error == 0) { // Not logged in
+
+						}
+						else if(returnData.error == 1) { // Title too long
+							$('.title-text-area').addClass('error-text-field');
+							$('.form-alert-bar').css('visibility', 'visible');
+							$('.form-alert-bar').html("Please enter a shorter question title. Make it concise!");
+
+						}
+					}
+
+				}, function(data) {
+
+				});
+			}
+		});
+
+		$('.title-text-area').keydown(function(e) {
+			if(e.keyCode == 32)  {
+				console.log('keydown');
+				var currentText = $(this).val();
+				var currentNumWords = currentText.split(" ").length;
+				console.log(currentNumWords);
+				if(currentNumWords >= 30) {
+					return false;
+				}
+			}
+		});
+	</script>
+
+	<!-- include libries(jQuery, bootstrap, fontawesome) -->
+	<script src="//code.jquery.com/jquery-1.9.1.min.js"></script> 
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet"> 
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script> 
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- include summernote css/js-->
+	<link href="{% static 'mainapp/js/summernote-master/dist/summernote.css' %}" rel="stylesheet">
+	<script src="{% static 'mainapp/js/summernote-master/dist/summernote.min.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+	<div class="ask-content">
+		<div class="ask-information">
+			<span class="main-text">Great discussions start with great questions</span>
+			<p>
+				<span class="bold">Free reign to ask questions and start discussions on Nutriosity is currently limited to a select group in the community.</span> However, you can still submit a question to be considered to be posted by someone in the community! 
+			</p>
+			<p>
+				Check out the tips on asking good questions so that your question is posted!
+			</p>
+		</div>
+		<div class="ask-box">
+			<div class="ask-form">
+				<textarea class="text-area title-text-area" placeholder="Title - Make your question's &quot;first impression&quot; straightforward and concise"></textarea>
+				<div class="summernote-wrapper">
+
+					<div class="unclicked" id="summernote">Details - Add background information, clarify the question, or link to relevant research or articles</div>
+					
+				</div>
+				<div class="form-alert-bar" style="visibility:hidden;">Please enter a valid first name.</div>
+				<button class="large-submit-button">Post</button>
+
+			</div><div class="how-to-ask-section">
+				<div class="info">
+					
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

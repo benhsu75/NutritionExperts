@@ -51,6 +51,42 @@
 		</div>
 		{% block content %}{% endblock %}
 	</div>
+
+	<!-- Fixed stuff -->
+	<div class="shadow-overlay" style="display:none;">
+	</div>
+	<div class="expert-profile-lightbox" style="display:none;">
+		<span class="close-expert-lightbox">Close</span>
+		<div class="left-detail-panel">
+				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
+				<a class="website">
+					<img src="{% static 'mainapp/images/blue_link.png' %}">
+					<div class="website-text">Website</div>
+				</a>
+			</div><div class="right-detail-panel">
+				<div class="name-line">
+					<span class="name">Bart de Jonghe,</span>
+					<span class="accreditations">PhD, MS</span>
+					<img src="{% static 'mainapp/images/expert_badge.png' %}">
+				</div>
+				<div class="position-line">
+					<span class="position">Associate Professor of Nutrition</span>
+					<span class="organization">University of Pennsylvania</span>
+				</div>
+				<div class="expertise-areas-line">
+<!-- 					<span class="expertise">Obesity</span> 
+					<span class="expertise">Energy Balance</span> 
+					<span class="expertise">Food Addiction</span> -->
+				</div>
+				<div class="description-paragraph-line">
+					<p class="description">
+						Dr. De Jonghe received his Ph.D. in Nutritional Sciences from the Pennsylvania State University in 2006, after which he entered a two-year Postdoctoral Fellowship in Neurophysiology at the Monell Chemical Senses Center to study nausea, vomiting and malaise. In 2008, Dr. De Jonghe began postdoctoral work in the Department of Animal Biology at the Penn School of Veterinary Medicine, examining the etiology and development of obesity as a Principal Investigator on a Postdoctoral Fellowship Grant from the American Heart Association.
+
+					</p>
+				</div>
+			</div>
+		
+	</div>
 	
 </body>
 {% block afterscript %}{% endblock %}

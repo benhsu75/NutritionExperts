@@ -1,9 +1,23 @@
 {% extends "mainapp/base/base_public.html" %}
 
-{% block title %}Discuss | Nutrition Experts{% endblock %}
+{% block title %}Discuss - Nutriosity{% endblock %}
 
 {% block afterscript %}
+	{% load staticfiles %}
+	<script src="{% static 'mainapp/js/ckeditor/ckeditor.js' %}"></script>
 	<script type="text/javascript">
+
+		CKEDITOR.instances['.answer-content-box'].on('.answer-content-box', function() {
+		    this.document.on('click', function(event){
+		         //your code
+		         alert('Click Event');
+		     });
+		});
+
+		$('#cke_answer-editor').click(function() {
+			alert('asdasd');
+			$(this).addClass('active');
+		});
 	</script>
 {% endblock %}
 
@@ -23,6 +37,12 @@
 				Asked by <span class="asked-by-user-name">Chris Jones</span>
 			</div>
 		</div>
+		<div class="answer-content-box">
+			<textarea name="answer-editor" class="ckeditor answer-editor-textarea">Enter your answer here.</textarea>
+			<button type="button" class="submit-answer-button">Answer</button>
+		</div>
+		
+
 		
 	</div>
 	

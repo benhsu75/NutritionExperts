@@ -14,39 +14,52 @@
 	{% block head %}{% endblock %}
 </head>
 
-<body>
+<body {% block bodyclass %}{% endblock %}>
 	<div class="header">
 		<div class="right-header-container">
-			<a class="logo" href="/about">Nutriosity</a>
-
-			<div class="wrapper" style="display:none;">
-				<div class="right-header not-logged-in" >
-					<div class="nav-item"><a href="/signup_form">Sign Up</a></div>
-					<div class="nav-item"><a href="/about">About</a></div>
-					<div class="nav-item"><a href="#" class="login-button">Log In</a></div>
-				</div>
-			</div>
+			<a class="logo" href="/feed/">Nutriosity</a>
+			
+			{% if user.is_authenticated %}
 			<div class="wrapper" style="display:block;">
 				<div class="right-header logged-in">
-					<div class="nav-item"><a href="#">Home</a></div>
-					<div class="nav-item"><a href="#">About</a></div>
+					{% if my_is_superuser %}
+					<div class="nav-item"><a href="/ask/">Ask</a></div>
+					{% else %}
+					{% endif %}
+					<!-- <div class="nav-item"><a href="/feed/">Home</a></div> -->
+					<div class="nav-item"><a href="/about/">About</a></div>
 					<div class="nav-item account-item">
-						<img class="dropdown-triangle" src="{% static 'mainapp/images/dropdown-triangle.png' %}">
-						<span class="account-name">Chris Jones</span>
-						<img class="account-image" src="{% static 'mainapp/images/chris-jones.png' %}">
+						<!-- <img class="dropdown-triangle" src="{% static 'mainapp/images/dropdown-triangle.png' %}"> -->
+						
+						<div class="account-item-hover">
+							<img class="account-image" src="{% static 'mainapp/images/profile_pictures/' %}{{ my_profile_picture }}">
+							<span class="account-name">{{first_name}}</span>
+						</div>
 						<div class="account-dropdown" style="display: none;">
 							<div class="dropdown-menu">
-								<a href="#" class="dropdown-item">Profile</a>
+								<a href="/profile/{{ my_user_profile_pk }}/" class="dropdown-item">Profile</a>
 								<a href="#" class="dropdown-item">My Account</a>
 								<div class="dropdown-break"></div>
-								<a href="#" class="dropdown-item">Log Out</a>
+								<a href="#" class="dropdown-item logout-item">Log Out</a>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			{% else %}
+			<div class="wrapper" style="display:block;">
+				<div class="right-header not-logged-in" >
+<!-- 					<div class="nav-item"><a href="/sign_up">Sign Up</a></div>
+ -->					<div class="nav-item"><a href="/about">About</a></div>
+					<div class="nav-item login-button"><a href="/sign_in/">Sign In</a></div>
+				</div>	
+			</div>
+			{% endif %}
 		</div>
 	</div>
+<!-- 	<div class="alert-bar green" style="display: block;">
+		Welcome to Nutriosity!
+	</div> -->
 
 	<div class="content">
 		{% block content %}{% endblock %}
@@ -62,26 +75,29 @@
 			<button class="login-submit-button">Log In</button>
 		</form>
 	</div>
-	<div class="login-overlay" style="display:none;">
+	<div class="shadow-overlay" style="display:none;">
 	</div>
 </body>
 <script type="text/javascript">
-	$('.login-button').click(function() {
-		$('.login-lightbox').show();
-		$('.login-overlay').show();
-	});
+	// $('.login-button').click(function() {
+	// 	$('.login-lightbox').show();
+	// 	$('.shadow-overlay').show();
+	// 	$('body').addClass('noscroll');
+	// });
 
 	$('.close-lightbox').click(function() {
 		$('.login-lightbox').hide();
-		$('.login-overlay').hide();
+		$('.shadow-overlay').hide();
+		$('body').removeClass('noscroll');
 	});
 
-	$('.login-overlay').click(function() {
+	$('.shadow-overlay').click(function() {
 		$('.login-lightbox').hide();
-		$('.login-overlay').hide();
+		$('.shadow-overlay').hide();
+		$('body').removeClass('noscroll');
 	});
 
-	$('.nav-it-em.account-item').click(function(event) {
+	$('.nav-item.account-item').click(function(event) {
 		if($('.account-dropdown').is(':visible')) {
 			$('.account-dropdown').hide();
 		}
@@ -96,6 +112,16 @@
 		if($('.account-dropdown').is(':visible')) {
 			$('.account-dropdown').hide();
 		}
+	});
+
+	/* Logout clicked */
+	$('.logout-item').click(function() {
+		HELPER.post("/api/log_out/",{}, function() {
+			location.reload();
+		}, function() {
+			/* Should not reach here */
+		});
+
 	});
 
 </script>

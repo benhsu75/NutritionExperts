@@ -1,0 +1,159 @@
+{% extends "mainapp/base/base_public.html" %}
+
+{% block title %}Sign Up - Nutriosity{% endblock %}
+
+{% block afterscript %}
+	<script type="text/javascript">
+		/* Prevent normal form submit on enter */
+		$('.signup-form').bind("keyup", function(e) {
+		  var code = e.keyCode || e.which; 
+		  if (code  == 13) {               
+		    /* Prevent form from being submitted */
+		    e.preventDefault();
+
+		    /* Click "Join" button */
+		    $('.sign-up-button').click();
+
+		    return false;
+		  }
+		});
+
+		$('.sign-up-button').click(function() {
+			var first_name = $('.first-name-field').val();
+			var last_name = $('.last-name-field').val();
+			var email = $('.email-field').val();
+			var password = $('.password-field').val();
+			var confirm_password = $('.confirm-password-field').val();
+			var code = $('.code-field').val();
+
+			/* Clear errors from all text fields */
+			$('.half-text-field').removeClass('error-text-field');
+			$('.full-text-field').removeClass('error-text-field');
+			$('.form-alert-bar').css('visibility', 'hidden');
+
+			var error_flag = false;
+
+			
+			/* Form validation */
+			if(first_name == "") {
+				$('.first-name-field').addClass('error-text-field');
+				$('.form-alert-bar').css('visibility', 'visible');
+				$('.form-alert-bar').html("Please enter a valid first name.");
+				error_flag = true;
+			}
+
+			if(last_name == "") {
+				$('.last-name-field').addClass('error-text-field');
+				if(!error_flag){
+					$('.form-alert-bar').css('visibility', 'visible');
+					$('.form-alert-bar').html("Please enter a valid last name.");
+					error_flag = true;
+				}
+				
+			}
+
+			if(email == "") {
+				$('.email-field').addClass('error-text-field');
+				if(!error_flag){
+					$('.form-alert-bar').css('visibility', 'visible');
+					$('.form-alert-bar').html("Please enter a valid email address.");
+					error_flag = true;
+				}
+			}
+
+			if(password == "") {
+				$('.password-field').addClass('error-text-field');
+				if(!error_flag){
+					$('.form-alert-bar').css('visibility', 'visible');
+					$('.form-alert-bar').html("Please enter a password.");
+					error_flag = true;
+				}
+			}
+
+			if(password != confirm_password || confirm_password == "") {
+				/* Passwords don't match - alert */
+				$('.confirm-password-field').addClass('error-text-field');
+				if(!error_flag){
+					$('.form-alert-bar').css('visibility', 'visible');
+					$('.form-alert-bar').html("Your password and password confirmation don't match.");
+					error_flag = true;
+				}
+			}
+
+
+			if(!error_flag) {
+				var data = {
+					'first_name': first_name,
+					'last_name': last_name,
+					'email': email,
+					'password': password,
+					'code': code
+				};
+
+				/* POST to endpoint */
+				HELPER.post('/api/sign_up_user/', data, function(data) { // Success
+					/* Handle possibilities */
+		    		var	returnData = JSON.parse(data);
+		    		console.log(returnData);
+
+		    		if(returnData.status == 0) { // Failure
+		    			/* Invalid Code */
+		    			if(returnData.error == 0) {
+		    				$('.code-field').addClass('error-text-field');
+							$('.form-alert-bar').css('visibility', 'visible');
+							$('.form-alert-bar').html("You entered an invalid Code. <a href=\"mailto:nutriosity@gmail.com\" class=\"email-code-link\">Email us</a> to get a valid code.");
+		    			}
+		    			/* User Exists */
+		    			else if (returnData.error == 1){
+		    				$('.email-field').addClass('error-text-field');
+							$('.form-alert-bar').css('visibility', 'visible');
+							$('.form-alert-bar').html("An account with this email address already exists.");
+		    			}
+		    			/* Invalid Email */
+		    			else if (returnData.error == 2){
+		    				$('.email-field').addClass('error-text-field');
+							$('.form-alert-bar').css('visibility', 'visible');
+							$('.form-alert-bar').html("Please enter a valid email.");
+		    			}
+		    		}
+		    		else if(returnData.status == 1) { // Success
+		    			/* Normal user signup - redirect to home feed */
+		    			if(returnData.is_expert_flag == 0) {
+		    				window.location.href = "/sign_up_profile/";
+		    			}
+		    			/* Expert signed up - bring them to profile page */
+		    			else if(returnData.is_expert_flag == 1) {
+		    				window.location.href = "/sign_up_profile/";
+		    			}
+		    		}
+
+				}, function(data) { // Failure
+					console.log('failure');
+				});
+			}
+		});
+	</script>
+{% endblock %}
+
+{% block content %}
+	<div class="white-content-box">
+		<div class="signup-information">
+			<span class="large-title-text">Join the <span class="bold">Nutriosity</span> knowledge community</span><br><br>
+			<p class="signup-text">Signing up allows you to <span class="bold">upvote</span>, <span class="bold">submit a question</span> to be asked, and <span class="bold">join the discussion.</span></p>
+		</div>
+		{% load staticfiles %}
+		<a class="twitter-sign-in" href="#"><img src="{% static 'mainapp/images/sign-in-with-twitter.png' %}"></a>
+		<img style="margin-bottom: 30px;" src="{% static 'mainapp/images/or-line.png' %}">
+		<form class="signup-form">
+			<input type="text" name="first-name" placeholder="First name" class="first-name-field half-text-field"><div style="width: 8px; display: none;"></div>
+			<input type="text" name="last-name" placeholder="Last name" class="last-name-field half-text-field">
+			<input type="text" name="email" placeholder="Email address" class="email-field full-text-field">
+			<input type="password" name="password" placeholder="Password" class="password-field full-text-field">
+			<input type="password" name="confirm-password" placeholder="Confirm password" class="confirm-password-field full-text-field">
+			<input type="text" name="code" placeholder="Code" class="code-field full-text-field">
+			<div class="form-alert-bar" style="visibility:hidden;">Please enter a valid first name.</div>
+			<br>
+			<button type="button" class="sign-up-button">Join</button>
+		</form>
+	</div>
+{% endblock %}

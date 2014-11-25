@@ -1,0 +1,256 @@
+{% extends "mainapp/base/base_public.html" %}
+
+{% block title %}Sign Up - Nutriosity{% endblock %}
+
+{% block afterscript %}
+	<script type="text/javascript">
+		{% if not user.is_authenticated %}
+			window.location.href = "/sign_in/";
+		{% endif %}
+
+		{% load staticfiles %}
+		var profile_pictures_dir_path = "{% static 'mainapp/images/profile_pictures/' %}";
+
+		$('.profile-picture').click(function() {
+			$('.file-selector').click();
+		});
+
+		function upload(event) {
+			event.preventDefault();
+			var data = new FormData($('form').get(0));
+			console.log('here');
+			$.ajax({
+			    url: $(this).attr('action'),
+			    type: $(this).attr('method'),
+			    data: data,
+			    cache: false,
+			    processData: false,
+			    contentType: false,
+			    success: function(data) {
+			        alert('success');
+			    }
+			});
+			return false;
+		}
+		$('.picture-form').submit(function () {
+
+			event.preventDefault();
+			var data = new FormData($('.picture-form').get(0));
+
+			HELPER.post_upload($(this).attr('action'), data, function(data) {
+				var returnData = JSON.parse(data);
+
+				if(returnData['status'] == 1) {
+					var profile_picture_filename = returnData['profile_picture_filename'];
+					$('.profile-picture').attr("src", profile_pictures_dir_path + profile_picture_filename);
+					$('.profile-picture').addClass('filled');
+
+
+				}
+				else {
+
+				}
+
+			}, function() {
+
+			});
+			return false;
+		});
+
+		$('.file-selector').change(function() {
+			$('.picture-form').submit();
+		})
+
+		/* Handle form submission */
+		{% if my_is_expert_flag %}
+		$('.large-submit-button').click(function() {
+			var accreditations_string = $.trim($('.accreditations-text-field').val());
+			var title = $.trim($('.title-text-field').val());
+			var organization = $.trim($('.organization-text-field').val());
+			var url = $.trim($('.url-text-field').val());
+			var bio = $.trim($('.bio-text-field').val());
+			var expertises_string = $.trim($('.expertises-text-field').val());
+
+			/* Get accreditations */
+			var accreditations_array_raw = accreditations_string.split(",");
+			var accreditations_array = [];
+			for(var a in accreditations_array_raw) {
+				if($.trim(accreditations_array_raw[a]) != "")
+					accreditations_array.push($.trim(accreditations_array_raw[a]));
+			}
+
+
+			/* Get areas of expertise */
+			var expertises_array_raw = expertises_string.split(",");
+			var expertises_array = [];
+			for(var e in expertises_array_raw) {
+				if($.trim(expertises_array_raw[e]) != "")
+					expertises_array.push($.trim(expertises_array_raw[e]));
+			}
+
+			var error_flag = false;
+
+			/* Validate the text fields aren't empty */
+			// if(accreditations_string == "") {
+			// 	error_flag = true;
+			// }
+
+			// if(title == "") {
+			// 	error_flag = true;
+			// }
+
+			// if(organization == "") {
+			// 	error_flag = true;
+			// }
+
+			// if(url == "") {
+			// 	error_flag = true;
+			// }
+
+			// if(bio == "") {
+			// 	error_flag = true;
+			// }
+
+			// if(expertises_string == "") {
+			// 	error_flag = true;
+			// }
+
+			/* Call API Endpoint */
+			var data = {
+				'accreditations': JSON.stringify(accreditations_array),
+				'title': JSON.stringify(title),
+				'organization': JSON.stringify(organization),
+				'url': JSON.stringify(url),
+				'bio': JSON.stringify(bio),
+				'areas_of_expertise': JSON.stringify(expertises_array),
+			};
+
+			console.log(data);
+
+			HELPER.post("/api/populate_expert_profile/", data, function(data) {
+
+				var returnData = JSON.parse(data);
+
+				if(returnData.status == 1) { // Success
+					// window.location.href = "/feed/"
+				}
+				else { // Failure
+
+				}
+
+			}, function(data) {
+
+			});
+		});
+		{% else %}
+		$('.large-submit-button').click(function() {
+
+			var five_words_string = $.trim($('.five-words-text-field').val());
+			var bio = $.trim($('.bio-text-field').val());
+
+			var error_flag = false;
+
+			/* Validate five words text */
+			if(five_words_string.split(" ").length > 5) {
+				error_flag = true;
+				$('.five-words-text-field').addClass('error-text-field');
+
+				$('.form-alert-bar').html("Your introduction is more than 5 words!").show();
+			}
+
+			if(!error_flag) {
+				/* Call API Endpoint */
+				var data = {
+					'five_words': JSON.stringify(five_words_string),
+					'bio': JSON.stringify(bio)
+				};
+
+				HELPER.post("/api/populate_member_profile/", data, function(data) {
+
+					var returnData = JSON.parse(data);
+
+					if(returnData.status == 1) { // Success
+						window.location.href = "/feed/"
+					}
+					else { // Failure
+
+					}
+
+				}, function(data) {
+
+				});
+			}
+			
+		});
+		{% endif %}
+
+
+	</script>
+{% endblock %}
+
+{% block content %}
+	{% load staticfiles %}
+	<div class="white-content-box">
+		{% if my_is_expert_flag %}
+		<span class="main-text">Introduce yourself to the community</span>
+		<span class="sub-text">We'll take this information and create a <span class="bold">beautiful profile</span> for you that will be next to your answer everytime you answer a question!</span>
+		<div class="expert-profile-form">
+			<div class="top-area">
+				<div class="set-profile-picture-box">
+					<img src="{% static 'mainapp/images/upload_image.png' %}" class="profile-picture">
+					<form class="picture-form" action="/api/upload_profile_picture/" method="post" enctype="multipart/form-data">
+						<input type="file" name="photo" style="display: none;" class="file-selector">
+					</form>
+					<!-- <button type="button">Upload</button> -->
+				</div><div class="basic-information-form">
+					<input type="text" class="accreditations-text-field text-field" placeholder="Accreditations, separated by commas (e.g. PhD, RD, etc.)">
+					<input type="text" class="title-text-field text-field" placeholder="Title/Position">
+					<input type="text" class="organization-text-field text-field" placeholder="Organization">
+					<input type="text" class="url-text-field text-field" placeholder="URL to website">
+				</div>
+			</div>
+			<div class="bottom-area">
+				<div class="more-information-form">
+					<textarea class="bio-text-field text-area" placeholder="Write a short bio about yourself"></textarea>
+					<input type="text" class="expertises-text-field text-field" placeholder="Areas of expertise, separated by commas (e.g. Weight Loss, Obesity, General Nutrition)">
+				</div>
+				<div class="form-alert-bar" style="display:none;">Please enter a valid first name.</div>
+				<button class="large-submit-button">Done</button>
+			</div>
+		</div>
+		{% else %}
+		<span class="main-text">Introduce yourself to the community</span>
+		<span class="sub-text">Upload a profile picture and introduce yourself to the community!</span>
+		<div class="expert-profile-form">
+			<div class="top-area">
+				<div class="set-profile-picture-box">
+					<img src="{% static 'mainapp/images/upload_image.png' %}" class="profile-picture">
+					<form class="picture-form" action="/api/upload_profile_picture/" method="post" enctype="multipart/form-data">
+						<input type="file" name="photo" style="display: none;" class="file-selector">
+					</form>
+					<!-- <button type="button">Upload</button> -->
+				</div><div class="basic-information-form">
+					<!-- <input type="text" class="accreditations-text-field text-field" placeholder="Accreditations, separated by commas (e.g. PhD, RD, etc.)"> -->
+					<input type="text" class="five-words-text-field text-field" placeholder="Introduce yourself in 5 words">
+					<!-- <input type="text" class="organization-text-field text-field" placeholder="Organization"> -->
+					<!-- <input type="text" class="url-text-field text-field" placeholder="URL to website"> -->
+					<textarea class="bio-text-field text-area" placeholder="Tell the community about yourself - nutrition and non-nutrition related!"></textarea>
+					<div class="form-alert-bar" style="display:none;">Please enter a valid first name.</div>
+
+				</div>
+				<br><br>
+				<button class="large-submit-button">Done</button>
+			</div>
+
+			<!-- <div class="bottom-area">
+				<div class="more-information-form">
+					<textarea class="bio-text-field text-area" placeholder="Write a short bio about yourself"></textarea>
+					<input type="text" class="expertises-text-field text-field" placeholder="Areas of expertise, separated by commas (e.g. Weight Loss, Obesity, General Nutrition)">
+				</div>
+				<div class="form-alert-bar" style="display:none;">Please enter a valid first name.</div>
+				<button class="large-submit-button">Done</button>
+			</div> -->
+		</div>
+		{% endif %}
+	</div>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends "mainapp/base/base_public.html" %}
+
+{% block title %}
+{{shown_first_name }} {{shown_last_name}} - Nutriosity
+{% endblock %}
+
+{% block afterscript %}
+
+	<script type="text/javascript">
+		{% if profile_exists %}
+		var user_profile_pk = {{ user_profile_pk }};
+		var shown_first_name = "{{ shown_first_name | safe}}";
+		var shown_last_name = "{{ shown_last_name | safe}}";
+
+		{% if shown_is_expert %}
+			var shown_title = {{ shown_title | safe}};
+			var shown_organization = {{ shown_organization | safe}};
+			var shown_bio = {{ shown_bio | safe}};
+			var shown_website = {{ shown_website | safe}};
+
+			var shown_expertise = {{ shown_expertise | safe}};
+			var shown_accreditations = {{ shown_accreditations | safe}};
+
+			
+
+			$('.title').html(shown_title);
+			$('.institution').html(shown_organization);
+			$('.expert-summary').html(shown_bio);
+
+			/* Load the accreditations */
+			var accreditations_string = "";
+			for(var a in shown_accreditations) {
+				accreditations_string += shown_accreditations[a] + " ";
+			}
+			accreditations_string = $.trim(accreditations_string);
+			$('.accreditations-text').text(accreditations_string);
+
+
+			if(accreditations_string != "") {
+				$('.full-name').text(shown_first_name + " " + shown_last_name + ",");
+			}
+			else {
+				$('.full-name').text(shown_first_name + " " + shown_last_name);
+			}
+
+			/* Load areas of expertise */
+			for(var e in shown_expertise) {
+				$('.expertise-areas-line').append('<span class="expertise">'+shown_expertise[e]+'</span> ');
+			}
+
+			/* Set website */
+			$('.website').attr('href',shown_website);
+
+		{% else %}
+			var shown_five_words = {{ shown_five_words | safe}};
+			var shown_bio = {{ shown_bio | safe}};
+
+			$('.five-words').html(shown_five_words);
+			$('.expert-summary').html(shown_bio);
+
+		{% endif %}
+		{% endif %}
+
+	</script>
+{% endblock %}
+
+{% block content %}
+	<div class="white-content-box">
+		{% if profile_exists %}
+
+		<div class="left-profile-panel">
+			{% load staticfiles %}
+			<img class="expert-picture" src="{% static 'mainapp/images/profile_pictures/' %}{{ shown_image_path }}">
+			<div class="count-section">
+				{% if shown_is_expert %}
+				<div class="count-item">
+					<span class="number-count follower-count">99</span>
+					Followers
+				</div>
+				<div class="count-item">
+					<span class="number-count answer-count">26</span>
+					Answers
+				</div>
+				{% else %}
+<!-- 				<div class="count-item">
+					<span class="number-count question-count">99</span>
+					Questions
+				</div> -->
+				{% endif %}
+			</div>
+			
+			<!-- <div class="follow-button">Follow</div> -->
+		</div>
+		<div class="right-profile-panel">
+			<div class="primary-information">
+				<span class="full-name">Bart de Jonghe</span>
+				<!-- <span class="semibold">,</span> -->
+				<!-- <span class="comma">,</span> -->
+				{% if shown_is_expert %}
+				<span class="accreditations-text ">PhD</span>
+				<img class="expert-badge" src="{% static 'mainapp/images/expert_badge.png' %}">
+				{% endif %}
+			</div>
+			
+			<div class="secondary-information">
+				{% if shown_is_expert %}
+				<span class="title">Assistant Professor of Nursing</span>
+				<span class="institution">University of Pennsylvania University of Pennsylvania</span>
+				{% else %}
+				<span class="five-words">I believe in nutrition knowledge</span>
+				{% endif %}
+			</div>
+			{% if shown_is_expert %}
+			<div class="expertise-areas-line">
+			</div>
+			{% endif %}
+			<p class="expert-summary">
+				<!-- Dr. De Jonghe received his Ph.D. in Nutritional Sciences from the Pennsylvania State University in 2006, after which he entered a two-year Postdoctoral Fellowship in Neurophysiology at the Monell Chemical Senses Center to study nausea, vomiting and malaise. Dr. De Jonghe’s research focuses on the nutritional, physiological, neuronal, and cellular signaling controls of energy balance with relevance to obesity, type 2 diabetes, and chemotherapy-induced nausea and vomiting. -->
+			</p>
+			{% if shown_is_expert %}
+			<a class="website" target="_blank">
+				<img src="{% static 'mainapp/images/blue_link.png' %}">
+				<span class="website-text">Website</span>
+			</a>
+			{% endif %}
+		</div>
+
+		{% else %}
+		<div>
+			<span class="page-not-found">We could not find that page :(</span>
+		</div>
+		{% endif %}
+	</div>
+{% endblock %}

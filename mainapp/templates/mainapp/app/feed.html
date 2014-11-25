@@ -1,16 +1,32 @@
 {% extends "mainapp/base/base_public.html" %}
 
-{% block title %}Home | Nutrition Experts{% endblock %}
+{% block title %}Home - Nutriosity{% endblock %}
+
+{% block bodyclass %}
+	class="feed"
+{% endblock %}
 
 {% block afterscript %}
 	<script type="text/javascript">
-	$('.filter-type').click(function() {
-		if(!$(this).hasClass('selected')) {
-			$('.filter-type').removeClass('selected');
-			$(this).addClass('selected');
+		var profile_picture = "{{ profile_picture }}";
+		$('.filter-type').click(function() {
+			if(!$(this).hasClass('selected')) {
+				$('.filter-type').removeClass('selected');
+				$(this).addClass('selected');
 
-		}
-	});
+			}
+		});
+
+		/* Apply upvoted class */
+		$('.upvote-item').click(function() {
+			$(this).addClass('upvoted');
+		});
+
+		/* Go to discussion if feed item clicked */
+		$('.feed-item').click(function() {
+			window.location.href = "/discussion/";
+		});
+
 	</script>
 {% endblock %}
 

@@ -1,14 +1,31 @@
 {% extends "mainapp/base/base_public.html" %}
 
-{% block title %}Discuss | Nutrition Experts{% endblock %}
+{% block title %}Discuss - Nutriosity{% endblock %}
 
 {% block afterscript %}
 	<script type="text/javascript">
+	$('.join-discussion').click(function() {
+		if($('.discussion-box').is(':visible')) {
+			console.log('visible');
+			$('.discussion-box').fadeOut();
+			$('.join-discussion-text').text("Show Discussion");
+			$('.join-discussion > .up').hide();
+			$('.join-discussion > .down').show();
+		}
+		else{
+			console.log('not visible');
+			$('.discussion-box').fadeIn();
+			$('.join-discussion-text').text("Hide Discussion");
+			$('.join-discussion > .down').hide();
+			$('.join-discussion > .up').show();
+		} 
+		
+	});
 	</script>
 {% endblock %}
 
 {% block content %}
-	<div id="app-back-bar">
+	<div id="app-back-bar" style="display: none;">
 		<div id="app-back-button">
 			{% load staticfiles %}
 			<img src="{% static 'mainapp/images/gray-back-arrow.png' %}">
@@ -17,10 +34,10 @@
 	</div>
 	<div class="discussion-item-container">
 		<div class="question-content-box">
-			<div class="question-text">Is there scientific evidence that a ketogenic diet is particularly effective for fat loss? What are the dangers of forcing your body into ketosis?</div>
-			<div class="question-details">How can advocates of the keto diet claim that eating lots of things like bacon and cheese are healthy? That sounds extremely counter intuitive. What does the science say about this?</div>
+			<div class="question-text">How does plaque build up within the arteries? What factors usually lead to the development of Atherosclerosis?</div>
+			<div class="question-details">I'm curious about the science behind Atherosclerosis and the systems that are working behind the scenes that lead to plaque buildup.</div>
 			<div class="asked-by-user">
-				Asked by <span class="asked-by-user-name">Chris Jones</span>
+				Asked by <span class="asked-by-user-name">Ben Hsu</span>
 			</div>
 		</div>
 		
@@ -29,22 +46,69 @@
 				<div class="expert-top-profile">
 					<div class="expert-image-wrapper"><img src="{% static 'mainapp/images/expert_image.png' %}"></div><div class="expert-right-info">
 						<span class="expert-name">Bart de Jonghe</span>
-						<span class="expert-accreditation">PhD, MS</span>
+<!-- 						<span class="expert-name"></span>
+ -->
+						<span class="expert-accreditation">PhD</span>
 						<img src="{% static 'mainapp/images/expert_badge.png' %}">
 					</div>
 				</div>
-				<p class="expert-description">Dr. de Jonghe is an Associate Professor of Nutrition at the University of Pennsylvania where in addition to teaching, he is leading research efforts in Obesity.</p>
+				<div class="expert-description">
+					<span class="position">Assistant Professor of Nutrition, Researcher</span>
+					<span class="organization">University of Pennsylvania</span>
+				</div>
+				<div class="go-to-profile">
+					<span class="go-to-profile-text">Profile</span>
+					<img class="right-arrow-button" src="{% static 'mainapp/images/right-more-arrow.png' %}">
+				</div>
 			</div><div class="answer-box">
 				<div class="answer-text">
 					<p>
-						A 2003 article published in the "Asia Pacific Journal of Clinical Nutrition" notes that low-carbohydrate diets may increase your risk for kidney damage, osteoporosis, abnormal heartbeat, lipid abnormalities and even sudden death. If your ketogenic diet is high in protein, it could also increase your risk for diabetes, cancer and overall premature mortality if you're middle-aged, but not if you're over 65, according to a March 2014 study published in "Cell Metabolism."
+						First, an Anatomy 101 review: Arteries are blood vessels that carry blood from the heart throughout the body. They're lined by a thin layer of cells called the endothelium. The endothelium works to keep the inside of arteries toned and smooth, which keeps blood flowing.
 					</p>
 					<p>
-						A 2003 article published in the "Asia Pacific Journal of Clinical Nutrition" notes that low-carbohydrate diets may increase your risk for kidney damage, osteoporosis, abnormal heartbeat, lipid abnormalities and even sudden death. If your ketogenic diet is high in protein, it could also increase your risk for diabetes, cancer and overall premature mortality if you're middle-aged, but not if you're over 65, according to a March 2014 study published in "Cell Metabolism."
+						According to experts, atherosclerosis begins with damage to the endothelium caused by high blood pressure, smoking, or high cholesterol. That damage leads to the formation of plaque. When bad cholesterol, or LDL, crosses the damaged endothelium, the cholesterol enters the wall of the artery. That causes your white blood cells to stream in to digest the LDL. Over years, the accumulating mess of cholesterol and cells becomes a plaque in the wall of the artery.
+					</p>
+					<p>
+						Plaque is a jumble of cholesterol, cells, and debris that creates a bump on the artery wall. As atherosclerosis progresses, that bump gets bigger. And when it gets big enough, it can create a blockage. That process goes on throughout your entire body. As a result, not only is your heart at risk but you are also at risk for stroke and other kinds of health problems.
 					</p>
 				</div>
 				<div class="join-discussion">
-					Join the discussion
+					<span class='join-discussion-text'>Show Discussion</span>
+					<img class="up" style="display:none;" src="{% static 'mainapp/images/blue-up-show-arrow.png' %}">
+					<img class="down" src="{% static 'mainapp/images/blue-down-show-arrow.png' %}">
+				</div>
+				<div class="discussion-box" style="display:none;">
+					<div class="discussion-header-text">Discussion (2)</div>
+					<div class="comment-panel">
+						<div class="comment-item">
+							<div class="comment-left-panel">
+								<img align="left" src="{% static 'mainapp/images/chris_jones.png' %}">
+							</div><div class="comment-right-panel">
+								<span class="commenter-full-name">Chris Jones</span>
+								<span class="commenter-comment-text">Interesting. Thanks for the answer. As a followup, I’m curious about any implications of keto regarding ketoacidosis. To what extent is this a problem?</span>
+								</div>
+						</div>
+						<div class="comment-item">
+							<div class="comment-left-panel">
+								<img align="left" src="{% static 'mainapp/images/chris_jones.png' %}">
+							</div><div class="comment-right-panel">
+								<span class="commenter-full-name">Chris Jones</span>
+								<span class="commenter-comment-text">Interesting. Thanks for the answer. As a followup, I’m curious about any implications of keto regarding ketoacidosis. To what extent is this a problem?</span>
+								</div>
+						</div>
+						<div class="comment-item">
+							<div class="comment-left-panel">
+								<img align="left" src="{% static 'mainapp/images/chris_jones.png' %}">
+							</div><div class="comment-right-panel">
+								<span class="commenter-full-name">Chris Jones</span>
+								<textarea class="comment-text-field" placeholder="Join the discussion..."></textarea>
+								<div class="comment-submit-area">
+									<button class="comment-button">Comment</button>
+								</div>
+								</div>
+						</div>
+					</div>
+
 				</div>
 			</div><div class="star-box">
 				<img src="{% static 'mainapp/images/yellow-star.png' %}">

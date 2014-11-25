@@ -1,0 +1,133 @@
+/* Login page styling */
+body {
+	background-image: url(images/congruent_outline_blue.png);
+	text-align: center;
+}
+
+.logo-area {
+	margin-bottom: 30px;
+}
+
+.logo-area > .logo-text {
+	font-size: 72px;
+	margin: 0 auto 0 auto;
+	color: white;
+	font-family: OpenSans-Bold;
+}
+
+.logo-area > .logo-text:hover {
+	cursor: default;
+}
+
+.login-box {
+	width: 500px;
+	text-align: center;
+	margin: 40px auto;
+
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	-webkit-transform: translate(-50%,-50%);
+}
+
+.login-form > .text-field {
+	margin: 15px auto;
+	display: block;
+	width: 367px;
+	height: 35px;
+	outline: none;
+	border: none;
+	padding: 3px 12px 3px 12px;
+	font-size: 16px;
+	border-radius: 1px;
+	font-family: OpenSans;
+}
+
+.text-field.error-text-field {
+	border: 3px solid #C70018;
+}
+
+.login-form > .login-button {
+	width:120px;
+	margin-top: 10px;
+	color: white;
+	height: 42px;
+	background-color: #34A2B3;
+	text-align: center;
+	border: #D4D4D4;
+	border-style: solid;
+	border-width: 0px;
+	font-size: 18px;
+	outline-width: 0;
+	font-family: OpenSans-Light;
+}
+
+.login-form > .login-button:hover {
+	cursor: pointer;
+	opacity: .7;
+}
+
+.alert-bar {
+	position: fixed;
+	text-align: center;
+	background-color: #f2dede;
+	margin: 30px auto;
+	padding: 8px 90px 8px 90px;
+	border: 1px solid red;
+	border-radius: 4px;
+	font-size: 18px;
+	color: #b94a48;
+	font-family: OpenSans;
+
+	left:50%;
+	transform: translateX(-50%);
+}
+
+
+
+/* FONTS */
+@font-face {
+    font-family: OpenSans-Bold;
+	src: url('fonts/OpenSans-Bold.eot'); /* IE9 Compat Modes */
+	src: url('fonts/OpenSans-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+		url('fonts/OpenSans-Bold.woff') format('woff'), /* Modern Browsers */
+		url('fonts/OpenSans-Bold.ttf')  format('truetype'), /* Safari, Android, iOS */
+		url('fonts/OpenSans-Bold.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+    font-family: OpenSans-Semibold;
+	src: url('fonts/OpenSans-Semibold.eot'); /* IE9 Compat Modes */
+	src: url('fonts/OpenSans-Semibold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+		url('fonts/OpenSans-Semibold.woff') format('woff'), /* Modern Browsers */
+		url('fonts/OpenSans-Semibold.ttf')  format('truetype'), /* Safari, Android, iOS */
+		url('fonts/OpenSans-Semibold.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+	font-family: OpenSans;
+	src: url('fonts/OpenSans.eot'); /* IE9 Compat Modes */
+	src: url('fonts/OpenSans.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+		url('fonts/OpenSans.woff') format('woff'), /* Modern Browsers */
+		url('fonts/OpenSans.ttf')  format('truetype'), /* Safari, Android, iOS */
+		url('fonts/OpenSans.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+	font-family: OpenSans-Light;
+	src: url('fonts/OpenSans-Light.eot'); /* IE9 Compat Modes */
+	src: url('fonts/OpenSans-Light.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+		url('fonts/OpenSans-Light.woff') format('woff'), /* Modern Browsers */
+		url('fonts/OpenSans-Light.ttf')  format('truetype'), /* Safari, Android, iOS */
+		url('fonts/OpenSans-Light.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+	font-family: OpenSans-ExtraBold;
+	src: url('fonts/OpenSans-ExtraBold.eot'); /* IE9 Compat Modes */
+	src: url('fonts/OpenSans-ExtraBold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+		url('fonts/OpenSans-ExtraBold.woff') format('woff'), /* Modern Browsers */
+		url('fonts/OpenSans-ExtraBold.ttf')  format('truetype'), /* Safari, Android, iOS */
+		url('fonts/OpenSans-ExtraBold.svg#svgFontName') format('svg'); /* Legacy iOS */
+}
