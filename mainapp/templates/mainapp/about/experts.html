@@ -40,9 +40,21 @@
 			$('.experts-row').last().append(expert_item_element);
 		}
 
-		if(experts_count % 3 == 0) {
-
+		/* Add Be Expert Item */
+		experts_count++;
+		if(experts_count % 3 == 1) {
+			$('#experts-panel').append('<div class="experts-row"></div>');
 		}
+		var be_expert_item = '<a class="be-expert-item" href="/expert_contact/"> \
+			<img src="{% static 'mainapp/images/we_want_you.jpg' %}"> \
+			<div class="join-information"> \
+				<span href="/expert_contact/" style="display: block;">Be an expert</span> \
+				<span href="/expert_contact/">Join</span> \
+				<img src="{% static 'mainapp/images/blue-chevron.png' %}"> \
+			</div> \
+		</a>';
+		$('.experts-row').last().append(be_expert_item);
+		
 
 		/* BINDINGS */
 		$('.expert-item').click(function() {
@@ -116,7 +128,8 @@
 
 	<div class="content-container">
 		<span class="main-text">Meet the Nutriosity expert community</span>
-		<span class="click-more-text">Click an expert to learn more.</span>
+		<span class="click-more-text">Click on an expert to learn more</span>
+		
 		<div id="experts-panel">
 			<!-- <div class="experts-row">
 				<div class="expert-item">
@@ -135,42 +148,9 @@
 						<span class="affiliation-text"></span>
 					</div>
 				</div>
-				<div class="expert-item">
-					<img src="{% static 'mainapp/images/melissa_foor.png' %}">
-					<div class="expert-information">
-						<span class="name-designiation-text">Melissa Foor, RD</span>
-						<span class="position-text">Registered Dietitian</span>
-						<span class="affiliation-text"></span>
-					</div>
-				</div>
-			</div>
-			<div class="experts-row">
-				<div class="expert-item">
-					<img src="{% static 'mainapp/images/flavia_herzog_2.png' %}">
-					<div class="expert-information">
-						<span class="name-designiation-text">Flavia Herzog Liebel, MA, RD, LDN</span>
-						<span class="position-text">Registered Dietitian</span>
-						<span class="affiliation-text">CEO, Therapeutic Nutrition</span>
-					</div>
-				</div>
-				<div class="expert-item">
-					<img src="{% static 'mainapp/images/matam_vijay_kumar.png' %}">
-					<div class="expert-information">
-						<span class="name-designiation-text">Matam Vijay-Kumar, PhD</span>
-						<span class="position-text">Nutritional Biochemistry Researcher and Professor</span>
-						<span class="affiliation-text">Pennsylvania State University</span>
-					</div>
-				</div>
-				<div class="expert-item">
-					<img src="{% static 'mainapp/images/melissa_foor.png' %}">
-					<div class="expert-information">
-						<span class="name-designiation-text">Melissa Foor, R.D.</span>
-						<span class="position-text">Registered Dietitian</span>
-						<span class="affiliation-text"></span>
-					</div>
-				</div> 
+				
 			</div> -->
 			
-			
+		</div>
 	</div>
 {% endblock %}

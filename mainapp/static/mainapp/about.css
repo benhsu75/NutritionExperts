@@ -1,7 +1,14 @@
 body {
-	font-family: OpenSans;
+	font-family: OpenSans !important;
 	background-color: #F9F9F9;
 	padding-bottom: 40px;
+	position: relative;
+	min-height: 100%;
+	/*min-height: 8000px;*/
+}
+
+html {
+	height: 100%;
 }
 
 body.noscroll {
@@ -146,7 +153,7 @@ body.noscroll {
 
 
 /* HEADER CSS */
-.header {
+.n-header {
 	background-color: #34A2B3;
 	height: 60px;
 	width: 100%;
@@ -154,14 +161,14 @@ body.noscroll {
 	z-index: 2;
 }
 
-.header > .right-header-container {
+.n-header > .right-header-container {
 	margin-left: auto;
 	margin-right: auto;
 	width: 900px;
 	height: 100%;
 }
 
-.wrapper {
+.n-wrapper {
 	position: relative;
 	width: 900px;
 	height: 60px;
@@ -189,14 +196,14 @@ a.logo:hover {
 	color: #D6F2F6;
 }
 
-.wrapper > .right-header {
+.n-wrapper > .right-header {
 	position: absolute;
 	right: 0;
 	top: 50%;                         
 	transform: translateY(-50%);
 }
 
-.right-header > .nav-item {
+.right-header > .n-nav-item {
 	display: inline-block;
 	margin-left: 15px;
 	margin-right: 0px;
@@ -205,7 +212,7 @@ a.logo:hover {
 	vertical-align: middle;
 }
 
-/*.right-header > .account-item:hover > .account-name,  .right-header > .nav-item:hover > .account-image{
+/*.right-header > .account-item:hover > .account-name,  .right-header > .n-nav-item:hover > .account-image{
 	opacity: .6;
 	cursor: pointer;
 }*/
@@ -215,23 +222,24 @@ a.logo:hover {
 	cursor: pointer;
 }
 
-.right-header > .nav-item:hover > a {
+.right-header > .n-nav-item:hover > a {
 	opacity: .6;
 	cursor: pointer;
+	text-decoration: none;
 }
 
-/*[class="nav-item"]:hover {
+/*[class="n-nav-item"]:hover {
 	opacity: .6;
 	cursor: pointer;
 }*/
 
-.nav-item > a {
+.n-nav-item > a {
 	color: white;
 	text-decoration: none;
 	font-size: 14px;
 }
 
-/*.nav-item.account-item:hover {
+/*.n-nav-item.account-item:hover {
 	background-color: transparent;
 }*/
 
@@ -264,7 +272,7 @@ a.logo:hover {
 	/*display: none;*/
 }
 
-.account-item > .account-dropdown {
+.account-item > .n-account-dropdown {
 	background-color: white;
 	width: 150px;
 	position: absolute;
@@ -282,11 +290,11 @@ a.logo:hover {
 	box-shadow: 0px 0px 1px 1px rgba(0,0,0,0.1);
 }
 
-.account-dropdown > .dropdown-menu {
+.n-account-dropdown > .n-dropdown-menu {
 
 }
 
-.dropdown-menu > .dropdown-item {
+.n-dropdown-menu > .n-dropdown-item {
 	display: block;
 	text-decoration: none;
 	padding-left: 20px;
@@ -296,7 +304,7 @@ a.logo:hover {
 	color: #325055;
 }
 
-.dropdown-menu > .dropdown-item:hover {
+.n-dropdown-menu > .n-dropdown-item:hover {
 	background-color: #C8CFD1;
 }
 
@@ -412,7 +420,22 @@ a.logo:hover {
 
 .text-link:hover {
 	opacity: .5;
+	text-decoration: none;
 }
+
+.error-text-link {
+	color: #DC001B;
+	font-family: OpenSans-Bold;
+	text-decoration: none;
+}
+
+.error-text-link:hover {
+	opacity: .5;
+	color: #DC001B;
+	text-decoration: none;
+}
+
+
 
 /* FORM STYLING */
 #interest-sign-up {
@@ -535,12 +558,45 @@ a.logo:hover {
 	display: inline-block;
 }
 
+#experts-panel > .experts-row > .be-expert-item  {
+	position: relative;
+	display: inline-block;
+/*	width: 268px;
+	height: 80px;*/
+}
+
+#experts-panel > .experts-row > .be-expert-item > .join-information {
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	padding-left: 4px;
+}
+
+#experts-panel > .experts-row > .be-expert-item > .join-information > span {
+	/*position: absolute;*/
+	font-size: 18px;
+	text-decoration: none;
+	color: #34A2B3;
+	font-family: OpenSans-Bold;
+	vertical-align: middle;
+}
+
+#experts-panel > .experts-row > .be-expert-item > .join-information > img {
+	height: 20px;
+	vertical-align: middle;
+}
+
 #experts-panel > .experts-row > .expert-item:hover {
 	opacity: .4;
 	cursor: pointer;
 }
 
-.expert-item > img {
+#experts-panel > .experts-row > .be-expert-item:hover {
+	opacity: .4;
+	cursor: pointer;
+}
+
+.expert-item > img, .be-expert-item > img {
 	height: 80px;
 	width: 80px;
 	border-radius: 50%;
@@ -549,6 +605,10 @@ a.logo:hover {
 	margin-right: 8px;
 }
 
+/*.be-expert-item > img {
+	border: 2px solid #CBEDF2;
+}
+*/
 .expert-item > .expert-information {
 	display: inline-block;
 	font-size: 12px;
@@ -637,7 +697,7 @@ a.logo:hover {
 
 .feed-item:hover {
 	/*background-color: #DCE0E0;*/
-	opacity: .7;
+	opacity: .8;
 	cursor: pointer;
 }
 
@@ -657,7 +717,7 @@ a.logo:hover {
 	cursor: pointer;
 }
 
-.feed-item > .upvote-item.upvoted  {
+.feed-item > .upvote-item.upvoted, .feed-item > .upvote-item:hover  {
 	opacity: 1;
 }
 
@@ -963,6 +1023,37 @@ a.logo:hover {
 
 .half-text-field:focus, .full-text-field:focus, .full-text-area:focus {
     outline-width: 0;
+}
+
+.footer {
+	font-size: 11px;
+	color: #8C8C8C;
+	position: absolute;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	text-align: center;
+
+}
+
+.footer > .blue-link {
+	color: #34ABBD;
+	text-decoration: none;
+}
+
+.footer > .blue-link:hover {
+	opacity: .7;
+	text-decoration: underline;
+}
+
+.legal-text {
+	width: 800px;
+	display: inline-block;
+	text-align: left;
+	font-size: 16px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+
 }
 
 

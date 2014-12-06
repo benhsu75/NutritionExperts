@@ -199,9 +199,9 @@ def post_question(request):
 	details = json.loads(request.POST.get('details', None))
 
 	# Validate title
-	title_num_words = len(title.split())
+	title_num_char = len(title)
 
-	if title_num_words > 30:
+	if title_num_char > 190:
 		return_object['status'] = 0
 		return_object['error'] = 1 # Title too long
 
@@ -224,10 +224,51 @@ def post_question(request):
 	return_object['status'] = 1
 	return HttpResponse(json.dumps(return_object))
 
+def answer_question(request):
+	return_object = {}
+
+	question_pk = request.POST.get('question_pk', None)
+	answer_text = request.POST.get('answer_text', None)
+
+	# Validate logged in
+	if not request.user.is_authenticated():
+		return_object['status'] = 0
+		return_object['error'] = 0 # Not logged in
+		return HttpResponse(json.dumps(return_object))
+
+	# Validate that user is an expert
+	user_profile = User_Profile.objects.get(user=request.user)
+	if not user_profile.is_expert:
+		return_object['status'] = 0
+		return_object['error'] = 1 # Not an expert
+		return HttpResponse(json.dumps(return_object))
+
+	# Get question
+	try:
+		question = Question.objects.get(pk=question_pk)
+	except Question.DoesNotExist:
+		return_object['status'] = 0
+		return_object['error'] = 2 # Nonexistent question
+		return HttpResponse(json.dumps(return_object))
+
+	# Validate that answer isn't an empty string
+	if answer_text:
+		answer_text = answer_text.strip()
+
+	if not answer_text:
+		return_object['status'] = 0
+		return_object['error'] = 3 # Empty string posted as answer
+		return HttpResponse(json.dumps(return_object))
+
+	# Create answer and relate to question
+	a = Answer(question=question, answered_by_user=user_profile, text=answer_text)
+	a.save()
+
+	return_object['status'] = 1 # Success
+	return HttpResponse(json.dumps(return_object))
 
 
 def populate_expert_profile(request):
-
 	return_object = {}
 
 	# Validate that user is member

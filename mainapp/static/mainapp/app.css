@@ -9,7 +9,7 @@ body.feed {
 /* Back button */
 #app-back-bar {
 	width: 900px;
-	margin: 15px auto;
+	margin: 10px auto;
 	text-align: left;
 }
 
@@ -17,7 +17,7 @@ body.feed {
 	font-size: 20px;
 	color: #767676;
 	position: relative;
-	margin-top:15px;
+	margin-top:10px;
 	margin-left: 8px;
 }
 
@@ -27,8 +27,8 @@ body.feed {
 }
 
 #app-back-button > img {
-	width: 24px;
-	height: 20px;
+	width: 22px;
+	height: 18px;
 }
 
 .question-content-box {
@@ -68,14 +68,42 @@ body.feed {
 	font-weight: bold;
 }
 
+.answer-preview {
+	padding: 10px 15px 10px 15px;
+	background-color: #f6f6f6;
+	display: inline-block;
+	width: 900px;
+	border-radius: 3px;
+	border: 1px solid #DEDEDE;
+}
+
+.answer-preview:hover {
+	/*opacity: .5;*/
+}
+
+.answer-preview > .preview-text {
+	padding: 7px 10px 7px 10px;
+	text-align: left;
+	background-color: white;
+	width: 870px;
+	font-size: 18px;
+	border: 1px solid #DEDEDE;
+	color: #737373;
+}
+
+.answer-preview > .preview-text:hover {
+	cursor: text;
+	opacity: .7;
+}
+
 .answer-container {
 	width: 968px;
-	margin: 20px auto;
+	margin: 30px auto;
 	overflow: hidden;
 	white-space: nowrap;
 }
 
-.answer-container > .expert-profile-box {
+.expert-profile-box {
 	display: inline-block;
 	width: 242px;
 	background-color: #EEEEEE;
@@ -84,6 +112,7 @@ body.feed {
 	white-space: normal;
 	height: 100%;
 	min-height: 200px;
+	position: relative;
 }
 
 .answer-container > .answer-box {
@@ -95,7 +124,7 @@ body.feed {
 	border-radius: 2px;
 	border: 1px solid #E8E8E8;
 	vertical-align: top;
-	padding: 10px 30px 50px 30px;
+	padding: 20px 30px 50px 30px;
 	min-height: 200px;
 	position: relative;
 }
@@ -201,6 +230,7 @@ body.feed {
 
 .expert-profile-box > .expert-top-profile {
 	padding: 15px 0 0 0;
+
 }
 
 .expert-top-profile > .expert-image-wrapper {
@@ -211,6 +241,8 @@ body.feed {
 
 .expert-top-profile > .expert-image-wrapper > img {
 	width: 80px;
+	height: 80px;
+	border-radius: 50%;
 	display: ;
 }
 
@@ -245,16 +277,24 @@ body.feed {
 
 .expert-profile-box > .expert-description > .position {
 	display: block;
+	font-size: 15px;
+	text-align: center;
 }
 
 .expert-profile-box > .expert-description > .organization {
 	display: block;
+	font-size: 15px;
+	text-align: center;
 }
 
 .expert-profile-box > .go-to-profile {
-	text-align: right;
+	position: absolute;
+	/*text-align: right;*/
 	padding-right: 10px;
 	padding-bottom: 8px;
+	right: 0;
+	bottom: 0;
+	text-decoration: none;
 }
 
 .expert-profile-box > .go-to-profile:hover {
@@ -273,13 +313,45 @@ body.feed {
 	vertical-align: middle;
 }
 
+.answer-question-box {
+	white-space: normal;
+	display: inline-block;
+	width: 650px;
+	margin-left: 10px;
+	background-color: white;
+	border-radius: 2px;
+	/*border: 1px solid #E8E8E8;*/
+	vertical-align: top;
+	position: relative;
+	text-align: middle;
+}
 
+.answer-question-box > .error-text {
+	position: absolute;
+	left: 0;
+	bottom: 15px;
+	font-size: 16px;
+	color: red;
+}
+.answer-question-box > .cancel-button {
+	position: absolute;
+	right: 0;
+	bottom: 15px;
+}
+.answer-question-box > .cancel-button:hover {
+	cursor: pointer;
+}
+
+.submit-answer-button {
+	margin: 0 auto;
+}
 
 /* Star */
 .star-box {
 	display: inline-block;
 	vertical-align: top;
 	padding-left:5px;
+	width: 34px;
 }
 
 .star-box > img {
@@ -310,13 +382,13 @@ body.feed {
 .answer-content-box {
 	width: 900px;
 	margin: 40px auto;
-	opacity: .5;
+	/*opacity: .5;*/
 }
 
-.answer-content-box:hover, .answer-content-box.active {
+/*.answer-content-box:hover, .answer-content-box.active {
 	opacity: 1;
 }
-
+*/
 .answer-editor-textarea {
 
 }
@@ -852,10 +924,21 @@ body.feed {
 	display: block;
 }
 
-.ask-content > .ask-information > p {
+.ask-content > .ask-information > .special-info-box {
 	width: 100%;
-	margin: 30px auto;
+	margin-top: 20px;
+	padding: 20px 40px 20px 40px;
+	background-color: #DCF0F2;
+	text-align: left;
 	font-size: 16px;
+}
+
+.ask-content > .ask-box > .how-to-ask-section > .info > p {
+	width: 90%;
+	/*margin: 30px auto;*/
+	margin: 0 auto;
+	padding-top: 10px;
+	font-size: 15px;
 	font-family: OpenSans;
 	text-align: left;
 }
@@ -882,7 +965,7 @@ body.feed {
 .ask-content > .ask-box > .how-to-ask-section > .info {
 	width: 280px;
 	margin: 0 0 0 35px;
-	background-color: #CAE0E3;
+	background-color: #FFEBCA;
 	/*border: 1px solid gray;*/
 	height: 400px;
 }
@@ -911,7 +994,7 @@ body.feed {
 
 .summernote-wrapper {
 	text-align: left;
-	margin-bottom: 15px;
+	/*margin-bottom: 15px;*/
 }
 
 .ask-form > .large-submit-button {

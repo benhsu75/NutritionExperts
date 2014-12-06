@@ -81,14 +81,10 @@ class Upvote_Rel(models.Model):
 
 class Answer(models.Model):
 	timestamp = models.DateTimeField(auto_now_add=True)
-	last_updated = models.DateTimeField()
+	last_updated = models.DateTimeField(auto_now=True)
+	question = models.ForeignKey(Question)
 	answered_by_user = models.ForeignKey(User_Profile)
 	text = models.TextField()
-
-# class d(models.Model):
-# 	d = models.CharField(max_length=10)
-
-
 
 
 

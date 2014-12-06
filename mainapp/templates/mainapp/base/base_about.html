@@ -28,7 +28,7 @@
 </head>
 
 <body>
-	<div class="header">
+	<div class="n-header">
 		<div class="right-header-container">
 			<a class="logo" href="/">Nutriosity</a>
 		</div>
@@ -46,10 +46,14 @@
 		<div id="back-bar">
 			<div id="back-button" style="display:none;">
 				<img src="{% static 'mainapp/images/back-arrow.png' %}">
-				Back to <span class="back-to-page bold">Experts</span>
+				Back
 			</div>
 		</div>
 		{% block content %}{% endblock %}
+	</div>
+	<div class="footer">
+		<a class="blue-link" href="/terms/">Terms of Service</a> | <a class="blue-link" href="/privacy/">Privacy Policy</a> | Copyright &copy; 2014 Nutriosity. All rights reserved.<br>
+		Nutriosity does not provide medical or nutrition advice, diagnosis, or treatment. <a href="/disclaimer/" class="blue-link">See additional information.</a>
 	</div>
 
 	<!-- Fixed stuff -->

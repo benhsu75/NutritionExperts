@@ -3,6 +3,8 @@
 <head>
 	<title>{% block title %} {% endblock %}</title>
 
+	{% block beforescript %} {% endblock %}
+	
 	{% load staticfiles %}
 	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/base.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/about.css' %}">
@@ -15,43 +17,43 @@
 </head>
 
 <body {% block bodyclass %}{% endblock %}>
-	<div class="header">
+	<div class="n-header">
 		<div class="right-header-container">
 			<a class="logo" href="/feed/">Nutriosity</a>
 			
 			{% if user.is_authenticated %}
-			<div class="wrapper" style="display:block;">
+			<div class="n-wrapper" style="display:block;">
 				<div class="right-header logged-in">
 					{% if my_is_superuser %}
-					<div class="nav-item"><a href="/ask/">Ask</a></div>
+					<div class="n-nav-item"><a href="/ask/">Ask</a></div>
 					{% else %}
 					{% endif %}
-					<!-- <div class="nav-item"><a href="/feed/">Home</a></div> -->
-					<div class="nav-item"><a href="/about/">About</a></div>
-					<div class="nav-item account-item">
+					<!-- <div class="n-nav-item"><a href="/feed/">Home</a></div> -->
+					<div class="n-nav-item"><a href="/about/">About</a></div>
+					<div class="n-nav-item account-item">
 						<!-- <img class="dropdown-triangle" src="{% static 'mainapp/images/dropdown-triangle.png' %}"> -->
 						
 						<div class="account-item-hover">
 							<img class="account-image" src="{% static 'mainapp/images/profile_pictures/' %}{{ my_profile_picture }}">
 							<span class="account-name">{{first_name}}</span>
 						</div>
-						<div class="account-dropdown" style="display: none;">
-							<div class="dropdown-menu">
-								<a href="/profile/{{ my_user_profile_pk }}/" class="dropdown-item">Profile</a>
-								<a href="#" class="dropdown-item">My Account</a>
+						<div class="n-account-dropdown" style="display: none;">
+							<div class="n-dropdown-menu">
+								<a href="/profile/{{ my_user_profile_pk }}/" class="n-dropdown-item">Profile</a>
+								<a href="#" class="n-dropdown-item">My Account</a>
 								<div class="dropdown-break"></div>
-								<a href="#" class="dropdown-item logout-item">Log Out</a>
+								<a href="#" class="n-dropdown-item logout-item">Log Out</a>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			{% else %}
-			<div class="wrapper" style="display:block;">
+			<div class="n-wrapper" style="display:block;">
 				<div class="right-header not-logged-in" >
-<!-- 					<div class="nav-item"><a href="/sign_up">Sign Up</a></div>
- -->					<div class="nav-item"><a href="/about">About</a></div>
-					<div class="nav-item login-button"><a href="/sign_in/">Sign In</a></div>
+<!-- 					<div class="n-nav-item"><a href="/sign_up">Sign Up</a></div>
+ -->					<div class="n-nav-item"><a href="/about">About</a></div>
+					<div class="n-nav-item login-button"><a href="/sign_in/">Sign In</a></div>
 				</div>	
 			</div>
 			{% endif %}
@@ -63,6 +65,10 @@
 
 	<div class="content">
 		{% block content %}{% endblock %}
+	</div>
+	<div class="footer">
+		<a class="blue-link" href="/terms/">Terms of Service</a> | <a class="blue-link" href="/privacy/">Privacy Policy</a> | Copyright &copy; 2014 Nutriosity. All rights reserved.<br>
+		Nutriosity does not provide medical or nutrition advice, diagnosis, or treatment. <a href="/disclaimer/" class="blue-link">See additional information.</a>
 	</div>
 
 	<div class="login-lightbox" style="display:none;">
@@ -97,20 +103,20 @@
 		$('body').removeClass('noscroll');
 	});
 
-	$('.nav-item.account-item').click(function(event) {
-		if($('.account-dropdown').is(':visible')) {
-			$('.account-dropdown').hide();
+	$('.n-nav-item.account-item').click(function(event) {
+		if($('.n-account-dropdown').is(':visible')) {
+			$('.n-account-dropdown').hide();
 		}
 		else {
-			$('.account-dropdown').show();
+			$('.n-account-dropdown').show();
 			event.stopPropagation();
 		}
 		
 	});
 
 	$('body').click(function() {
-		if($('.account-dropdown').is(':visible')) {
-			$('.account-dropdown').hide();
+		if($('.n-account-dropdown').is(':visible')) {
+			$('.n-account-dropdown').hide();
 		}
 	});
 

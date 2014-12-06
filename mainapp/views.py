@@ -4,6 +4,8 @@ from django.template import RequestContext, loader
 import json
 from mainapp.models import *
 from django.contrib.auth import authenticate, login, logout
+import time
+import calendar
 
 ############################################################
 #################     HELPER METHODS       #################
@@ -23,6 +25,9 @@ def prepare_context(request):
 		context['my_is_expert_flag'] = profile.is_expert
 		context['my_user_profile_pk'] = profile.pk
 		context['first_name'] = request.user.first_name
+
+		# Pass User Profile object
+		context['my_user_profile'] = profile
 
 		profile_picture_loc = None
 		if profile.is_expert:
@@ -120,11 +125,25 @@ def faq(request):
 	})
 	return HttpResponse(template.render(context))
 
-def expert_contact(request, from_page):
+def expert_contact(request):
 	template = loader.get_template('mainapp/about/expert_contact.html')
 	context = RequestContext(request, {
-		'from_page': from_page
 	})
+	return HttpResponse(template.render(context))
+
+def terms(request):
+	template = loader.get_template('mainapp/about/terms.html')
+	context = prepare_context(request)
+	return HttpResponse(template.render(context))
+
+def privacy(request):
+	template = loader.get_template('mainapp/about/privacy.html')
+	context = prepare_context(request)
+	return HttpResponse(template.render(context))
+
+def disclaimer(request):
+	template = loader.get_template('mainapp/about/disclaimer.html')
+	context = prepare_context(request)
 	return HttpResponse(template.render(context))
 
 # APP PAGES
@@ -139,6 +158,17 @@ def sign_in(request):
 def feed(request):
 	template = loader.get_template('mainapp/app/feed.html')
 	context = prepare_context(request)
+
+	feed_items = []
+
+	for q in Question.objects.order_by('timestamp'):
+		item = {}
+		item['pk'] = q.pk 
+		item['text'] = q.text
+		item['num_upvotes'] = len(Upvote_Rel.objects.filter(question=q))
+		feed_items.append(item)
+
+	context['feed_items'] = json.dumps(feed_items)
 
 	return HttpResponse(template.render(context))
 	
@@ -217,9 +247,49 @@ def profile(request, user_profile_pk):
 
 	return HttpResponse(template.render(context))
 
-def discussion(request):
+def discussion(request, pk):
 	template = loader.get_template('mainapp/app/discussion.html')
 	context = prepare_context(request)
+	
+	# Get question information
+	try:
+		question = Question.objects.get(pk=pk)
+		context['question_exists'] = True
+		context['question_pk'] = pk
+
+		# Load Question Data
+		question_data = {}
+		question_data['text'] = question.text
+		question_data['timestamp'] = question.timestamp
+		question_data['details'] = question.details
+		question_data['num_votes'] = len(Upvote_Rel.objects.filter(question=question))
+		context['question_data'] = question_data
+
+		answers_array = []
+
+		
+		# Load all answers for the question
+		answers = Answer.objects.filter(question=question)
+		for a in answers:
+			answer_object = {}
+			
+			answer_object['timestamp'] = calendar.timegm(a.timestamp.utctimetuple())
+			answer_object['text'] = a.text
+			answer_object['answered_by_user'] = a.answered_by_user
+
+			# Get answer-by user information
+			user_profile = a.answered_by_user
+
+			answer_object['answered_by_first_name'] = user_profile.user.first_name
+			answer_object['answered_by_last_name'] = user_profile.user.last_name
+
+			answers_array.append(answer_object)
+
+		context['answers_data'] = answers_array
+
+	except Question.DoesNotExist:
+		context['question_exists'] = False
+
 	return HttpResponse(template.render(context))
 
 def ask(request):

@@ -17,7 +17,9 @@ urlpatterns = patterns('',
     url(r'^mission/', views.mission2, name="mission"),
     url(r'^experts/', views.experts, name="experts"),
     url(r'^faq/', views.faq, name="faq"),
-    url(r'^expert_contact/(?P<from_page>\d+)/$', views.expert_contact, name="expert_contact"),
+    url(r'^terms/', views.terms, name="terms"),
+    url(r'^privacy/', views.privacy, name="privacy"),
+    url(r'^disclaimer/', views.disclaimer, name="disclaimer"),
     url(r'^expert_contact/', views.expert_contact, name="expert_contact"),
 
     # App pages
@@ -25,7 +27,7 @@ urlpatterns = patterns('',
     url(r'^sign_up/', views.sign_up, name="sign_up"),
     url(r'^sign_up_profile/', views.sign_up_profile, name="sign_up_profile"),
     url(r'^profile/(?P<user_profile_pk>\d+)/$', views.profile, name="profile"),
-    url(r'^discussion/', views.discussion, name="discussion"),
+    url(r'^discussion/(?P<pk>\d+)/', views.discussion, name="discussion"),
     url(r'^ask/', views.ask, name="ask"),
 
     url(r'^expert_update/', views.expert_update, name="expert_update"),
@@ -42,5 +44,7 @@ urlpatterns = patterns('',
     url(r'^api/populate_expert_profile/', endpoints.populate_expert_profile, name="populate_expert_profile"),
     url(r'^api/populate_member_profile/', endpoints.populate_member_profile, name="populate_member_profile"),
     url(r'^api/post_question/', endpoints.post_question, name="post_question"),
+    url(r'^api/answer_question/', endpoints.answer_question, name="answer_question"),
+    
     
 )

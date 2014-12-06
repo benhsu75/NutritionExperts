@@ -79,7 +79,6 @@
 					accreditations_array.push($.trim(accreditations_array_raw[a]));
 			}
 
-
 			/* Get areas of expertise */
 			var expertises_array_raw = expertises_string.split(",");
 			var expertises_array = [];
@@ -132,7 +131,7 @@
 				var returnData = JSON.parse(data);
 
 				if(returnData.status == 1) { // Success
-					// window.location.href = "/feed/"
+					window.location.href = "/feed/"
 				}
 				else { // Failure
 

@@ -4,34 +4,146 @@
 
 {% block afterscript %}
 	<script type="text/javascript">
-	$('.join-discussion').click(function() {
-		if($('.discussion-box').is(':visible')) {
-			console.log('visible');
-			$('.discussion-box').fadeOut();
-			$('.join-discussion-text').text("Show Discussion");
-			$('.join-discussion > .up').hide();
-			$('.join-discussion > .down').show();
-		}
-		else{
-			console.log('not visible');
-			$('.discussion-box').fadeIn();
-			$('.join-discussion-text').text("Hide Discussion");
-			$('.join-discussion > .down').hide();
-			$('.join-discussion > .up').show();
-		} 
-		
-	});
+		var initialText = "Write your answer here";
+
+		// var answers_data = {{ answers_data | safe }};
+
+		{% if my_is_expert_flag %}
+
+		$(document).ready(function() {
+				$('#summernote').summernote({
+					height: 250,
+				minHeight: 250,             // set minimum height of editor
+  				maxHeight: 700,             // set maximum height of editor
+  				onfocus: function(e) {
+					if($('#summernote').code() == initialText) {
+						$('#summernote').code('');
+					}
+					else {
+
+					}
+				},
+				onblur: function(e) {
+					if($.trim($('#summernote').code()) == "") {
+						$('#summernote').code(initialText);
+					}
+					else {
+						
+					}
+				},
+				onChange: function(contents, $editable)
+				{
+					$('.summernote-wrapper').removeClass('error-text-field');
+				},
+				toolbar: [
+				    ['style', ['bold', 'italic', 'underline', 'clear']],
+				    ['fontsize', ['fontsize']],
+				    ['color', ['color']],
+				    ['para', ['ul', 'ol']],
+				    ['insert', ['picture','link']]
+				  ],
+				});
+		});
+
+		$('.answer-preview').click(function() {
+			$('.answer-question-container').show();
+			$(this).hide();
+		});
+
+		$('.cancel-button').click(function() {
+			$('.answer-question-container').hide();
+			$('.answer-preview').show();
+		});
+
+		$('.submit-answer-button').click(function() {
+			var answerHTML = $.trim($('#summernote').code());
+
+			var error_flag = false;
+
+			if(answerHTML == initialText || answerHTML == "") {
+				error_flag = true;
+				$('.summernote-wrapper').addClass('error-text-field');
+				$('.answer-question-box > .error-text').html("Please enter an answer!").show();
+			}
+
+			if(!error_flag) {
+				var data = {
+					'question_pk' : {{ question_pk }},
+					'answer_text' : answerHTML
+				};
+
+				HELPER.post("/api/answer_question/", data, function(data) {
+					/* Success */
+
+					var returnData = JSON.parse(data);
+
+					if(returnData.status == 1) { // Success
+						location.reload(); // Refresh the page
+					}
+					else { // Failure
+						if(returnData.error == 0) { // Not logged in
+							
+						}
+						else if(returnData.error == 1) { // Not an expert
+
+						}
+						else if(returnData.error == 2) { // Nonexistent question
+
+						}
+						else if(returnData.error == 3) { // Invalid answer
+
+						}
+					}
+
+				}, function(data) {
+					/* Failure */
+
+
+				});
+			}
+		});
+
+		{% endif %}
+
+
+		// $('.go-to-profile').click(function() {
+		// 	var profile_
+		// });
+
+
+		$('.join-discussion').click(function() {
+			if($('.discussion-box').is(':visible')) {
+				console.log('visible');
+				$('.discussion-box').fadeOut();
+				$('.join-discussion-text').text("Show Discussion");
+				$('.join-discussion > .up').hide();
+				$('.join-discussion > .down').show();
+			}
+			else{
+				console.log('not visible');
+				$('.discussion-box').fadeIn();
+				$('.join-discussion-text').text("Hide Discussion");
+				$('.join-discussion > .down').hide();
+				$('.join-discussion > .up').show();
+			} 
+			
+		});
+
+		$('#app-back-button').click(function() {
+			window.history.back();
+		});
 	</script>
 {% endblock %}
 
 {% block content %}
-	<div id="app-back-bar" style="display: none;">
+	<div id="app-back-bar" style="display: block;">
 		<div id="app-back-button">
 			{% load staticfiles %}
 			<img src="{% static 'mainapp/images/gray-back-arrow.png' %}">
-			Back to <span class="app-back-to-page bold">Experts</span>
+			Back<!--  to <span class="app-back-to-page bold">Experts</span> -->
 		</div>
 	</div>
+	{% if question_exists %}
 	<div class="discussion-item-container">
 		<div class="question-content-box">
 			<div class="question-text">How does plaque build up within the arteries? What factors usually lead to the development of Atherosclerosis?</div>
@@ -40,37 +152,75 @@
 				Asked by <span class="asked-by-user-name">Ben Hsu</span>
 			</div>
 		</div>
+
+		{% if my_is_expert_flag %}
 		
+		<!-- include libries(jQuery, bootstrap, fontawesome) -->
+		<script src="//code.jquery.com/jquery-1.9.1.min.js"></script> 
+		<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet"> 
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script> 
+		<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+
+		<!-- include summernote css/js-->
+		<link href="{% static 'mainapp/js/summernote-master/dist/summernote.css' %}" rel="stylesheet">
+		<script src="{% static 'mainapp/js/summernote-master/dist/summernote.min.js' %}"></script>
+
+
+		<div class="answer-container">
+			<div class="answer-preview">
+				<div class="preview-text">Write an answer and provide your expertise on the topic!</div>
+			</div>
+			<div class="answer-question-container" style="display:none;">
+				<div class="expert-profile-box" style="min-height: 110px;">
+					<div class="expert-top-profile">
+						<div class="expert-image-wrapper"><img src="{% static 'mainapp/images/profile_pictures/' %}{{ my_user_profile.expert_profile.image_path }}"></div><div class="expert-right-info">
+							<span class="expert-name">{{ my_user_profile.user.first_name }} {{ my_user_profile.user.last_name }}</span>
+							<span class="expert-accreditation">PhD</span>
+							<img src="{% static 'mainapp/images/expert_badge.png' %}">
+						</div>
+					</div>
+					<!-- <div class="expert-description">
+						<span class="position">{{ my_user_profile.expert_profile.title }} - {{ my_user_profile.expert_profile.organization }}</span>
+						<span class="organization"></span>
+					</div>
+					<div class="go-to-profile">
+						<span class="go-to-profile-text">Profile</span>
+						<img class="right-arrow-button" src="{% static 'mainapp/images/right-more-arrow.png' %}">
+					</div> -->
+				</div><div class="answer-question-box">
+						<div class="summernote-wrapper">
+							<div id="summernote">Write your answer here</div>
+						</div>
+						<span class="error-text" style="display:none;">Please enter an answer!</span>
+						<button class="large-submit-button submit-answer-button">Answer</button>
+						<a class="cancel-button">Cancel</a>
+					</div>
+			</div>
+			
+		</div>
+		{% endif %}
+		
+		{% for answer in answers_data %}
 		<div class="answer-container">
 			<div class="star-balancer"></div><div class="expert-profile-box">
 				<div class="expert-top-profile">
-					<div class="expert-image-wrapper"><img src="{% static 'mainapp/images/expert_image.png' %}"></div><div class="expert-right-info">
-						<span class="expert-name">Bart de Jonghe</span>
-<!-- 						<span class="expert-name"></span>
- -->
+					<div class="expert-image-wrapper"><img src="{% static 'mainapp/images/profile_pictures/' %}{{ answer.answered_by_user.expert_profile.image_path | safe }}"></div><div class="expert-right-info">
+						<span class="expert-name">{{ answer.answered_by_user.user.first_name | safe }} {{ answer.answered_by_user.user.last_name | safe }}</span>
 						<span class="expert-accreditation">PhD</span>
 						<img src="{% static 'mainapp/images/expert_badge.png' %}">
 					</div>
 				</div>
 				<div class="expert-description">
-					<span class="position">Assistant Professor of Nutrition, Researcher</span>
-					<span class="organization">University of Pennsylvania</span>
+					<span class="position">{{ answer.answered_by_user.expert_profile.title | safe }} - {{ answer.answered_by_user.expert_profile.organization | safe }}</span>
+					<span class="organization"></span>
 				</div>
-				<div class="go-to-profile">
+				<a class="go-to-profile" href="/profile/{{ answer.answered_by_user.pk }}/">
 					<span class="go-to-profile-text">Profile</span>
 					<img class="right-arrow-button" src="{% static 'mainapp/images/right-more-arrow.png' %}">
-				</div>
+				</a>
 			</div><div class="answer-box">
 				<div class="answer-text">
-					<p>
-						First, an Anatomy 101 review: Arteries are blood vessels that carry blood from the heart throughout the body. They're lined by a thin layer of cells called the endothelium. The endothelium works to keep the inside of arteries toned and smooth, which keeps blood flowing.
-					</p>
-					<p>
-						According to experts, atherosclerosis begins with damage to the endothelium caused by high blood pressure, smoking, or high cholesterol. That damage leads to the formation of plaque. When bad cholesterol, or LDL, crosses the damaged endothelium, the cholesterol enters the wall of the artery. That causes your white blood cells to stream in to digest the LDL. Over years, the accumulating mess of cholesterol and cells becomes a plaque in the wall of the artery.
-					</p>
-					<p>
-						Plaque is a jumble of cholesterol, cells, and debris that creates a bump on the artery wall. As atherosclerosis progresses, that bump gets bigger. And when it gets big enough, it can create a blockage. That process goes on throughout your entire body. As a result, not only is your heart at risk but you are also at risk for stroke and other kinds of health problems.
-					</p>
+					{{ answer.text | safe }}
 				</div>
 				<div class="join-discussion">
 					<span class='join-discussion-text'>Show Discussion</span>
@@ -115,7 +265,15 @@
 				<span class="star-count">12</span>
 			</div>
 		</div>
-		
+		{% endfor %}
+	
 	</div>
+	{% else %}
+	<div class="white-content-box">
+		<div>
+			<span class="page-not-found">We could not find that page :(</span>
+		</div>
+	</div>
+	{% endif %}
 	
 {% endblock %}

@@ -17,14 +17,48 @@
 			}
 		});
 
+		/* LOAD EVERYTHING */
+		var feedItems = {{ feed_items | safe }};
+		
+		for(var index in feedItems) {
+			var feedItem = feedItems[index];
+
+			var feedHTMLItem = '<div class="feed-item" data-pk="'+feedItem.pk+'"> \
+				<div class="upvote-item"> \
+					{% load staticfiles %} \
+					<img src="{% static "mainapp/images/upvote-arrow.png" %}"> \
+					<span class="vote-count">'+feedItem.num_upvotes+'</span> \
+				</div> \
+				<div class="question-text">'+feedItem.text+'</div> \
+				<div class="experts-pane"> \
+					<img src="{% static "mainapp/images/bart-de-jonghe.png" %}"> \
+					<img src="{% static "mainapp/images/bart-de-jonghe.png" %}"> \
+					<img src="{% static "mainapp/images/bart-de-jonghe.png" %}"> \
+				</div> \
+			</div>';
+					
+			$('.content-feed').append(feedHTMLItem);
+
+		}
+
+
+
+
+
+
 		/* Apply upvoted class */
-		$('.upvote-item').click(function() {
-			$(this).addClass('upvoted');
+		$('.upvote-item').click(function(e) {
+			if(!$(this).hasClass('upvoted')) {
+				$(this).addClass('upvoted');
+			}
+			
+			return false;
 		});
 
 		/* Go to discussion if feed item clicked */
 		$('.feed-item').click(function() {
-			window.location.href = "/discussion/";
+			var pk = $(this).data('pk');
+			window.location.href = "/discussion/"+pk+"/";
 		});
 
 	</script>
@@ -36,7 +70,7 @@
 		<span class="filter-type">Recent</span>
 	</div>
 	<div class="content-feed">
-		<div class="feed-item">
+		<!-- <div class="feed-item">
 			<div class="upvote-item">
 				{% load staticfiles %}
 				<img src="{% static 'mainapp/images/upvote-arrow.png' %}">
@@ -152,6 +186,6 @@
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
 				<img src="{% static 'mainapp/images/bart-de-jonghe.png' %}">
 			</div>
-		</div>
+		</div> -->
 	</div>
 {% endblock %}

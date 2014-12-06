@@ -6,13 +6,13 @@
 	<script type="text/javascript">
 
 		/* Set correct back-to page */
-		var from_page = {{ from_page | safe }};
-		if(from_page == 0) { // Came from About page
-			$('.back-to-page').text("About");
-		}
-		else if(from_page == 1) { // Came from Experts page
-			$('.back-to-page').text("Experts");
-		}
+		// var from_page = {{ from_page | safe }};
+		// if(from_page == 0) { // Came from About page
+		// 	$('.back-to-page').text("About");
+		// }
+		// else if(from_page == 1) { // Came from Experts page
+		// 	$('.back-to-page').text("Experts");
+		// }
 
 		$('#back-button').click(function() {
 			history.go(-1);
@@ -111,7 +111,9 @@
 	<div class="content-container">
 		<div class="signup-information">
 			<span class="large-title-text">Are you a nutrition expert?</span><br><br>
-			<p class="signup-text">We are looking for experts like dietitians, professors, researchers, nutrionists, and others to help us build a community of Nutrition knowledge sharing. Fill in the form or <a href="mailto:nutriosity@gmail.com" class="text-link">email us</a> and we'll be in contact soon!</p>
+			<p class="signup-text">We are looking for experts like dietitians, professors, researchers, nutrionists, and others to help us build a community of Nutrition knowledge sharing. </p>
+			<br>
+			<p class="signup-text">Fill in the form or <a href="mailto:nutriosity@gmail.com" class="text-link">email us</a> and we'll be in contact soon!</p>
 		</div>
 		<form class="signup-form">
 			<input id="first-name-field" type="text" name="first-name" placeholder="First name" class="half-text-field"><div style="width: 8px; display: none;"></div>

@@ -21,8 +21,6 @@
 			var shown_expertise = {{ shown_expertise | safe}};
 			var shown_accreditations = {{ shown_accreditations | safe}};
 
-			
-
 			$('.title').html(shown_title);
 			$('.institution').html(shown_organization);
 			$('.expert-summary').html(shown_bio);
@@ -57,6 +55,8 @@
 
 			$('.five-words').html(shown_five_words);
 			$('.expert-summary').html(shown_bio);
+
+			$('.full-name').text(shown_first_name + " " + shown_last_name);
 
 		{% endif %}
 		{% endif %}

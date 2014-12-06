@@ -2,6 +2,10 @@
 
 {% block title %}Ask - Nutriosity{% endblock %}
 
+{% block beforescript %} 
+
+{% endblock %}
+
 {% block afterscript %}
 	{% load staticfiles %}
 	<script type="text/javascript">
@@ -49,14 +53,14 @@
 
 			var error_flag = false;
 
-			console.log(title);
-			console.log(details);
+			// console.log(title);
+			// console.log(details);
 
-			if(title.split(" ").length > 30) {
+			if(title.length > 190) {
 				error_flag = true;
 				$('.title-text-area').addClass('error-text-field');
 				$('.form-alert-bar').css('visibility', 'visible');
-				$('.form-alert-bar').html("Please enter a shorter question title. Make it concise!");
+				$('.form-alert-bar').html("Please enter a shorter question title (less than 190 characters). Make it concise!");
 			}
 
 			if(title == "") {
@@ -82,12 +86,14 @@
 					}
 					else { // Failure
 						if(returnData.error == 0) { // Not logged in
-
+							$('.title-text-area').addClass('error-text-field');
+							$('.form-alert-bar').css('visibility', 'visible');
+							$('.form-alert-bar').html("Please <a href='/sign_in/' class='error-text-link'>sign in</a> first.");
 						}
 						else if(returnData.error == 1) { // Title too long
 							$('.title-text-area').addClass('error-text-field');
 							$('.form-alert-bar').css('visibility', 'visible');
-							$('.form-alert-bar').html("Please enter a shorter question title. Make it concise!");
+							$('.form-alert-bar').html("Please enter a shorter question title (less than 190 characters). Make it concise!");
 
 						}
 					}
@@ -127,27 +133,32 @@
 	<div class="ask-content">
 		<div class="ask-information">
 			<span class="main-text">Great discussions start with great questions</span>
-			<p>
-				<span class="bold">Free reign to ask questions and start discussions on Nutriosity is currently limited to a select group in the community.</span> However, you can still submit a question to be considered to be posted by someone in the community! 
-			</p>
-			<p>
-				Check out the tips on asking good questions so that your question is posted!
-			</p>
+			<div class="special-info-box">
+				<span class="bold">Free reign to ask questions on Nutriosity is currently limited to a small group of members.</span> However, you can still submit a question to be considered to be posted by someone in the community! 
+				<br><br>
+				If you're interested in learning more, <a href="mailto:nutriosity@gmail.com" class="text-link">email us</a>.
+			</div>
 		</div>
 		<div class="ask-box">
 			<div class="ask-form">
 				<textarea class="text-area title-text-area" placeholder="Title - Make your question's &quot;first impression&quot; straightforward and concise"></textarea>
 				<div class="summernote-wrapper">
 
-					<div class="unclicked" id="summernote">Details - Add background information, clarify the question, or link to relevant research or articles</div>
+					<div id="summernote">Details - Add background information, clarify the question, or link to relevant research or articles</div>
 					
 				</div>
+				<br>
 				<div class="form-alert-bar" style="visibility:hidden;">Please enter a valid first name.</div>
 				<button class="large-submit-button">Post</button>
 
 			</div><div class="how-to-ask-section">
 				<div class="info">
-					
+					<p>
+						<span class="bold">How To Ask</span>
+					</p>
+					<p>
+						<!-- <span class="bold">Free reign to ask questions and start discussions on Nutriosity is currently limited to a select group in the community.</span> However, you can still submit a question to be considered to be posted by someone in the community!  -->
+					</p>
 				</div>
 			</div>
 		</div>
