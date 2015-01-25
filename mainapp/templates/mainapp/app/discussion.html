@@ -10,6 +10,32 @@
 
 		{% if my_is_expert_flag %}
 
+		function CleanPastedHTML(input) {
+			// 1. remove line breaks / Mso classes
+			var stringStripper = /(\n|\r| class=(")?Mso[a-zA-Z]+(")?)/g;
+			var output = input.replace(stringStripper, ' ');
+			// 2. strip Word generated HTML comments
+			var commentSripper = new RegExp('<!--(.*?)-->','g');
+			var output = output.replace(commentSripper, '');
+			var tagStripper = new RegExp('<(/)*(meta|link|span|\\?xml:|st1:|o:|font)(.*?)>','gi');
+			// 3. remove tags leave content if any
+			output = output.replace(tagStripper, '');
+			// 4. Remove everything in between and including tags '<style(.)style(.)>'
+			var badTags = ['style', 'script','applet','embed','noframes','noscript'];
+
+			for (var i=0; i< badTags.length; i++) {
+			tagStripper = new RegExp('<'+badTags[i]+'.*?'+badTags[i]+'(.*?)>', 'gi');
+			output = output.replace(tagStripper, '');
+			}
+			// 5. remove attributes ' style="..."'
+			var badAttributes = ['style', 'start'];
+			for (var i=0; i< badAttributes.length; i++) {
+			var attributeStripper = new RegExp(' ' + badAttributes[i] + '="(.*?)"','gi');
+			output = output.replace(attributeStripper, '');
+			}
+			return output;
+		}
+
 		$(document).ready(function() {
 				$('#summernote').summernote({
 					height: 250,
@@ -35,10 +61,23 @@
 				{
 					$('.summernote-wrapper').removeClass('error-text-field');
 				},
+				onpaste: function(e) {
+					 var thisNote = $(this);
+					var updatePastedText = function(someNote){
+					    var original = someNote.code();
+					    var cleaned = CleanPastedHTML(original); //this is where to call whatever clean function you want. I have mine in a different file, called CleanPastedHTML.
+					    someNote.code('').html(cleaned); //this sets the displayed content editor to the cleaned pasted code.
+					};
+					setTimeout(function () {
+					    //this kinda sucks, but if you don't do a setTimeout, 
+					    //the function is called before the text is really pasted.
+					    updatePastedText(thisNote);
+					}, 10);
+				},
 				toolbar: [
 				    ['style', ['bold', 'italic', 'underline', 'clear']],
-				    ['fontsize', ['fontsize']],
-				    ['color', ['color']],
+				    // ['fontsize', ['fontsize']],
+				    // ['color', ['color']],
 				    ['para', ['ul', 'ol']],
 				    ['insert', ['picture','link']]
 				  ],
@@ -68,7 +107,7 @@
 
 			if(!error_flag) {
 				var data = {
-					'question_pk' : {{ question_pk }},
+					'question_pk' : {{ question.pk }},
 					'answer_text' : answerHTML
 				};
 
@@ -105,12 +144,6 @@
 
 		{% endif %}
 
-
-		// $('.go-to-profile').click(function() {
-		// 	var profile_
-		// });
-
-
 		$('.join-discussion').click(function() {
 			if($('.discussion-box').is(':visible')) {
 				console.log('visible');
@@ -125,9 +158,78 @@
 				$('.join-discussion-text').text("Hide Discussion");
 				$('.join-discussion > .down').hide();
 				$('.join-discussion > .up').show();
-			} 
-			
+			}
 		});
+
+		$('.star-box').click(function() {
+			if($(this).hasClass('upvoted')) {
+				// Unstar
+				var data = {
+					'answer_pk' : $(this).data('pk'),
+					'user_pk' : {{ my_user_profile_pk }}
+				};
+				HELPER.post("/api/unstar_answer/", data, function(data) {
+					/* Success */
+
+					var returnData = JSON.parse(data);
+
+					if(returnData.status == 1) { // Success
+						location.reload(); // Refresh the page
+					}
+					else { // Failure
+						if(returnData.error == 0) { // Not logged in
+							
+						}
+						else if(returnData.error == 1) { // User doesn't exist
+
+						}
+						else if(returnData.error == 2) { // Nonexistent question
+
+						}
+						else if(returnData.error == 3) { // User never starred
+
+						}
+					}
+
+				}, function(data) {
+					/* Failure */
+				});
+			}
+			else {
+				// Star
+				var data = {
+					'answer_pk' : $(this).data('pk'),
+					'user_pk' : {{ my_user_profile_pk }}
+				};
+
+				HELPER.post("/api/star_answer/", data, function(data) {
+					/* Success */
+
+					var returnData = JSON.parse(data);
+
+					if(returnData.status == 1) { // Success
+						location.reload(); // Refresh the page
+					}
+					else { // Failure
+						if(returnData.error == 0) { // Not logged in
+							
+						}
+						else if(returnData.error == 1) { // User doesn't exist
+
+						}
+						else if(returnData.error == 2) { // Nonexistent question
+
+						}
+						else if(returnData.error == 3) { // User already starred
+
+						}
+					}
+
+				}, function(data) {
+					/* Failure */
+				});
+			}
+		});	
 
 		$('#app-back-button').click(function() {
 			window.history.back();
@@ -146,10 +248,10 @@
 	{% if question_exists %}
 	<div class="discussion-item-container">
 		<div class="question-content-box">
-			<div class="question-text">How does plaque build up within the arteries? What factors usually lead to the development of Atherosclerosis?</div>
-			<div class="question-details">I'm curious about the science behind Atherosclerosis and the systems that are working behind the scenes that lead to plaque buildup.</div>
+			<div class="question-text">{{ question.text | safe }}</div>
+			<div class="question-details">{% autoescape off %}{{ question.details }}{% endautoescape %}</div>
 			<div class="asked-by-user">
-				Asked by <span class="asked-by-user-name">Ben Hsu</span>
+				Asked by <a class="asked-by-user-name" href="/profile/{{ question.asked_by_user.pk }}">{{ question.asked_by_user.user.first_name }} {{ question.asked_by_user.user.last_name }}</a>
 			</div>
 		</div>
 
@@ -204,23 +306,23 @@
 		<div class="answer-container">
 			<div class="star-balancer"></div><div class="expert-profile-box">
 				<div class="expert-top-profile">
-					<div class="expert-image-wrapper"><img src="{% static 'mainapp/images/profile_pictures/' %}{{ answer.answered_by_user.expert_profile.image_path | safe }}"></div><div class="expert-right-info">
-						<span class="expert-name">{{ answer.answered_by_user.user.first_name | safe }} {{ answer.answered_by_user.user.last_name | safe }}</span>
+					<div class="expert-image-wrapper"><img src="{% static 'mainapp/images/profile_pictures/' %}{{ answer.object.answered_by_user.expert_profile.image_path | safe }}"></div><div class="expert-right-info">
+						<span class="expert-name">{{ answer.object.answered_by_user.user.first_name | safe }} {{ answer.object.answered_by_user.user.last_name | safe }}</span>
 						<span class="expert-accreditation">PhD</span>
 						<img src="{% static 'mainapp/images/expert_badge.png' %}">
 					</div>
 				</div>
 				<div class="expert-description">
-					<span class="position">{{ answer.answered_by_user.expert_profile.title | safe }} - {{ answer.answered_by_user.expert_profile.organization | safe }}</span>
+					<span class="position">{{ answer.object.answered_by_user.expert_profile.title | safe }} - {{ answer.object.answered_by_user.expert_profile.organization | safe }}</span>
 					<span class="organization"></span>
 				</div>
-				<a class="go-to-profile" href="/profile/{{ answer.answered_by_user.pk }}/">
+				<a class="go-to-profile" href="/profile/{{ answer.object.answered_by_user.pk }}/">
 					<span class="go-to-profile-text">Profile</span>
 					<img class="right-arrow-button" src="{% static 'mainapp/images/right-more-arrow.png' %}">
 				</a>
 			</div><div class="answer-box">
 				<div class="answer-text">
-					{{ answer.text | safe }}
+					{{ answer.object.text | safe }}
 				</div>
 				<div class="join-discussion">
 					<span class='join-discussion-text'>Show Discussion</span>
@@ -260,9 +362,9 @@
 					</div>
 
 				</div>
-			</div><div class="star-box">
+			</div><div class="{% if logged_in %}star-box{% else %}star-box-uneditable{% endif %} {% if answer.already_starred %}upvoted{% endif %}" data-pk="{{ answer.object.pk }}">
 				<img src="{% static 'mainapp/images/yellow-star.png' %}">
-				<span class="star-count">12</span>
+				<span class="star-count">{{ answer.stars }}</span>
 			</div>
 		</div>
 		{% endfor %}

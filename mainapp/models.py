@@ -86,6 +86,11 @@ class Answer(models.Model):
 	answered_by_user = models.ForeignKey(User_Profile)
 	text = models.TextField()
 
+class Star_Rel(models.Model):
+	timestamp = models.DateTimeField(auto_now_add=True)
+	user_profile = models.ForeignKey(User_Profile)
+	answer = models.ForeignKey(Answer)
+
 
 
 

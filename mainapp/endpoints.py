@@ -338,6 +338,128 @@ def populate_expert_profile(request):
 
 	return HttpResponse(json.dumps(return_object))
 
+def upvote_question(request):
+	return_object = {}
+
+	# Validate logged in
+	if not request.user.is_authenticated():
+		return_object['status'] = 0
+		return_object['error'] = 0 # Not logged in
+		return HttpResponse(json.dumps(return_object))
+
+	user_pk = request.POST.get('user_pk', None)
+	question_pk = request.POST.get('question_pk', None)
+
+	try:
+		user = User_Profile.objects.get(pk=user_pk)
+		question = Question.objects.get(pk=question_pk)
+
+		already_upvoted = Upvote_Rel.objects.get(user_profile=user,question=question)
+
+
+	# Validate that user exists
+	except User_Profile.DoesNotExist: 
+		return_object['status'] = 0
+		return_object['error'] = 1 # User doesn't exist
+		return HttpResponse(json.dumps(return_object))
+	# Validate that question exists
+	except Question.DoesNotExist:
+		return_object['status'] = 0
+		return_object['error'] = 2 # Question doesn't exist
+		return HttpResponse(json.dumps(return_object))
+	except Upvote_Rel.DoesNotExist:
+		# Create new Upvote_Rel
+		u = Upvote_Rel(user_profile=user, question=question)
+		u.save()
+
+		# Return
+		return_object['status'] = 1
+		return HttpResponse(json.dumps(return_object))
+
+def star_answer(request):
+	return_object = {}
+
+	# Validate logged in
+	if not request.user.is_authenticated():
+		return_object['status'] = 0
+		return_object['error'] = 0 # Not logged in
+		return HttpResponse(json.dumps(return_object))
+
+	user_pk = request.POST.get('user_pk', None)
+	answer_pk = request.POST.get('answer_pk', None)
+
+	try:
+		user = User_Profile.objects.get(pk=user_pk)
+
+		answer = Answer.objects.get(pk=answer_pk)
+
+		already_starred = Star_Rel.objects.get(user_profile=user, answer=answer)
+
+		# User already starred
+		return_object['status'] = 0
+		return_object['error'] = 3 # User already starred
+		return HttpResponse(json.dumps(return_object))
+	# Validate that user exists
+	except User_Profile.DoesNotExist: 
+		return_object['status'] = 0
+		return_object['error'] = 1 # User doesn't exist
+		return HttpResponse(json.dumps(return_object))
+	# Validate that question exists
+	except Question.DoesNotExist:
+		return_object['status'] = 0
+		return_object['error'] = 2 # Question doesn't exist
+		return HttpResponse(json.dumps(return_object))
+	except Star_Rel.DoesNotExist:
+		# Create new Star_Rel
+		s = Star_Rel(user_profile=user, answer=answer)
+		s.save()
+
+		# Return
+		return_object['status'] = 1
+		return HttpResponse(json.dumps(return_object))
+
+def unstar_answer(request):
+	return_object = {}
+
+	# Validate logged in
+	if not request.user.is_authenticated():
+		return_object['status'] = 0
+		return_object['error'] = 0 # Not logged in
+		return HttpResponse(json.dumps(return_object))
+
+	user_pk = request.POST.get('user_pk', None)
+	answer_pk = request.POST.get('answer_pk', None)
+
+	try:
+		user = User_Profile.objects.get(pk=user_pk)
+
+		answer = Answer.objects.get(pk=answer_pk)
+
+		already_starred = Star_Rel.objects.get(user_profile=user, answer=answer)
+		already_starred.delete()
+
+		# Return
+		return_object['status'] = 1
+		return HttpResponse(json.dumps(return_object))
+	# Validate that user exists
+	except User_Profile.DoesNotExist: 
+		return_object['status'] = 0
+		return_object['error'] = 1 # User doesn't exist
+		return HttpResponse(json.dumps(return_object))
+	# Validate that question exists
+	except Question.DoesNotExist:
+		return_object['status'] = 0
+		return_object['error'] = 2 # Question doesn't exist
+		return HttpResponse(json.dumps(return_object))
+	except Star_Rel.DoesNotExist:
+		# User already starred
+		return_object['status'] = 0
+		return_object['error'] = 3 # User never starred
+		return HttpResponse(json.dumps(return_object))
+		
+
+		
+
 def upload_profile_picture(request):
 	return_object = {}
 
@@ -380,6 +502,7 @@ def handle_uploaded_file(f, new_filepath):
     with open(new_filepath, 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
+
 
 
 

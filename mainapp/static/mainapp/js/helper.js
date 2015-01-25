@@ -84,6 +84,7 @@ window.HELPER = (function () {
 			// });
 			
 			data.csrfmiddlewaretoken = getCookie('csrftoken');
+			console.log(data.csrfmiddlewaretoken);
 			
 			/* AJAX REQUEST */
     		$.ajax({

@@ -66,6 +66,14 @@ body.feed {
 
 .asked-by-user > .asked-by-user-name {
 	font-weight: bold;
+	text-decoration: none;
+	color: black;
+}
+
+.asked-by-user > .asked-by-user-name:hover {
+	cursor: pointer;
+	opacity: .7;
+	text-decoration: underline;
 }
 
 .answer-preview {
@@ -354,12 +362,23 @@ body.feed {
 	width: 34px;
 }
 
+.star-box-uneditable {
+	display: inline-block;
+	vertical-align: top;
+	padding-left:5px;
+	width: 34px;
+}
+
+.star-box-uneditable > img {
+	width: 29px;
+}
+
 .star-box > img {
 	width: 29px;
 	opacity: .3;
 }
 
-.star-box:hover > img {
+.star-box:hover > img, .star-box.upvoted > img {
 	opacity: 1;
 }
 
@@ -367,7 +386,7 @@ body.feed {
 	cursor: pointer;
 }
 
-.star-box > .star-count {
+.star-box > .star-count, .star-box-uneditable > .star-count {
 	display: block;
 	font-size: 16px;
 	font-family: OpenSans-Bold;

@@ -22,6 +22,7 @@ def prepare_context(request):
 			logout(request)
 			return context
 
+		context['logged_in'] = True
 		context['my_is_expert_flag'] = profile.is_expert
 		context['my_user_profile_pk'] = profile.pk
 		context['first_name'] = request.user.first_name
@@ -43,6 +44,8 @@ def prepare_context(request):
 				context['my_is_superuser'] = False
 
 		context['my_profile_picture'] = profile_picture_loc
+	else:
+		context['logged_in'] = False
 	return context
 
 
@@ -254,14 +257,11 @@ def discussion(request, pk):
 	# Get question information
 	try:
 		question = Question.objects.get(pk=pk)
+		context['question'] = question
 		context['question_exists'] = True
-		context['question_pk'] = pk
 
 		# Load Question Data
 		question_data = {}
-		question_data['text'] = question.text
-		question_data['timestamp'] = question.timestamp
-		question_data['details'] = question.details
 		question_data['num_votes'] = len(Upvote_Rel.objects.filter(question=question))
 		context['question_data'] = question_data
 
@@ -272,16 +272,18 @@ def discussion(request, pk):
 		answers = Answer.objects.filter(question=question)
 		for a in answers:
 			answer_object = {}
-			
-			answer_object['timestamp'] = calendar.timegm(a.timestamp.utctimetuple())
-			answer_object['text'] = a.text
-			answer_object['answered_by_user'] = a.answered_by_user
 
-			# Get answer-by user information
-			user_profile = a.answered_by_user
+			answer_object['object'] = a
+			answer_object['stars'] = len(Star_Rel.objects.filter(answer=a))
 
-			answer_object['answered_by_first_name'] = user_profile.user.first_name
-			answer_object['answered_by_last_name'] = user_profile.user.last_name
+			# Check if user already starred
+			if request.user.is_authenticated():
+				user_profile = User_Profile.objects.get(user=request.user)
+				try:
+					s = Star_Rel.objects.get(user_profile=user_profile,answer=a)
+					answer_object['already_starred'] = True
+				except Star_Rel.DoesNotExist:
+					answer_object['already_starred'] = False
 
 			answers_array.append(answer_object)
 

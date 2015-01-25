@@ -45,6 +45,10 @@ urlpatterns = patterns('',
     url(r'^api/populate_member_profile/', endpoints.populate_member_profile, name="populate_member_profile"),
     url(r'^api/post_question/', endpoints.post_question, name="post_question"),
     url(r'^api/answer_question/', endpoints.answer_question, name="answer_question"),
+    url(r'^api/star_answer/', endpoints.star_answer, name="star_answer"),
+    url(r'^api/unstar_answer/', endpoints.unstar_answer, name="unstar_answer"),
+    
+
     
     
 )
