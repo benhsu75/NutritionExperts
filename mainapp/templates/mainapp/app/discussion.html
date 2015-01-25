@@ -230,6 +230,43 @@
 				});
 			}
 		});	
+		
+		$('.comment-button').click(function() {
+			var answer_pk = $(this).parents('.discussion-box').data('pk');
+			var text = $(this).parents('.comment-right-panel').find('.comment-text-field').val();
+			console.log(text);
+
+			var data = {
+				answer_pk: answer_pk,
+				text: text
+			};
+
+			HELPER.post("/api/comment/", data, function(data) {
+				/* Success */
+				var returnData = JSON.parse(data);
+
+				if(returnData.status == 1) { // Success
+					location.reload(); // Refresh the page
+				}
+				else { // Failure
+					if(returnData.error == 0) { // Not logged in
+						
+					}
+					else if(returnData.error == 1) { // No user
+
+					}
+					else if(returnData.error == 2) { // Nonexistent answer
+
+					}
+				}
+
+			}, function(data) {
+				/* Failure */
+
+
+			});
+
+		});
 
 		$('#app-back-button').click(function() {
 			window.history.back();
@@ -329,30 +366,25 @@
 					<img class="up" style="display:none;" src="{% static 'mainapp/images/blue-up-show-arrow.png' %}">
 					<img class="down" src="{% static 'mainapp/images/blue-down-show-arrow.png' %}">
 				</div>
-				<div class="discussion-box" style="display:none;">
-					<div class="discussion-header-text">Discussion (2)</div>
+				<div class="discussion-box"  data-pk="{{answer.object.pk}}" style="display:none;">
+					<div class="discussion-header-text">Discussion ({{ answer.comments | length}})</div>
 					<div class="comment-panel">
+						{% for comment in answer.comments %}
 						<div class="comment-item">
 							<div class="comment-left-panel">
-								<img align="left" src="{% static 'mainapp/images/chris_jones.png' %}">
+								<img align="left" src="{% static 'mainapp/images/profile_pictures/' %}{{comment.image_path}}">
 							</div><div class="comment-right-panel">
-								<span class="commenter-full-name">Chris Jones</span>
-								<span class="commenter-comment-text">Interesting. Thanks for the answer. As a followup, I’m curious about any implications of keto regarding ketoacidosis. To what extent is this a problem?</span>
+								<span class="commenter-full-name">{{comment.first_name}} {{comment.last_name}}</span>
+								<span class="commenter-comment-text">{{comment.object.text}}</span>
 								</div>
 						</div>
+						{% endfor %}
+
 						<div class="comment-item">
 							<div class="comment-left-panel">
-								<img align="left" src="{% static 'mainapp/images/chris_jones.png' %}">
+								<img align="left" src="{% static 'mainapp/images/profile_pictures/' %}{{ my_profile_picture }}">
 							</div><div class="comment-right-panel">
-								<span class="commenter-full-name">Chris Jones</span>
-								<span class="commenter-comment-text">Interesting. Thanks for the answer. As a followup, I’m curious about any implications of keto regarding ketoacidosis. To what extent is this a problem?</span>
-								</div>
-						</div>
-						<div class="comment-item">
-							<div class="comment-left-panel">
-								<img align="left" src="{% static 'mainapp/images/chris_jones.png' %}">
-							</div><div class="comment-right-panel">
-								<span class="commenter-full-name">Chris Jones</span>
+								<span class="commenter-full-name">{{first_name}} {{my_last_name}}</span>
 								<textarea class="comment-text-field" placeholder="Join the discussion..."></textarea>
 								<div class="comment-submit-area">
 									<button class="comment-button">Comment</button>
@@ -368,6 +400,11 @@
 			</div>
 		</div>
 		{% endfor %}
+		{% if not answers_data %}
+		<div class="no-answers-box">
+			No one has answered yet. Check back soon.
+		</div>
+		{% endif %}
 	
 	</div>
 	{% else %}

@@ -26,6 +26,8 @@ def prepare_context(request):
 		context['my_is_expert_flag'] = profile.is_expert
 		context['my_user_profile_pk'] = profile.pk
 		context['first_name'] = request.user.first_name
+		context['my_last_name'] = request.user.last_name
+
 
 		# Pass User Profile object
 		context['my_user_profile'] = profile
@@ -166,9 +168,26 @@ def feed(request):
 
 	for q in Question.objects.order_by('timestamp'):
 		item = {}
+		# General info
 		item['pk'] = q.pk 
 		item['text'] = q.text
 		item['num_upvotes'] = len(Upvote_Rel.objects.filter(question=q))
+
+		# Get pictures of experts who answered
+		experts_array = []
+		answers = Answer.objects.filter(question=q)
+		for a in answers:
+			expert_object = {}
+			expert = a.answered_by_user.expert_profile # Expert_Profile
+			expert_object['expert_profile_pk'] = expert.pk
+			expert_object['image_path'] = expert.image_path
+			experts_array.append(expert_object)
+		item['experts_array'] = experts_array 
+
+		# Upvoted
+		if request.user.is_authenticated():
+			user = User_Profile.objects.get(user=request.user)
+			item['upvoted'] = Upvote_Rel.objects.filter(user_profile=user,question=q).count()
 		feed_items.append(item)
 
 	context['feed_items'] = json.dumps(feed_items)
@@ -274,6 +293,24 @@ def discussion(request, pk):
 			answer_object = {}
 
 			answer_object['object'] = a
+
+			comments_array = []
+			comments = Comment.objects.filter(answer=a)
+			for comment in comments:
+				comment_object = {}
+				comment_object['object'] = comment
+				if comment.commented_by_user.is_expert:
+					comment_object['image_path'] = comment.commented_by_user.expert_profile.image_path
+					
+				else:
+					comment_object['image_path'] = comment.commented_by_user.member_profile.image_path
+
+				comment_object['first_name'] = comment.commented_by_user.user.first_name
+				comment_object['last_name'] = comment.commented_by_user.user.last_name
+
+				comments_array.append(comment_object)
+			answer_object['comments'] = comments_array
+
 			answer_object['stars'] = len(Star_Rel.objects.filter(answer=a))
 
 			# Check if user already starred

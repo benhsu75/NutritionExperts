@@ -761,6 +761,7 @@ a.logo:hover {
 	vertical-align: middle;
 	margin-left: 5px;
 	margin-right: 5px;
+	border-radius: 17.5px;
 }
 
 .feed-item > .experts-pane > img:hover {

@@ -347,15 +347,18 @@ def upvote_question(request):
 		return_object['error'] = 0 # Not logged in
 		return HttpResponse(json.dumps(return_object))
 
-	user_pk = request.POST.get('user_pk', None)
 	question_pk = request.POST.get('question_pk', None)
 
 	try:
-		user = User_Profile.objects.get(pk=user_pk)
+		user = User_Profile.objects.get(user=request.user)
 		question = Question.objects.get(pk=question_pk)
 
 		already_upvoted = Upvote_Rel.objects.get(user_profile=user,question=question)
 
+		# User already upvoted
+		return_object['status'] = 0
+		return_object['error'] = 3 # User already upvoted
+		return HttpResponse(json.dumps(return_object))
 
 	# Validate that user exists
 	except User_Profile.DoesNotExist: 
@@ -374,7 +377,49 @@ def upvote_question(request):
 
 		# Return
 		return_object['status'] = 1
+		return_object['num_votes'] = Upvote_Rel.objects.filter(question=question).count()
 		return HttpResponse(json.dumps(return_object))
+
+def remove_upvote_question(request):
+	return_object = {}
+
+	# Validate logged in
+	if not request.user.is_authenticated():
+		return_object['status'] = 0
+		return_object['error'] = 0 # Not logged in
+		return HttpResponse(json.dumps(return_object))
+
+	question_pk = request.POST.get('question_pk', None)
+
+	try:
+		user = User_Profile.objects.get(user=request.user)
+		question = Question.objects.get(pk=question_pk)
+
+		already_upvoted = Upvote_Rel.objects.get(user_profile=user,question=question)
+		already_upvoted.delete();
+
+		# Return
+		return_object['status'] = 1
+		return_object['num_votes'] = Upvote_Rel.objects.filter(question=question).count()
+		return HttpResponse(json.dumps(return_object))
+
+	# Validate that user exists
+	except User_Profile.DoesNotExist: 
+		return_object['status'] = 0
+		return_object['error'] = 1 # User doesn't exist
+		return HttpResponse(json.dumps(return_object))
+	# Validate that question exists
+	except Question.DoesNotExist:
+		return_object['status'] = 0
+		return_object['error'] = 2 # Question doesn't exist
+		return HttpResponse(json.dumps(return_object))
+	# Validate that question has been upvoted by user
+	except Upvote_Rel.DoesNotExist:
+		return_object['status'] = 0
+		return_object['error'] = 3
+		return HttpResponse(json.dumps(return_object))
+
+
 
 def star_answer(request):
 	return_object = {}
@@ -457,8 +502,39 @@ def unstar_answer(request):
 		return_object['error'] = 3 # User never starred
 		return HttpResponse(json.dumps(return_object))
 		
+def comment(request):
+	return_object = {}
 
-		
+	# Validate logged in
+	if not request.user.is_authenticated():
+		return_object['status'] = 0
+		return_object['error'] = 0 # Not logged in
+		return HttpResponse(json.dumps(return_object))
+
+	answer_pk = request.POST.get('answer_pk', None)
+	text = request.POST.get('text', None)
+
+	try:
+		user = User_Profile.objects.get(user=request.user)
+
+		answer = Answer.objects.get(pk=answer_pk)
+
+		comment = Comment(answer=answer, commented_by_user=user, text=text)
+		comment.save()
+
+		# Return
+		return_object['status'] = 1
+		return HttpResponse(json.dumps(return_object))
+	# Validate that user exists
+	except User_Profile.DoesNotExist: 
+		return_object['status'] = 0
+		return_object['error'] = 1 # User doesn't exist
+		return HttpResponse(json.dumps(return_object))
+	# Validate that answer exists
+	except Answer.DoesNotExist:
+		return_object['status'] = 0
+		return_object['error'] = 2 # Answer doesn't exist
+		return HttpResponse(json.dumps(return_object))
 
 def upload_profile_picture(request):
 	return_object = {}

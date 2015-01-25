@@ -47,8 +47,9 @@ urlpatterns = patterns('',
     url(r'^api/answer_question/', endpoints.answer_question, name="answer_question"),
     url(r'^api/star_answer/', endpoints.star_answer, name="star_answer"),
     url(r'^api/unstar_answer/', endpoints.unstar_answer, name="unstar_answer"),
+    url(r'^api/upvote_question/', endpoints.upvote_question, name="upvote_question"),
+    url(r'^api/remove_upvote_question/', endpoints.remove_upvote_question, name="remove_upvote_question"),
+    url(r'^api/comment/', endpoints.comment, name="comment"),
     
 
-    
-    
 )

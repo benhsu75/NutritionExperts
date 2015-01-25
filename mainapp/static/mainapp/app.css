@@ -31,6 +31,19 @@ body.feed {
 	height: 18px;
 }
 
+.no-answers-box {
+	margin: 0 auto;
+	width: 410px;
+	background-color: #34A2B3;
+	margin-top: 50px;
+	padding: 10px 20px 10px 10px;
+	text-align: center;
+	border-radius: 2px;
+	border: 1px solid #ADADAD;
+	font-size: 18px;
+	color: white;
+}
+
 .question-content-box {
 	margin: 0 auto;
 	width: 900px;
@@ -143,7 +156,7 @@ body.feed {
 	border: 1px solid #E8E8E8;
 	margin-top: 70px;
 	text-align: center;
-	padding-bottom: 30px;
+	padding-bottom: 10px;
 }
 
 .answer-container > .answer-box > .discussion-box > .discussion-header-text {
@@ -934,12 +947,12 @@ body.feed {
 /* ASK QUESTION CSS */
 .ask-content {
 	margin: 30px auto;
-	width: 900px;
+	width: 800px;
 }
 
 .ask-content > .ask-information > .main-text {
 	width: 100%;
-	/*font-size: 32px;*/
+	font-size: 36px;
 	display: block;
 }
 
@@ -970,7 +983,7 @@ body.feed {
 
 .ask-content > .ask-box > .ask-form {
 	display: inline-block;
-	width: 65%;
+	width: 100%;
 	/*background-color: blue;*/
 }
 

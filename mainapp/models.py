@@ -91,6 +91,16 @@ class Star_Rel(models.Model):
 	user_profile = models.ForeignKey(User_Profile)
 	answer = models.ForeignKey(Answer)
 
+class Comment(models.Model):
+	timestamp = models.DateTimeField(auto_now_add=True)
+	last_updated = models.DateTimeField(auto_now=True)
+	answer = models.ForeignKey(Answer)
+	commented_by_user = models.ForeignKey(User_Profile)
+	text = models.TextField()
+
+
+
+
 
 
 

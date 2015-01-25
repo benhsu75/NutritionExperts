@@ -7,7 +7,46 @@
 {% endblock %}
 
 {% block afterscript %}
+	{% load staticfiles %}
 	<script type="text/javascript">
+
+		var feedItems;
+
+		/* This function takes data from feedItems and uses it to populate the page */
+		function populatePageFromFeedItems() {
+			$('.content-feed').html("");
+			for(var index in feedItems) {
+				var feedItem = feedItems[index];
+				var upvoted = "";
+				if(feedItem.upvoted) {
+					upvoted = "upvoted";
+				}
+
+				/* Load expert images */
+				var experts_html_string = '<div class="experts-pane"> ';
+				for(var x = 0; x < feedItem.experts_array.length; x++) {
+					if(x < 3) {
+						var image_path = profile_path + feedItem.experts_array[x].image_path;
+						experts_html_string += '<img data-pk="';
+						experts_html_string += feedItem.experts_array[x].expert_profile_pk;
+						experts_html_string += '" src="'+image_path+'"> ';
+					}
+				}
+				experts_html_string += '</div>';
+
+				/* Load feed items */
+				var feedHTMLItem = '<div class="feed-item" data-pk="'+feedItem.pk+'"> \
+					<div class="upvote-item '+upvoted+'"> \
+						<img src="{% static "mainapp/images/upvote-arrow.png" %}"> \
+						<span class="vote-count">'+feedItem.num_upvotes+'</span> \
+					</div> \
+					<div class="question-text">'+feedItem.text+'</div> ' + experts_html_string + 
+				'</div>';
+						
+				$('.content-feed').append(feedHTMLItem);
+			}
+		}
+
 		var profile_picture = "{{ profile_picture }}";
 		$('.filter-type').click(function() {
 			if(!$(this).hasClass('selected')) {
@@ -17,41 +56,78 @@
 			}
 		});
 
+		var profile_path = '{% static "mainapp/images/profile_pictures/" %}';
+
 		/* LOAD EVERYTHING */
-		var feedItems = {{ feed_items | safe }};
-		
-		for(var index in feedItems) {
-			var feedItem = feedItems[index];
+		feedItems = {{ feed_items | safe }}; // Get feedItems
+		populatePageFromFeedItems(); // Populate the page
 
-			var feedHTMLItem = '<div class="feed-item" data-pk="'+feedItem.pk+'"> \
-				<div class="upvote-item"> \
-					{% load staticfiles %} \
-					<img src="{% static "mainapp/images/upvote-arrow.png" %}"> \
-					<span class="vote-count">'+feedItem.num_upvotes+'</span> \
-				</div> \
-				<div class="question-text">'+feedItem.text+'</div> \
-			</div>';
+		/* This function toggles how the feed items are ordered */
+		function toggleFeed(state) {
+			console.log('Here');
+			/* First get's data in new order */
+			if(state == 0) { // Ordered by popularity
+				feedItems = [];
+			}
+			else { // Ordered by recent
+				feedItems = [];
+			}
 
-			// <div class="experts-pane"> \
-			// 		<img src="{% static "mainapp/images/bart-de-jonghe.png" %}"> \
-			// 		<img src="{% static "mainapp/images/bart-de-jonghe.png" %}"> \
-			// 		<img src="{% static "mainapp/images/bart-de-jonghe.png" %}"> \
-			// 	</div> \
-					
-			$('.content-feed').append(feedHTMLItem);
-
+			populatePageFromFeedItems();
 		}
-
-
-
-
-
 
 		/* Apply upvoted class */
 		$('.upvote-item').click(function(e) {
-			if(!$(this).hasClass('upvoted')) {
-				$(this).addClass('upvoted');
+			var currentUpvoteItem = $(this);
+			var data = {
+				question_pk: $(this).parent('.feed-item').data('pk')
+			};
+			var postString = "";
+
+			if(!$(this).hasClass('upvoted')) { // upvote
+				postString = "upvote_question";
 			}
+			else { // Remove upvote
+				postString = "remove_upvote_question";
+			}
+
+			HELPER.post("/api/"+postString+"/", data, function(data) {
+
+				var returnData = JSON.parse(data);
+				if(returnData.status == 1) { // Success
+					if(postString == "remove_upvote_question") {
+						currentUpvoteItem.removeClass('upvoted');
+						currentUpvoteItem.find('.vote-count').text(returnData.num_votes);
+					}
+					else 
+					{
+						currentUpvoteItem.addClass('upvoted');
+						currentUpvoteItem.find('.vote-count').text(returnData.num_votes);
+					}
+				}
+				else { // Failure
+					if(returnData.error == 0) { // Not logged in
+						console.log("not logged in but upvoting");
+					}
+					else if(returnData.error == 1) { // User doesn't exist
+
+					}
+					else if(returnData.error == 2) { // Question doesn't exist
+
+					}
+					else if(returnData.error == 3) { // Already upvoted or not upvoted yet
+
+					}
+					else {
+
+					}
+				}
+
+				
+
+			}, function(data) {
+
+			});
 			
 			return false;
 		});
