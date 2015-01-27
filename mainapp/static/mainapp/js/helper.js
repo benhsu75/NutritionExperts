@@ -84,7 +84,7 @@ window.HELPER = (function () {
 			// });
 			
 			data.csrfmiddlewaretoken = getCookie('csrftoken');
-			console.log(data.csrfmiddlewaretoken);
+			// console.log(data.csrfmiddlewaretoken);
 			
 			/* AJAX REQUEST */
     		$.ajax({
@@ -92,7 +92,7 @@ window.HELPER = (function () {
 			    data: data,
 			    type: 'POST',
 			    success: function(data) {
-			    	console.log(data);
+			    	// console.log(data);
 			    	success(data);
 			    },
 			    failure: function(data) { 

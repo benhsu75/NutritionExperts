@@ -461,6 +461,9 @@ def star_answer(request):
 
 		# Return
 		return_object['status'] = 1
+
+		answer = Answer.objects.get(pk=answer_pk)
+		return_object['num_stars'] = Star_Rel.objects.filter(answer=answer).count()
 		return HttpResponse(json.dumps(return_object))
 
 def unstar_answer(request):
@@ -484,6 +487,7 @@ def unstar_answer(request):
 		already_starred.delete()
 
 		# Return
+		return_object['num_stars'] = Star_Rel.objects.filter(answer=answer).count()
 		return_object['status'] = 1
 		return HttpResponse(json.dumps(return_object))
 	# Validate that user exists
@@ -524,6 +528,13 @@ def comment(request):
 
 		# Return
 		return_object['status'] = 1
+		return_object['comment_text'] = text
+		if user.is_expert:
+			return_object['file_path'] = user.expert_profile.image_path
+		else:
+			return_object['file_path'] = user.member_profile.image_path
+		return_object['first_name'] = user.user.first_name
+		return_object['last_name'] = user.user.last_name
 		return HttpResponse(json.dumps(return_object))
 	# Validate that user exists
 	except User_Profile.DoesNotExist: 
@@ -572,6 +583,49 @@ def upload_profile_picture(request):
 	return_object['profile_picture_filename'] = new_filename
 
 	return HttpResponse(json.dumps(return_object))
+
+def get_feed_items(request):
+	return_object = {}
+
+	state = int(request.POST.get('state', None))
+
+	feed_items = []
+
+	# 0 = popularity, 1 = recent
+	if state == 0: # Popularity
+		feed_items = []
+		
+	else: # Recent
+		for q in Question.objects.order_by('timestamp'):
+			item = {}
+			# General info
+			item['pk'] = q.pk 
+			item['text'] = q.text
+			item['num_upvotes'] = len(Upvote_Rel.objects.filter(question=q))
+
+			# Get pictures of experts who answered
+			experts_array = []
+			answers = Answer.objects.filter(question=q)
+			for a in answers:
+				expert_object = {}
+				expert = a.answered_by_user.expert_profile # Expert_Profile
+				expert_object['expert_profile_pk'] = expert.pk
+				expert_object['image_path'] = expert.image_path
+				experts_array.append(expert_object)
+			item['experts_array'] = experts_array 
+
+			# Upvoted
+			if request.user.is_authenticated():
+				user = User_Profile.objects.get(user=request.user)
+				item['upvoted'] = Upvote_Rel.objects.filter(user_profile=user,question=q).count()
+			feed_items.append(item)
+
+	return_object['feed_items'] = json.dumps(feed_items)
+	return_object['status'] = 1
+	return_object['state'] = state
+
+	return HttpResponse(json.dumps(return_object))
+
 
 # Helper method for uploading photo
 def handle_uploaded_file(f, new_filepath):

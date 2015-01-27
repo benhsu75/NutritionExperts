@@ -145,19 +145,21 @@
 		{% endif %}
 
 		$('.join-discussion').click(function() {
-			if($('.discussion-box').is(':visible')) {
+			var answer_box = $(this).parents('.answer-box');
+
+			if(answer_box.find('.discussion-box').is(':visible')) {
 				console.log('visible');
-				$('.discussion-box').fadeOut();
-				$('.join-discussion-text').text("Show Discussion");
-				$('.join-discussion > .up').hide();
-				$('.join-discussion > .down').show();
+				answer_box.find('.discussion-box').fadeOut();
+				answer_box.find('.join-discussion-text').text("Show Discussion");
+				answer_box.find('.join-discussion > .up').hide();
+				answer_box.find('.join-discussion > .down').show();
 			}
 			else{
 				console.log('not visible');
-				$('.discussion-box').fadeIn();
-				$('.join-discussion-text').text("Hide Discussion");
-				$('.join-discussion > .down').hide();
-				$('.join-discussion > .up').show();
+				answer_box.find('.discussion-box').fadeIn();
+				answer_box.find('.join-discussion-text').text("Hide Discussion");
+				answer_box.find('.join-discussion > .down').hide();
+				answer_box.find('.join-discussion > .up').show();
 			}
 		});
 
@@ -168,13 +170,19 @@
 					'answer_pk' : $(this).data('pk'),
 					'user_pk' : {{ my_user_profile_pk }}
 				};
+
+				/* Get reference to star_box */
+				var star_box = $(this);
+
 				HELPER.post("/api/unstar_answer/", data, function(data) {
 					/* Success */
 
 					var returnData = JSON.parse(data);
 
 					if(returnData.status == 1) { // Success
-						location.reload(); // Refresh the page
+						// Ajax
+						star_box.removeClass('upvoted');
+						star_box.find('.star-count').text(returnData.num_stars);
 					}
 					else { // Failure
 						if(returnData.error == 0) { // Not logged in
@@ -201,6 +209,8 @@
 					'answer_pk' : $(this).data('pk'),
 					'user_pk' : {{ my_user_profile_pk }}
 				};
+				
+				var star_box = $(this);
 
 				HELPER.post("/api/star_answer/", data, function(data) {
 					/* Success */
@@ -208,7 +218,9 @@
 					var returnData = JSON.parse(data);
 
 					if(returnData.status == 1) { // Success
-						location.reload(); // Refresh the page
+						// Ajax
+						star_box.addClass('upvoted');
+						star_box.find('.star-count').text(returnData.num_stars);
 					}
 					else { // Failure
 						if(returnData.error == 0) { // Not logged in
@@ -234,19 +246,36 @@
 		$('.comment-button').click(function() {
 			var answer_pk = $(this).parents('.discussion-box').data('pk');
 			var text = $(this).parents('.comment-right-panel').find('.comment-text-field').val();
-			console.log(text);
 
 			var data = {
 				answer_pk: answer_pk,
 				text: text
 			};
 
+			var comment_panel = $(this).parents('.comment-panel');
+
 			HELPER.post("/api/comment/", data, function(data) {
 				/* Success */
 				var returnData = JSON.parse(data);
 
 				if(returnData.status == 1) { // Success
-					location.reload(); // Refresh the page
+
+					/* Clear text field */
+					comment_panel.find('.comment-text-field').val("");
+
+					/* Ajax */
+					var comment_item = '<div class="comment-item"> \
+							<div class="comment-left-panel"> \
+								<img align="left" src="/static/mainapp/images/profile_pictures/'+returnData.file_path+'"> \
+							</div><div class="comment-right-panel"> \
+								<span class="commenter-full-name">'+returnData.first_name + ' ' + returnData.last_name+'</span> \
+								<span class="commenter-comment-text">'+returnData.comment_text+'</span> \
+								</div> \
+						</div>';
+
+					comment_panel.find('.comment-item').last().before(comment_item);
+
+
 				}
 				else { // Failure
 					if(returnData.error == 0) { // Not logged in

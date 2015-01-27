@@ -50,6 +50,7 @@ urlpatterns = patterns('',
     url(r'^api/upvote_question/', endpoints.upvote_question, name="upvote_question"),
     url(r'^api/remove_upvote_question/', endpoints.remove_upvote_question, name="remove_upvote_question"),
     url(r'^api/comment/', endpoints.comment, name="comment"),
-    
+
+    url(r'^api/get_feed_items/', endpoints.get_feed_items, name="get_feed_items"),
 
 )

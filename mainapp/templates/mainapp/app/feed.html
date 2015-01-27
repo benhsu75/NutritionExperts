@@ -47,12 +47,17 @@
 			}
 		}
 
+		/* Get profile picture */
 		var profile_picture = "{{ profile_picture }}";
+
 		$('.filter-type').click(function() {
 			if(!$(this).hasClass('selected')) {
+				/* Make bold */
 				$('.filter-type').removeClass('selected');
 				$(this).addClass('selected');
 
+				/* Reload page */
+				toggleFeed($(this).data('state'));
 			}
 		});
 
@@ -63,17 +68,50 @@
 		populatePageFromFeedItems(); // Populate the page
 
 		/* This function toggles how the feed items are ordered */
+		/* State is being changed to the the state argument */
 		function toggleFeed(state) {
-			console.log('Here');
 			/* First get's data in new order */
-			if(state == 0) { // Ordered by popularity
-				feedItems = [];
-			}
-			else { // Ordered by recent
-				feedItems = [];
-			}
+			var data = {
+				state: state
+			};
+			console.log("State: " + state);
 
-			populatePageFromFeedItems();
+			HELPER.post("/api/get_feed_items/", data, function(data) {
+
+				var returnData = JSON.parse(data);
+				console.log(returnData);
+				if(returnData.status == 1) { // Success
+					feedItems = JSON.parse(returnData.feed_items);
+
+					/* Update UI */
+					populatePageFromFeedItems();
+				}
+				else { // Failure
+					console.log('FAILURE!')
+					if(returnData.error == 0) { // Not logged in
+						console.log("not logged in but upvoting");
+					}
+					else if(returnData.error == 1) { // User doesn't exist
+
+					}
+					else if(returnData.error == 2) { // Question doesn't exist
+
+					}
+					else if(returnData.error == 3) { // Already upvoted or not upvoted yet
+
+					}
+					else {
+
+					}
+				}
+
+				
+
+			}, function(data) {
+
+			});
+
+			
 		}
 
 		/* Apply upvoted class */
@@ -143,8 +181,8 @@
 
 {% block content %}
 	<div class="filter-selector">
-		<span class="filter-type selected">Popular</span>
-		<span class="filter-type">Recent</span>
+		<span class="filter-type selected" data-state="0">Popular</span>
+		<span class="filter-type" data-state="1">Recent</span>
 	</div>
 	<div class="content-feed">
 		<!-- <div class="feed-item">
