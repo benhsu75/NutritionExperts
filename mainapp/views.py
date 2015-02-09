@@ -35,7 +35,7 @@ def prepare_context(request):
 		profile_picture_loc = None
 		if profile.is_expert:
 			profile_picture_loc = profile.expert_profile.image_path
-			context['my_is_superuser'] = False
+			context['my_is_superuser'] = True
 		else:
 			profile_picture_loc = profile.member_profile.image_path
 
@@ -116,7 +116,8 @@ def experts(request):
 			expertise_array.append(e.area_of_expertise.name)
 		expert_profile_object['expertise'] = expertise_array
 
-		expert_profiles_dict[expert.pk] = expert_profile_object
+		user_profile = User_Profile.objects.get(expert_profile=expert)
+		expert_profiles_dict[user_profile.pk] = expert_profile_object
 
 	template = loader.get_template('mainapp/about/experts.html')
 	context = RequestContext(request, {
@@ -160,13 +161,31 @@ def sign_in(request):
 	})
 	return HttpResponse(template.render(context))
 
-def feed(request):
+def feed(request, state=0, current_page=0):
 	template = loader.get_template('mainapp/app/feed.html')
 	context = prepare_context(request)
 
 	feed_items = []
 
-	for q in Question.objects.order_by('timestamp'):
+	# Paginate
+	if state == 0:
+		page = Question.popularity_sorted.all()
+	else:
+		page = Question.recent_sorted.all()
+
+	current_page = int(current_page)
+	start_index = current_page * 12
+	end_index = (current_page + 1) * 12
+	if end_index > len(page):
+		context['next_exists'] = False
+		end_index = len(page)
+	elif end_index == len(page):
+		context['next_exists'] = False
+	else:
+		context['next_exists'] = True
+	page = page[start_index:end_index]
+
+	for q in page:
 		item = {}
 		# General info
 		item['pk'] = q.pk 
@@ -190,14 +209,28 @@ def feed(request):
 			item['upvoted'] = Upvote_Rel.objects.filter(user_profile=user,question=q).count()
 		feed_items.append(item)
 
+	# Pagination values
+	context['current_page'] = current_page
+	context['page_number'] = current_page + 1
+	context['back_page'] = current_page-1
+	context['next_page'] = 1
+	if current_page == 0:
+		context['back_exists'] = False
+	else:
+		context['back_exists'] = True
+	context['state'] = state
+	
 	context['feed_items'] = json.dumps(feed_items)
 
 	return HttpResponse(template.render(context))
 	
 def sign_up(request):
 	template = loader.get_template('mainapp/app/sign_up.html')
-	context = RequestContext(request, {
-	})
+	context = prepare_context(request)
+
+	if request.user.is_authenticated():
+		return HttpResponseRedirect("/feed/")
+
 	return HttpResponse(template.render(context))
 
 def sign_up_profile(request):
@@ -247,6 +280,7 @@ def profile(request, user_profile_pk):
 		context['shown_bio'] = json.dumps(shown_user_profile.expert_profile.bio)
 		context['shown_website'] = json.dumps(shown_user_profile.expert_profile.website)
 		context['shown_image_path'] = shown_user_profile.expert_profile.image_path
+		context['shown_num_answers'] = len(Answer.objects.filter(answered_by_user=shown_user_profile))
 
 		# Get accreditations, package into array
 		accreditations_array = []
@@ -266,6 +300,45 @@ def profile(request, user_profile_pk):
 		context['shown_five_words'] = json.dumps(shown_user_profile.member_profile.five_words)
 		context['shown_image_path'] = shown_user_profile.member_profile.image_path
 		context['shown_bio'] = json.dumps(shown_user_profile.member_profile.bio)
+		context['shown_num_questions'] = len(Question.objects.filter(asked_by_user=shown_user_profile))
+
+	feed_items = []
+
+	questions_to_store = []
+
+	if shown_is_expert:
+		answers = Answer.objects.filter(answered_by_user=shown_user_profile)
+		for a in answers:
+			if a.question not in questions_to_store:
+				questions_to_store.append(a.question)
+	else:
+		questions_to_store = Question.objects.filter(asked_by_user=shown_user_profile).order_by('-timestamp')
+	
+	for q in questions_to_store:
+		item = {}
+		# General info
+		item['pk'] = q.pk 
+		item['text'] = q.text
+		item['num_upvotes'] = len(Upvote_Rel.objects.filter(question=q))
+
+		# Get pictures of experts who answered
+		experts_array = []
+		answers = Answer.objects.filter(question=q)
+		for a in answers:
+			expert_object = {}
+			expert = a.answered_by_user.expert_profile # Expert_Profile
+			expert_object['expert_profile_pk'] = expert.pk
+			expert_object['image_path'] = expert.image_path
+			experts_array.append(expert_object)
+		item['experts_array'] = experts_array 
+
+		# Upvoted
+		if request.user.is_authenticated():
+			user = User_Profile.objects.get(user=request.user)
+			item['upvoted'] = Upvote_Rel.objects.filter(user_profile=user,question=q).count()
+		feed_items.append(item)
+	
+	context['feed_items'] = json.dumps(feed_items)
 
 	return HttpResponse(template.render(context))
 
@@ -288,7 +361,7 @@ def discussion(request, pk):
 
 		
 		# Load all answers for the question
-		answers = Answer.objects.filter(question=question)
+		answers = sorted(Answer.objects.filter(question=question), key=lambda n: -n.stars)
 		for a in answers:
 			answer_object = {}
 
@@ -307,6 +380,7 @@ def discussion(request, pk):
 
 				comment_object['first_name'] = comment.commented_by_user.user.first_name
 				comment_object['last_name'] = comment.commented_by_user.user.last_name
+				comment_object['commenter_pk'] = comment.commented_by_user.pk
 
 				comments_array.append(comment_object)
 			answer_object['comments'] = comments_array
@@ -345,11 +419,105 @@ def answer_questions(request):
 def expert_update(request):
 	template = loader.get_template('mainapp/app/expert_update.html')
 	context = prepare_context(request)
+	
+	if request.user.is_authenticated():
+		# Get all user data to send through context
+		user_profile = User_Profile.objects.get(user=request.user)
+		expert_profile = user_profile.expert_profile
+
+		if expert_profile.title:
+			context['title'] = expert_profile.title
+		else:
+			context['title'] = json.dumps("")
+
+		if expert_profile.organization:
+			context['organization'] = expert_profile.organization
+		else:
+			context['organization'] = json.dumps("")
+
+		if expert_profile.bio:
+			context['bio'] = expert_profile.bio
+		else:
+			context['bio'] = json.dumps("")
+
+		if expert_profile.website:
+			context['website'] = expert_profile.website
+		else:
+			context['website'] = json.dumps("")
+
+		# Get accreditations
+		accreditation_string = ""
+		accreditation_rels = Expert_Profile_Accreditation_Rel.objects.filter(expert_profile=expert_profile)
+		for r in accreditation_rels:
+			accreditation_string += r.accreditation.name + ", "
+		go_till_index = 0
+		if len(accreditation_rels) > 0:
+			go_till_index = len(accreditation_string)-2
+		context['accreditations'] = accreditation_string[:go_till_index]
+
+		# Get areas of expertise
+		expertise_string = ""
+		expertise_rels = Expert_Profile_Expertise_Rel.objects.filter(expert_profile=expert_profile)
+		for r in expertise_rels:
+			expertise_string += r.area_of_expertise.name + ", "
+		go_till_index = 0
+		if len(expertise_rels) > 0:
+			go_till_index = len(expertise_string)-2
+		context['expertise'] = expertise_string[:go_till_index]
+
+		context['account_image_path'] = json.dumps(expert_profile.image_path)
+
+
+		return HttpResponse(template.render(context))
+	else:
+		return HttpResponseRedirect('/feed/')
+
+def my_account(request):
+	if request.user.is_authenticated():
+		if User_Profile.objects.get(user=request.user).is_expert:
+			return HttpResponseRedirect('/expert_update/')
+		else:
+			return HttpResponseRedirect('/user_update/')	
+	else:
+		return HttpResponseRedirect('/sign_in/')		
+
+def update_password(request):
+	template = loader.get_template('mainapp/app/update_password.html')
+	context = prepare_context(request)
 	return HttpResponse(template.render(context))
 
 # User update profile 
 def user_update(request):
 	template = loader.get_template('mainapp/app/user_update.html')
-	context = RequestContext(request, {
-	})
-	return HttpResponse(template.render(context))
+	context = prepare_context(request)
+
+	if request.user.is_authenticated():
+		# Get all user data to send through context
+		user_profile = User_Profile.objects.get(user=request.user)
+		member_profile = user_profile.member_profile
+
+		if member_profile.five_words:
+			context['five_words'] = member_profile.five_words
+		else:
+			context['five_words'] = ""
+
+		if member_profile.bio:
+			context['bio'] = member_profile.bio
+		else:
+			context['bio'] = ""
+
+		context['account_image_path'] = json.dumps(member_profile.image_path)
+
+
+		return HttpResponse(template.render(context))
+	else:
+		return HttpResponseRedirect('/feed/')
+
+
+
+
+
+
+
+
+

@@ -28,7 +28,6 @@
 			for(var a in expert_profile.accreditations) {
 				accreditations_text += expert_profile.accreditations[a] + " ";
 			}
-			console.log(expert_profile.image_path);
 			var expert_item_element = '<div class="expert-item" data-expert_pk="'+pk+'"> \
 					<img src="{% static "mainapp/images/profile_pictures/" %}'+expert_profile.image_path+'"> \
 					<div class="expert-information">\
@@ -94,6 +93,9 @@
 				var expertise_element = '<div class="expertise">'+expert_profile.expertise[area]+'</div>';
 				$('.expertise-areas-line').append(expertise_element);
 			}
+
+			/* Change go to link */
+			$('.go-to-profile-item').attr('href', '/profile/' + expert_pk + '/');
 			
 			/* Show lightbox */
 			$('.shadow-overlay').show();

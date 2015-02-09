@@ -9,8 +9,114 @@
 {% block afterscript %}
 	{% load staticfiles %}
 	<script type="text/javascript">
+		function attachListeners() {
+			/* Go to discussion if feed item clicked */
+			$('.feed-item').click(function() {
+				var pk = $(this).data('pk');
+				window.location.href = "/discussion/"+pk+"/";
+			});
+
+			/* Apply upvoted class */
+			$('.upvote-item').click(function(e) {
+				var currentUpvoteItem = $(this);
+				var data = {
+					question_pk: $(this).parent('.feed-item').data('pk')
+				};
+				var postString = "";
+
+				if(!$(this).hasClass('upvoted')) { // upvote
+					postString = "upvote_question";
+				}
+				else { // Remove upvote
+					postString = "remove_upvote_question";
+				}
+
+				HELPER.post("/api/"+postString+"/", data, function(data) {
+
+					var returnData = JSON.parse(data);
+					if(returnData.status == 1) { // Success
+						if(postString == "remove_upvote_question") {
+							currentUpvoteItem.removeClass('upvoted');
+							currentUpvoteItem.find('.vote-count').text(returnData.num_votes);
+						}
+						else 
+						{
+							currentUpvoteItem.addClass('upvoted');
+							currentUpvoteItem.find('.vote-count').text(returnData.num_votes);
+						}
+					}
+					else { // Failure
+						if(returnData.error == 0) { // Not logged in
+							$('.login-lightbox').show();
+							$('.shadow-overlay').show();
+							$('body').addClass('noscroll');						
+						}
+						else if(returnData.error == 1) { // User doesn't exist
+
+						}
+						else if(returnData.error == 2) { // Question doesn't exist
+
+						}
+						else if(returnData.error == 3) { // Already upvoted or not upvoted yet
+
+						}
+						else {
+
+						}
+					}
+
+					
+
+				}, function(data) {
+
+				});
+				
+				return false;
+			});
+		}
 
 		var feedItems;
+
+		// var post_data = {
+		// 	state: 0
+		// };
+
+		// /* TEMP */
+		// HELPER.post("/api/get_scores/", post_data, function(data) {
+		// 	var returnData = JSON.parse(data);
+			
+		// 	if(returnData.status == 1) { // Success
+		// 		var scores = JSON.parse(returnData.results);
+		// 		console.log(scores);
+		// 		for(var x = 0; x < scores.length; x++) {
+		// 			console.log(scores[x].text + " Time: " + scores[x].timestamp + " Upvotes: " + scores[x].upvotes + " Score: " + scores[x].score);
+		// 		}
+
+		// 	}
+		// 	else { // Failure
+		// 		console.log('FAILURE!')
+		// 		if(returnData.error == 0) { // Not logged in
+		// 			console.log("not logged in but upvoting");
+		// 		}
+		// 		else if(returnData.error == 1) { // User doesn't exist
+
+		// 		}
+		// 		else if(returnData.error == 2) { // Question doesn't exist
+
+		// 		}
+		// 		else if(returnData.error == 3) { // Already upvoted or not upvoted yet
+
+		// 		}
+		// 		else {
+
+		// 		}
+		// 	}
+
+			
+
+		// }, function(data) {
+
+		// });
 
 		/* This function takes data from feedItems and uses it to populate the page */
 		function populatePageFromFeedItems() {
@@ -45,6 +151,8 @@
 						
 				$('.content-feed').append(feedHTMLItem);
 			}
+
+			attachListeners();
 		}
 
 		/* Get profile picture */
@@ -57,131 +165,83 @@
 				$(this).addClass('selected');
 
 				/* Reload page */
-				toggleFeed($(this).data('state'));
+				// toggleFeed($(this).data('state'));
+				window.location.href = "/feed/"+$(this).data('state')+"/0/";
 			}
 		});
 
 		var profile_path = '{% static "mainapp/images/profile_pictures/" %}';
 
-		/* LOAD EVERYTHING */
+
+		/* Set correct filter to be selected */
+		var state = {{state}};
+		if(state == 0) {
+			$('.filter-type').first().addClass('selected');
+		}
+		else {
+			$('.filter-type').last().addClass('selected');
+		}
+
+		/* LOAD EVERYTHING */		
 		feedItems = {{ feed_items | safe }}; // Get feedItems
 		populatePageFromFeedItems(); // Populate the page
 
 		/* This function toggles how the feed items are ordered */
 		/* State is being changed to the the state argument */
-		function toggleFeed(state) {
-			/* First get's data in new order */
-			var data = {
-				state: state
-			};
-			console.log("State: " + state);
+		// function toggleFeed(state) {
+		// 	/* First get's data in new order */
+		// 	var data = {
+		// 		state: state
+		// 	};
+		// 	console.log("State: " + state);
 
-			HELPER.post("/api/get_feed_items/", data, function(data) {
+		// 	HELPER.post("/api/get_feed_items/", data, function(data) {
 
-				var returnData = JSON.parse(data);
-				console.log(returnData);
-				if(returnData.status == 1) { // Success
-					feedItems = JSON.parse(returnData.feed_items);
+		// 		var returnData = JSON.parse(data);
+		// 		console.log(returnData);
+		// 		if(returnData.status == 1) { // Success
+		// 			feedItems = JSON.parse(returnData.feed_items);
 
-					/* Update UI */
-					populatePageFromFeedItems();
-				}
-				else { // Failure
-					console.log('FAILURE!')
-					if(returnData.error == 0) { // Not logged in
-						console.log("not logged in but upvoting");
-					}
-					else if(returnData.error == 1) { // User doesn't exist
+		// 			/* Update UI */
+		// 			populatePageFromFeedItems();
 
-					}
-					else if(returnData.error == 2) { // Question doesn't exist
+		// 			 Edit previous and next buttons 
 
-					}
-					else if(returnData.error == 3) { // Already upvoted or not upvoted yet
+		// 		}
+		// 		else { // Failure
+		// 			console.log('FAILURE!')
+		// 			if(returnData.error == 0) { // Not logged in
+		// 				console.log("not logged in but upvoting");
+		// 			}
+		// 			else if(returnData.error == 1) { // User doesn't exist
 
-					}
-					else {
+		// 			}
+		// 			else if(returnData.error == 2) { // Question doesn't exist
 
-					}
-				}
+		// 			}
+		// 			else if(returnData.error == 3) { // Already upvoted or not upvoted yet
 
-				
+		// 			}
+		// 			else {
 
-			}, function(data) {
+		// 			}
+		// 		}
+		// 	}, function(data) {
 
-			});
+		// 	});
+		// }
 
-			
-		}
 
-		/* Apply upvoted class */
-		$('.upvote-item').click(function(e) {
-			var currentUpvoteItem = $(this);
-			var data = {
-				question_pk: $(this).parent('.feed-item').data('pk')
-			};
-			var postString = "";
-
-			if(!$(this).hasClass('upvoted')) { // upvote
-				postString = "upvote_question";
-			}
-			else { // Remove upvote
-				postString = "remove_upvote_question";
-			}
-
-			HELPER.post("/api/"+postString+"/", data, function(data) {
-
-				var returnData = JSON.parse(data);
-				if(returnData.status == 1) { // Success
-					if(postString == "remove_upvote_question") {
-						currentUpvoteItem.removeClass('upvoted');
-						currentUpvoteItem.find('.vote-count').text(returnData.num_votes);
-					}
-					else 
-					{
-						currentUpvoteItem.addClass('upvoted');
-						currentUpvoteItem.find('.vote-count').text(returnData.num_votes);
-					}
-				}
-				else { // Failure
-					if(returnData.error == 0) { // Not logged in
-						console.log("not logged in but upvoting");
-					}
-					else if(returnData.error == 1) { // User doesn't exist
-
-					}
-					else if(returnData.error == 2) { // Question doesn't exist
-
-					}
-					else if(returnData.error == 3) { // Already upvoted or not upvoted yet
-
-					}
-					else {
-
-					}
-				}
-
-				
-
-			}, function(data) {
-
-			});
-			
-			return false;
-		});
-
-		/* Go to discussion if feed item clicked */
-		$('.feed-item').click(function() {
-			var pk = $(this).data('pk');
-			window.location.href = "/discussion/"+pk+"/";
-		});
 
 	</script>
 {% endblock %}
 
 {% block content %}
+	<div class="notification-box">
+		<span style="font-family: OpenSans-Semibold;">Nutriosity is current in early alpha, but here's a sneak preview. Please give us your comments <a href="mailto:nutriosity@gmail.com" target="_blank" style="text-decoration: none; color: #3C8A96;">here</a>!</span>
+	</div>
 	<div class="filter-selector">
-		<span class="filter-type selected" data-state="0">Popular</span>
+		<span class="filter-type" data-state="0">Popular</span>
 		<span class="filter-type" data-state="1">Recent</span>
 	</div>
 	<div class="content-feed">
@@ -303,4 +363,32 @@
 			</div>
 		</div> -->
 	</div>
+	<div class="pagination">
+		{% if back_exists %}
+		<div class="pagination-item" style="text-align: left;">
+			<img src="{% static 'mainapp/images/black-chevron-left.png' %}">
+			<a href="/feed/{{state}}/{{back_page}}/">Back</a>
+		</div>
+		{% else %}
+<!-- 		<div class="inactive-pagination-item" style="text-align: left; opacity: .3;">
+			<img src="{% static 'mainapp/images/black-chevron-left.png' %}">
+			<a href="#" onclick="return false;">Back</a>
+		</div> -->
+		{% endif %}
+		<div class="pagination-current-item">
+			Page {{page_number}}
+		</div>
+		{% if next_exists %}
+		<div class="pagination-item" style="text-align: right;">
+			<a href="/feed/{{state}}/{{next_page}}/">Next</a>
+			<img src="{% static 'mainapp/images/black-chevron.png' %}">
+		</div>
+		{% else %}
+		<!-- <div class="inactive-pagination-item" style="text-align: right; opacity: .3">
+			<a href="#" onclick="return false;">Next</a>
+			<img src="{% static 'mainapp/images/black-chevron.png' %}">
+		</div> -->
+		{% endif %}
+	</div>
+
 {% endblock %}

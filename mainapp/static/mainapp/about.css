@@ -37,7 +37,7 @@ body.noscroll {
     -webkit-transform: translate(-50%, 0);
     z-index: 3;
 }
-.green {
+.alert-bar.green {
 	border: 2px solid #d6e9c6;
 	background-color: #dff0d8;
 	color: #468847;
@@ -54,6 +54,12 @@ body.noscroll {
 .login-logo {
 	font-family: OpenSans-Bold;
 	font-size: 48px;
+	color: #34A2B3;
+}
+
+.need-to-login {
+	font-weight: bold;
+	font-size: 24px;
 	color: #34A2B3;
 }
 
@@ -78,7 +84,7 @@ body.noscroll {
 	padding-bottom: 50px;
 	z-index: 4;
 
-	top: 40%;
+	top: 30%;
 	transform: translate(0, -50%);
 	-webkit-transform: translate(0, -50%);
 
@@ -114,7 +120,7 @@ body.noscroll {
 	text-align: center;
 }
 
-.login-text-field {
+.public-login-text-field {
 	height:40px; 
 	width: 350px;
 	display: inline-block;
@@ -127,11 +133,11 @@ body.noscroll {
 	border: 1px solid #A4AFB1;
 }
 
-.login-text-field:focus {
+.public-login-text-field:focus {
     outline-width: 0;
 }
 
-.login-submit-button {
+.public-login-submit-button {
 	width:120px;
 	color: white;
 	height: 42px;
@@ -145,7 +151,7 @@ body.noscroll {
 	font-family: OpenSans-Light;
 }
 
-.login-submit-button:hover {
+.public-login-submit-button:hover {
     cursor: pointer;
     background-color: #66ACB7;
 }
@@ -193,7 +199,7 @@ a.logo {
 
 a.logo:hover {
 	/* Something should happen */
-	color: #D6F2F6;
+	/*color: #D6F2F6;*/
 }
 
 .n-wrapper > .right-header {
@@ -312,6 +318,7 @@ a.logo:hover {
 .content {
 	text-align: center;
 	z-index: 1;
+	padding-bottom: 40px;
 }
 
 #back-bar {
@@ -485,6 +492,27 @@ a.logo:hover {
     background-color: #66ACB7;
 }
 
+.small-submit-button {
+	width:80px;
+	color: white;
+	display: inline-block;
+	height: 30px;
+	background-color: #34A2B3;
+	text-align: center;
+	vertical-align: top;
+	border: #D4D4D4;
+	border-style: solid;
+	border-width: 0px;
+	font-size: 18px;
+	outline-width: 0;
+	font-family: OpenSans-Light;
+}
+
+.small-submit-button:hover {
+    cursor: pointer;
+    background-color: #66ACB7;
+}
+
 /* EXPERT CSS STARTS HERE */
 #experts-introduction {
 	padding-bottom: 0px;
@@ -558,6 +586,10 @@ a.logo:hover {
 	display: inline-block;
 }
 
+/*#experts-panel > .experts-row > .expert-item > img { 
+	border-radius: 40px; 
+}
+*/
 #experts-panel > .experts-row > .be-expert-item  {
 	position: relative;
 	display: inline-block;
@@ -678,11 +710,36 @@ a.logo:hover {
 	cursor: pointer;
 }
 
+.notification-box {
+	margin-top: 20px;
+	width: 887px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 15px 0 15px 0;
+
+	background: #D0EEF2;
+	/*border: 1px solid #94C9D1;*/
+	/*border-radius: 3px;*/
+}
+
 .content-feed {
 	margin-top: 20px;
 	width: 887px;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.profile-content-feed {
+	margin-top: 20px;
+}
+
+.profile-questions-header {
+	width: 887px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: left;
+	font-size: 26px;
+	color: #3B3B3B;
 }
 
 .feed-item {
@@ -792,6 +849,7 @@ a.logo:hover {
 	width: 160px;
 	height: 160px;
 	margin-top: 10px;
+	border-radius: 80px;
 }
 
 .expert-profile-lightbox > .left-detail-panel > .website {
@@ -890,6 +948,32 @@ a.logo:hover {
 
 .expert-profile-lightbox > .right-detail-panel > .description-paragraph-line > .description {
 
+}
+
+.expert-profile-lightbox > .right-detail-panel > .go-to-profile-item {
+	text-align: center;
+	display: block;
+}
+
+.expert-profile-lightbox > .right-detail-panel > .go-to-profile-item > .center-wrapper {
+	margin: 0 auto;
+	display: inline-block;
+}
+
+.expert-profile-lightbox > .right-detail-panel > .go-to-profile-item:hover {
+	opacity: .5;
+	cursor: pointer;
+}
+
+.expert-profile-lightbox > .right-detail-panel > .go-to-profile-item > .center-wrapper > span {
+	color: #34A2B3;
+	font-family: OpenSans-Semibold;
+	font-size: 18px;
+}
+
+.expert-profile-lightbox > .right-detail-panel > .go-to-profile-item > .center-wrapper > img {
+	padding-top: 2px;
+	height: 15px;
 }
 
 .close-expert-lightbox {
@@ -1034,7 +1118,6 @@ a.logo:hover {
 	left: 50%;
 	transform: translateX(-50%);
 	text-align: center;
-
 }
 
 .footer > .blue-link {

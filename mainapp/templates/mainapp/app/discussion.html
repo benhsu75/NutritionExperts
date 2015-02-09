@@ -153,6 +153,8 @@
 				answer_box.find('.join-discussion-text').text("Show Discussion");
 				answer_box.find('.join-discussion > .up').hide();
 				answer_box.find('.join-discussion > .down').show();
+
+				
 			}
 			else{
 				console.log('not visible');
@@ -160,10 +162,15 @@
 				answer_box.find('.join-discussion-text').text("Hide Discussion");
 				answer_box.find('.join-discussion > .down').hide();
 				answer_box.find('.join-discussion > .up').show();
+
+				$('html, body').animate({
+			        scrollTop: $(this).parents('.answer-box').find('.discussion-box').offset().top
+			    }, 1000);
 			}
 		});
 
 		$('.star-box').click(function() {
+			{% if user.is_authenticated %}
 			if($(this).hasClass('upvoted')) {
 				// Unstar
 				var data = {
@@ -241,6 +248,11 @@
 					/* Failure */
 				});
 			}
+			{% else %}
+			$('.login-lightbox').show();
+			$('.shadow-overlay').show();
+			$('body').addClass('noscroll');	
+			{% endif %}
 		});	
 		
 		$('.comment-button').click(function() {
@@ -299,6 +311,10 @@
 
 		$('#app-back-button').click(function() {
 			window.history.back();
+		});
+
+		$('.expert-profile-box').click(function() {
+			window.location.href = $(this).attr('href');
 		});
 	</script>
 {% endblock %}
@@ -370,7 +386,7 @@
 		
 		{% for answer in answers_data %}
 		<div class="answer-container">
-			<div class="star-balancer"></div><div class="expert-profile-box">
+			<div class="star-balancer"></div><div href="/profile/{{ answer.object.answered_by_user.pk }}/" class="expert-profile-box">
 				<div class="expert-top-profile">
 					<div class="expert-image-wrapper"><img src="{% static 'mainapp/images/profile_pictures/' %}{{ answer.object.answered_by_user.expert_profile.image_path | safe }}"></div><div class="expert-right-info">
 						<span class="expert-name">{{ answer.object.answered_by_user.user.first_name | safe }} {{ answer.object.answered_by_user.user.last_name | safe }}</span>
@@ -382,7 +398,7 @@
 					<span class="position">{{ answer.object.answered_by_user.expert_profile.title | safe }} - {{ answer.object.answered_by_user.expert_profile.organization | safe }}</span>
 					<span class="organization"></span>
 				</div>
-				<a class="go-to-profile" href="/profile/{{ answer.object.answered_by_user.pk }}/">
+				<a class="go-to-profile">
 					<span class="go-to-profile-text">Profile</span>
 					<img class="right-arrow-button" src="{% static 'mainapp/images/right-more-arrow.png' %}">
 				</a>
@@ -403,12 +419,12 @@
 							<div class="comment-left-panel">
 								<img align="left" src="{% static 'mainapp/images/profile_pictures/' %}{{comment.image_path}}">
 							</div><div class="comment-right-panel">
-								<span class="commenter-full-name">{{comment.first_name}} {{comment.last_name}}</span>
+								<a class="commenter-full-name" href="/profile/{{comment.commenter_pk}}/">{{comment.first_name}} {{comment.last_name}}</a>
 								<span class="commenter-comment-text">{{comment.object.text}}</span>
 								</div>
 						</div>
 						{% endfor %}
-
+						{% if user.is_authenticated %}
 						<div class="comment-item">
 							<div class="comment-left-panel">
 								<img align="left" src="{% static 'mainapp/images/profile_pictures/' %}{{ my_profile_picture }}">
@@ -420,6 +436,7 @@
 								</div>
 								</div>
 						</div>
+						{% endif %}
 					</div>
 
 				</div>

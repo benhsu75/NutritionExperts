@@ -142,17 +142,16 @@
 			<p class="signup-text">Signing up allows you to <span class="bold">upvote</span>, <span class="bold">submit a question</span> to be asked, and <span class="bold">join the discussion.</span></p>
 		</div>
 		{% load staticfiles %}
-		<a class="twitter-sign-in" href="#"><img src="{% static 'mainapp/images/sign-in-with-twitter.png' %}"></a>
-		<img style="margin-bottom: 30px;" src="{% static 'mainapp/images/or-line.png' %}">
+		<!-- <a class="twitter-sign-in" href="#"><img src="{% static 'mainapp/images/sign-in-with-twitter.png' %}"></a>
+		<img style="margin-bottom: 30px;" src="{% static 'mainapp/images/or-line.png' %}"> -->
 		<form class="signup-form">
 			<input type="text" name="first-name" placeholder="First name" class="first-name-field half-text-field"><div style="width: 8px; display: none;"></div>
 			<input type="text" name="last-name" placeholder="Last name" class="last-name-field half-text-field">
 			<input type="text" name="email" placeholder="Email address" class="email-field full-text-field">
 			<input type="password" name="password" placeholder="Password" class="password-field full-text-field">
 			<input type="password" name="confirm-password" placeholder="Confirm password" class="confirm-password-field full-text-field">
-			<input type="text" name="code" placeholder="Code" class="code-field full-text-field">
+			<input type="text" name="code" placeholder="Invite Code" class="code-field full-text-field">
 			<div class="form-alert-bar" style="visibility:hidden;">Please enter a valid first name.</div>
-			<br>
 			<button type="button" class="sign-up-button">Join</button>
 		</form>
 	</div>

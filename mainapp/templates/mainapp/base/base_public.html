@@ -40,7 +40,7 @@
 						<div class="n-account-dropdown" style="display: none;">
 							<div class="n-dropdown-menu">
 								<a href="/profile/{{ my_user_profile_pk }}/" class="n-dropdown-item">Profile</a>
-								<a href="#" class="n-dropdown-item">My Account</a>
+								<a href="/my_account/" class="n-dropdown-item">My Account</a>
 								<div class="dropdown-break"></div>
 								<a href="#" class="n-dropdown-item logout-item">Log Out</a>
 							</div>
@@ -59,7 +59,7 @@
 			{% endif %}
 		</div>
 	</div>
-<!-- 	<div class="alert-bar green" style="display: block;">
+	<!-- <div class="alert-bar green" style="display: none;">
 		Welcome to Nutriosity!
 	</div> -->
 
@@ -73,12 +73,12 @@
 
 	<div class="login-lightbox" style="display:none;">
 		<span class="close-lightbox">Close</span>
-		<!-- <span class="login-lightbox-text">Discuss</span> -->
-		<span class="login-logo">Nutriosity</span>
+		<span class="need-to-login">You must be logged in to upvote.</span>
+		<!-- <span class="login-logo">Nutriosity</span> -->
 		<form class="lightbox-login-form">
-			<input class="login-text-field" type="text" name="emailaddress" placeholder="Email"><br><br>
-			<input class="login-text-field" type="text" name="password" placeholder="Password"><br><br>
-			<button class="login-submit-button">Log In</button>
+			<input class="public-login-text-field public-email-text-field" type="text" name="emailaddress" placeholder="Email"><br><br>
+			<input class="public-login-text-field public-password-text-field" type="password" name="password" placeholder="Password"><br><div class="form-alert-bar top-bottom-padding" style="visibility:hidden;">Please enter a valid first name.</div>
+			<button type="button" class="public-login-submit-button">Log In</button>
 		</form>
 	</div>
 	<div class="shadow-overlay" style="display:none;">
@@ -86,15 +86,16 @@
 </body>
 <script type="text/javascript">
 	// $('.login-button').click(function() {
-	// 	$('.login-lightbox').show();
-	// 	$('.shadow-overlay').show();
-	// 	$('body').addClass('noscroll');
+		// $('.login-lightbox').show();
+		// $('.shadow-overlay').show();
+		// $('body').addClass('noscroll');
 	// });
 
 	$('.close-lightbox').click(function() {
 		$('.login-lightbox').hide();
 		$('.shadow-overlay').hide();
 		$('body').removeClass('noscroll');
+		$('.form-alert-bar').css('visibility', 'hidden');
 	});
 
 	$('.shadow-overlay').click(function() {
@@ -128,6 +129,69 @@
 			/* Should not reach here */
 		});
 
+	});
+
+	$('.lightbox-login-form').bind("keyup keypress", function(e) {
+		var code = e.keyCode || e.which; 
+		if (code  == 13) {               
+			/* Prevent form from being submitted */
+			e.preventDefault();
+
+			/* Click "Join" button */
+			$('.public-login-submit-button').click();
+
+			return false;
+		}
+	});
+
+	$('.public-login-submit-button').click(function() {
+		var email = $.trim($('.public-email-text-field').val());
+		var password = $.trim($('.public-password-text-field').val());
+
+		var error_flag = false;
+
+		if(email == "") {
+			$('.public-email-text-field').addClass('error');
+			$('.form-alert-bar').css('visibility', 'visible');
+			$('.form-alert-bar').html("Please enter a valid email.");
+			error_flag = true;
+		}
+
+		if(password == "") {
+			$('.public-password-text-field').addClass('error');
+			$('.form-alert-bar').css('visibility', 'visible');
+			if(!error_flag) {
+				$('.form-alert-bar').html("Please enter a valid password.");
+				error_flag = true;
+			}
+		}
+
+		var data = {
+			'email' : email,
+			'password' : password
+		};
+
+		if(!error_flag) {
+			console.log('going to helper post');
+			HELPER.post('/api/authenticate_signin/', data, function(data) {
+		    	
+		    	/* Handle possibilities */
+		    	var	returnData = JSON.parse(data);
+
+		        if(returnData['status'] == 1) {
+		        	window.location.href = "/feed/";
+		        }
+		        else {
+		        	console.log('wromg');
+		        	$('.form-alert-bar').css('visibility', 'visible');
+					$('.form-alert-bar').html("Invalid username and/or password. Please try again!");
+		        }
+			}, function(data) {
+				/* Clear the email text field */
+		    	
+		        // alert('Error');
+			});
+		}
 	});
 
 </script>

@@ -1,14 +1,226 @@
 {% extends "mainapp/base/base_public.html" %}
 
-{% block title %}Discuss - Nutriosity{% endblock %}
+{% block title %}My Account - Nutriosity{% endblock %}
 
 {% block afterscript %}
 	<script type="text/javascript">
+		{% load staticfiles %}
+		var profile_pictures_dir_path = "{% static 'mainapp/images/profile_pictures/' %}";
+
+
+		/* Populate initial data */
+		var image = {{account_image_path | safe}};
+		$('.profile-picture').attr("src", profile_pictures_dir_path + image);
+		$('.profile-picture').addClass('filled');
+
+
+		/* Listeners */
+		$('.change-password-link').click(function() {
+
+			if($('.change-password-form').is(':visible')) {
+				$('.change-password-form').hide();
+			}
+			else {
+				$('.change-password-form').show();
+			}
+		});
+
+		$('.change-password-button').click(function() {
+			var old_password = $.trim($('.old-password-field').val());
+			var new_password = $.trim($('.new-password-field').val());
+			var confirm_password = $.trim($('.confirm-password-field').val());
+
+			var post_data = {
+				old_password: old_password,
+				new_password: new_password,
+				confirm_password: confirm_password
+			};
+
+			HELPER.post("/api/change_password/", post_data, function(data) {
+
+				var returnData = JSON.parse(data);
+
+				if(returnData.status == 1) { // Success
+					$('.old-password-field').val("");
+					$('.new-password-field').val("");
+					$('.confirm-password-field').val("");
+
+					$('.change-password-alert').show().addClass('green');
+					$('.change-password-alert').html("Your password has been changed!");
+				}
+				else { // Failure
+					$('.change-password-alert').show().removeClass('green');
+
+					if(returnData.error == 0) {
+						$('.change-password-alert').html("Please log in first!");
+					}
+					else if(returnData.error == 1) {
+						$('.change-password-alert').html("The old password entered was incorrect!");
+					}
+					else if(returnData.error == 2) {
+						$('.change-password-alert').html("The password confirmation was different!");
+					} 
+				}
+
+			}, function(data) {
+
+			});
+		});
+
+		$('.save-button').click(function() {
+			var accreditations_text = $.trim($('.accreditations-text-field').val());
+			var title_text = $.trim($('.title-text-field').val());
+			var organization_text = $.trim($('.organization-text-field').val());
+			var url_text = $.trim($('.url-text-field').val());
+			var bio_text = $.trim($('.bio-text-field').val());
+			var expertises_text = $.trim($('.expertises-text-field').val());
+
+			/* Parse accreditations_text into a list of accreditations */
+			var accreditations_array_raw = accreditations_text.split(",");
+			var accreditations_array = [];
+			for(var a in accreditations_array_raw) {
+				if($.trim(accreditations_array_raw[a]) != "")
+					accreditations_array.push($.trim(accreditations_array_raw[a]));
+			}
+
+
+
+			/* Parse expertises_text into a list of areas of expertise */
+			var expertises_array_raw = expertises_text.split(",");
+			var expertises_array = [];
+			for(var e in expertises_array_raw) {
+				if($.trim(expertises_array_raw[e]) != "")
+					expertises_array.push($.trim(expertises_array_raw[e]));
+			}
+
+			var post_data = {
+				'accreditations': JSON.stringify(accreditations_array),
+				'title': title_text,
+				'organization': organization_text,
+				'url': url_text,
+				'bio': bio_text,
+				'expertises': JSON.stringify(expertises_array)
+			};
+
+			/* Client side validation */
+			var error_flag = false;
+
+			if(!error_flag) {
+				/* AJAX Request */
+				HELPER.post("/api/update_expert_profile/", post_data, function(data) {
+
+					var returnData = JSON.parse(data);
+
+					if(returnData.status == 1) { // Success
+
+						$('.basic-info-alert').show().addClass('green');
+						$('.basic-info-alert').html("Changes saved!");
+					}
+					else { // Failure
+
+						if(returnData.error == 0) {
+						}
+						else if(returnData.error == 1) {
+						}
+						else if(returnData.error == 2) {
+						} 
+					}
+
+				}, function(data) {
+
+				});
+			}
+			
+		});
+
+		/* Photo upload stuff */
+		$('.profile-picture').click(function() {
+			$('.file-selector').click();
+		});
+
+		function upload(event) {
+			event.preventDefault();
+			var data = new FormData($('form').get(0));
+			$.ajax({
+			    url: $(this).attr('action'),
+			    type: $(this).attr('method'),
+			    data: data,
+			    cache: false,
+			    processData: false,
+			    contentType: false,
+			    success: function(data) {
+			        alert('success');
+			    }
+			});
+			return false;
+		}
+
+		$('.picture-form').submit(function () {
+
+			event.preventDefault();
+			var data = new FormData($('.picture-form').get(0));
+
+			HELPER.post_upload($(this).attr('action'), data, function(data) {
+				var returnData = JSON.parse(data);
+
+				if(returnData['status'] == 1) {
+					var profile_picture_filename = returnData['profile_picture_filename'];
+					$('.profile-picture').attr("src", profile_pictures_dir_path + profile_picture_filename);
+					$('.profile-picture').addClass('filled');
+				}
+				else {
+
+				}
+
+			}, function() {
+
+			});
+			return false;
+		});
+
+		$('.file-selector').change(function() {
+			$('.picture-form').submit();
+		});
 	</script>
 {% endblock %}
 
 {% block content %}
+	{% load staticfiles %}
 	<div class="white-content-box">
-		
+		<span class="main-text">My Account</span>
+		<div class="expert-profile-form">
+			<div class="top-area">
+				<div class="set-profile-picture-box">
+					<img src="{% static 'mainapp/images/upload_image.png' %}" class="profile-picture">
+					<form class="picture-form" action="/api/upload_profile_picture/" method="post" enctype="multipart/form-data">
+						<input type="file" name="photo" style="display: none;" class="file-selector">
+					</form>
+					<!-- <button type="button">Upload</button> -->
+				</div><div class="basic-information-form">
+					<input type="text" class="accreditations-text-field text-field" placeholder="Accreditations, separated by commas (e.g. PhD, RD, etc.)" value="{{accreditations}}">
+					<input type="text" class="title-text-field text-field" placeholder="Title/Position" value="{{title}}">
+					<input type="text" class="organization-text-field text-field" placeholder="Organization"  value="{{organization}}">
+					<input type="text" class="url-text-field text-field" placeholder="URL to website"  value="{{website}}">
+				</div>
+			</div>
+			<div class="change-password-box">
+				<a class="change-password-link">Change Password</a>
+				<div class="change-password-form" style="display:none;">
+					<input type="password" class="old-password-field text-field" placeholder="Old Password">
+					<input type="password" class="new-password-field text-field" placeholder="New Password">
+					<input type="password" class="confirm-password-field text-field" placeholder="Confirm Password">	
+					<div class="change-password-alert form-alert-bar" style="display:none;">Please enter a valid first name.</div><br>
+					<button class="change-password-button small-submit-button">Change</button>
+				</div>
+			</div>
+			<div class="bottom-area">
+				<div class="more-information-form">
+					<textarea class="bio-text-field text-area" placeholder="Write a short bio about yourself">{{bio}}</textarea>
+					<input type="text" class="expertises-text-field text-field" placeholder="Areas of expertise, separated by commas (e.g. Weight Loss, Obesity, General Nutrition)"  value="{{expertise}}">
+				</div>
+				<div class="form-alert-bar basic-info-alert" style="display:none;">Please enter a valid first name.</div>
+				<button class="save-button large-submit-button">Save</button>
+			</div>
+		</div>
 	</div>
 {% endblock %}

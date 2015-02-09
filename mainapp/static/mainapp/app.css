@@ -134,6 +134,18 @@ body.feed {
 	height: 100%;
 	min-height: 200px;
 	position: relative;
+
+	color: black;
+	text-decoration: none;
+}
+
+.expert-profile-box:hover {
+	opacity: .7;
+	cursor: pointer;
+}
+
+.expert-profile-box:hover > .go-to-profile {
+	display: block;
 }
 
 .answer-container > .answer-box {
@@ -184,6 +196,8 @@ body.feed {
 
 .answer-container > .answer-box > .discussion-box > .comment-panel > .comment-item > .comment-left-panel > img {
 	width: 30px;
+	height: 30px;
+	border-radius: 15px;
 	vertical-align: top;
 	margin-top: 5px;}
 
@@ -196,6 +210,11 @@ body.feed {
 .answer-container > .answer-box > .discussion-box > .comment-panel > .comment-item > .comment-right-panel > .commenter-full-name {
 	font-size: 14px;
 	font-family: OpenSans-Bold;
+	text-decoration: none;
+	color: black;
+}
+.answer-container > .answer-box > .discussion-box > .comment-panel > .comment-item > .comment-right-panel > .commenter-full-name:hover {
+	text-decoration: underline;
 }
 
 .answer-container > .answer-box > .discussion-box > .comment-panel > .comment-item > .comment-right-panel > .commenter-comment-text {
@@ -294,6 +313,7 @@ body.feed {
 	text-align: left;
 	font-size: 12px;
 	padding: 10px 15px 10px 15px;
+
 }
 
 .expert-profile-box > .expert-description > .position {
@@ -316,11 +336,12 @@ body.feed {
 	right: 0;
 	bottom: 0;
 	text-decoration: none;
+	display: none;
 }
 
 .expert-profile-box > .go-to-profile:hover {
-	opacity: .7;
-	cursor: pointer;
+/*	opacity: .7;
+	cursor: pointer;*/
 }
 
 .expert-profile-box > .go-to-profile > .go-to-profile-text {
@@ -503,6 +524,10 @@ body.feed {
 	margin: 40px auto;
 }	
 
+.white-content-box > .signup-form {
+	margin-top: 30px;
+}
+
 .half-text-field {
 	display: inline-block;
 	width: 236px;
@@ -580,15 +605,18 @@ body.feed {
 }
 */
 
-
 .form-alert-bar {
 	text-align: center;
-	background-color: white;
+	background-color: transparent;
 	margin: -10px auto;
-	padding: 5px 30px 5px 30px;
+	padding: 13px 15px 13px 15px;
 	border-radius: 4px;
 	font-size: 18px;
 	color: #DC001B;
+}
+
+.form-alert-bar.green {
+	color: #7ED321;
 }
 
 .sign-up-button {
@@ -629,7 +657,7 @@ body.feed {
 	margin-top: 20px;
 	display: inline-block;
 	width: 700px;
-
+	text-align: center;
 }
 
 .expert-profile-form > .top-area {
@@ -684,7 +712,21 @@ body.feed {
 	margin-top: 20px;
 }
 
+.update-password-text-field {
+	display: inline-block;
+	width: 100%;
 
+	height:32px; 
+	font-size: 16px;
+	padding: 5px 12px 5px 12px;
+	background-color: #F0F0F0;
+	color: #125660;
+	font-family: OpenSans-Light;
+	border: 1px solid #A4AFB1;
+
+	margin-bottom: 15px;
+	outline-width: 0;
+}
 
 .expert-profile-form  .text-field {
 	display: inline-block;
@@ -904,8 +946,8 @@ body.feed {
 }
 
 .count-item:hover {
-	opacity: .6;
-	cursor: pointer;
+	/*opacity: .6;*/
+	cursor: default;
 }
 
 .count-item > .number-count {
@@ -1031,6 +1073,76 @@ body.feed {
 
 .ask-form > .large-submit-button {
 	margin-top: 15px;
+}
+
+.change-password-box {
+	background-color: white;
+	max-width: 450px;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.change-password-box > a {
+	text-decoration: underline;
+}
+
+.change-password-box > a:hover {
+	color: #34A2B3;
+	cursor: pointer;
+}
+
+.change-password-box > .change-password-form {
+	margin-top: 15px;
+	background-color: #FAFAFA;
+	border: 1px solid #E6E6E6;
+	padding: 20px 20px 20px 20px;
+}
+
+/* Pagination */
+.pagination {
+
+}
+
+.pagination-item {
+	display: inline-block;
+	padding: 5px 20px 5px 20px;
+	width: 140px;
+}
+
+.inactive-pagination-item {
+	display: inline-block;
+	padding: 5px 20px 5px 20px;
+	width: 140px;
+}
+
+.pagination-item:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+
+.pagination-item > a, .inactive-pagination-item > a {
+	font-size: 18px;
+	font-family: OpenSans-Bold;
+	text-decoration: none;
+	color: black;
+}
+
+.inactive-pagination-item:hover, .inactive-pagination-item > a {
+	cursor: default;
+}
+
+.pagination-item > img, .inactive-pagination-item > img {
+	height: 17px;
+	padding-top: 4px;
+}
+
+.pagination-current-item {
+	font-size: 18px;
+	display: inline-block;
+	color: #34A2B3;
+	font-family: OpenSans-Semibold;
 }
 
 /* FONTS */

@@ -46,7 +46,7 @@ body {
 	opacity: .7;
 }
 
-#landing-header-container > #header-item{
+#landing-header-container > .header-item{
 	font-size: 16px;
 	font-family: OpenSans-Semibold;
 	float: right;
@@ -55,9 +55,11 @@ body {
 	/*color: white;*/
 	margin-top: 32px;
 	vertical-align: middle;
+	padding-left: 20px;
+	padding-right: 20px;
 }
 
-#landing-header-container > #header-item:hover {
+#landing-header-container > .header-item:hover {
 	opacity: .7;
 }
 

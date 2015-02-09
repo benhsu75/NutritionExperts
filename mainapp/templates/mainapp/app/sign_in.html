@@ -7,6 +7,7 @@
 	<link rel="shortcut icon" type="image/png" 
           href="{% static 'mainapp/images/favicon.ico' %}"/>
 	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/sign_in.css' %}">
+	<!-- <link rel="stylesheet" type="text/css" href="{% static 'mainapp/about.css' %}"> -->
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script type="text/javascript" src="{% static 'mainapp/js/helper.js' %}"></script>
@@ -34,38 +35,83 @@
 		<div class="logo-area">
 			<span class="logo-text">Nutriosity</span>
 		</div>
-		<form class="login-form">
-			<input class="email-text-field text-field" type="email" placeholder="Email">
-			<input class="password-text-field text-field" type="password" placeholder="Password">
-			<button type="button" class="login-button">Sign In</button>
-		</form>
+		
+		<div class="form-container">
+			<form class="login-form login">
+				<div class="above-form-area">
+					<a href="#" class="forgot-password">Forgot Password?</a>
+				</div>
+				
+				<input class="signin-email-text-field text-field" type="email" placeholder="Email">
+				<input class="password-text-field text-field" type="password" placeholder="Password">
+				<button type="button" class="login-button sign-in-button">Sign In</button>
+			</form>
+			<form class="login-form forgot-password-form" style="display:none;">
+				<div class="above-forgot-password-area">
+					<a href="#" class="back">Back</a>
+					<!-- <span class="forgot-password-info-text">Enter your email and we'll send you instructions on how to retrieve your password!</span> -->
+				</div>
+				<input class="retrieve-email-text-field text-field" type="email" placeholder="Enter the email address you signed up with">
+				<button type="button" class="login-button retrieve-button">Retrieve</button>
+			</form>
+		</div>
 	</div>
 </body>
 <script type="text/javascript">
 
+	$(document).ready(function() {
+		$('.signin-email-text-field').focus();
+	});	
+
 	/* Prevent normal form submit on enter */
-	$('.login-form').bind("keyup keypress", function(e) {
+	$('.login').bind("keyup keypress", function(e) {
 		var code = e.keyCode || e.which; 
 		if (code  == 13) {               
 			/* Prevent form from being submitted */
 			e.preventDefault();
 
 			/* Click "Join" button */
-			$('.login-button').click();
+			$('.sign-in-button').click();
 
 			return false;
 		}
 	});
 
-	$('.login-button').click(function() {
-		console.log('here');
-		var email = $.trim($('.email-text-field').val());
+	$('.forgot-password-form').bind("keyup keypress", function(e) {
+		var code = e.keyCode || e.which; 
+		if (code  == 13) {               
+			/* Prevent form from being submitted */
+			e.preventDefault();
+
+			/* Click "Join" button */
+			$('.retrieve-button').click();
+
+			return false;
+		}
+	});
+
+	$('.forgot-password').click(function() {
+		$('.alert-bar').fadeOut();
+		$('.login-form.login').fadeOut(function() {
+			$('.login-form.forgot-password-form').fadeIn();
+		});
+	});
+
+	$('.back').click(function() {
+		$('.alert-bar').fadeOut();
+		$('.login-form.forgot-password-form').fadeOut(function() {
+			$('.login-form.login').fadeIn();
+		});
+	});
+
+	$('.sign-in-button').click(function() {
+		var email = $.trim($('.signin-email-text-field').val());
 		var password = $.trim($('.password-text-field').val());
 
 		var error_flag = false;
 
 		if(email == "") {
-			$('.email-text-field').addClass('error');
+			$('.signin-email-text-field').addClass('error');
 			$('.alert-bar').show();
 			$('.alert-bar').html("Please enter a valid email.");
 			error_flag = true;
@@ -92,7 +138,12 @@
 		    	var	returnData = JSON.parse(data);
 
 		        if(returnData['status'] == 1) {
-		        	window.location.href = "/feed/";
+		        	if(returnData.change_password == 1) {
+		        		window.location.href = "/update_password/";
+		        	}
+		        	else {
+		        		window.location.href = "/feed/";
+		        	}
 		        }
 		        else {
 		        	$('.alert-bar').show();
@@ -101,9 +152,38 @@
 			}, function(data) {
 				/* Clear the email text field */
 		    	
-		        // alert('Error');
 			});
 		}
 	});	
+
+	$('.retrieve-button').click(function() {
+		console.log('j')
+		var email_text = $.trim($('.retrieve-email-text-field').val());
+
+		var post_data = {
+			'email' : email_text
+		};
+
+		HELPER.post('/api/forgot_password/', post_data, function(data) {	
+	    	/* Handle possibilities */
+	    	var	returnData = JSON.parse(data);
+
+	        if(returnData['status'] == 1) {
+	        	console.log(returnData.random);
+	        	$('.alert-bar').html("We've sent instructions on how to reset your password to your email!");
+	        	$('.alert-bar').addClass('green').fadeIn();
+	        }
+	        else {
+	        	if(returnData.error == 0) {
+	        		console.log('hello: ' + returnData.email);
+	        		$('.alert-bar').html("No account associated with that email exists!");
+	        		$('.alert-bar').fadeIn();
+	        	} 	
+	        }
+		}, function(data) {
+			/* Clear the email text field */
+		});
+	});
+
 </script>
 </html>

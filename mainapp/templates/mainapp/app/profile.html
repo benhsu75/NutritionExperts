@@ -7,6 +7,7 @@
 {% block afterscript %}
 
 	<script type="text/javascript">
+		{% load staticfiles %}
 		{% if profile_exists %}
 		var user_profile_pk = {{ user_profile_pk }};
 		var shown_first_name = "{{ shown_first_name | safe}}";
@@ -49,6 +50,11 @@
 			/* Set website */
 			$('.website').attr('href',shown_website);
 
+			if(shown_website == "") {
+				$('.website').attr('onclick','return false;');
+				$('.website').hide();
+			}
+
 		{% else %}
 			var shown_five_words = {{ shown_five_words | safe}};
 			var shown_bio = {{ shown_bio | safe}};
@@ -60,6 +66,116 @@
 
 		{% endif %}
 		{% endif %}
+
+
+		/* LOAD ALL QUESTIONS */
+		var feedItems;
+
+		function attachListeners() {
+			/* Go to discussion if feed item clicked */
+			$('.feed-item').click(function() {
+				console.log('click');
+				var pk = $(this).data('pk');
+				window.location.href = "/discussion/"+pk+"/";
+			});
+
+			/* Apply upvoted class */
+			$('.upvote-item').click(function(e) {
+				var currentUpvoteItem = $(this);
+				var data = {
+					question_pk: $(this).parent('.feed-item').data('pk')
+				};
+				var postString = "";
+
+				if(!$(this).hasClass('upvoted')) { // upvote
+					postString = "upvote_question";
+				}
+				else { // Remove upvote
+					postString = "remove_upvote_question";
+				}
+
+				HELPER.post("/api/"+postString+"/", data, function(data) {
+
+					var returnData = JSON.parse(data);
+					if(returnData.status == 1) { // Success
+						if(postString == "remove_upvote_question") {
+							currentUpvoteItem.removeClass('upvoted');
+							currentUpvoteItem.find('.vote-count').text(returnData.num_votes);
+						}
+						else 
+						{
+							currentUpvoteItem.addClass('upvoted');
+							currentUpvoteItem.find('.vote-count').text(returnData.num_votes);
+						}
+					}
+					else { // Failure
+						if(returnData.error == 0) { // Not logged in
+							console.log("not logged in but upvoting");
+						}
+						else if(returnData.error == 1) { // User doesn't exist
+
+						}
+						else if(returnData.error == 2) { // Question doesn't exist
+
+						}
+						else if(returnData.error == 3) { // Already upvoted or not upvoted yet
+
+						}
+						else {
+
+						}
+					}
+
+					
+
+				}, function(data) {
+
+				});
+				
+				return false;
+			});
+		}
+
+		var profile_path = '{% static "mainapp/images/profile_pictures/" %}';
+		
+		/* This function takes data from feedItems and uses it to populate the page */
+		function populatePageFromFeedItems() {
+			$('.content-feed').html("");
+			for(var index in feedItems) {
+				var feedItem = feedItems[index];
+				var upvoted = "";
+				if(feedItem.upvoted) {
+					upvoted = "upvoted";
+				}
+
+				/* Load expert images */
+				var experts_html_string = '<div class="experts-pane"> ';
+				for(var x = 0; x < feedItem.experts_array.length; x++) {
+					if(x < 3) {
+						var image_path = profile_path + feedItem.experts_array[x].image_path;
+						experts_html_string += '<img data-pk="';
+						experts_html_string += feedItem.experts_array[x].expert_profile_pk;
+						experts_html_string += '" src="'+image_path+'"> ';
+					}
+				}
+				experts_html_string += '</div>';
+
+				/* Load feed items */
+				var feedHTMLItem = '<div class="feed-item" data-pk="'+feedItem.pk+'"> \
+					<div class="upvote-item '+upvoted+'"> \
+						<img src="{% static "mainapp/images/upvote-arrow.png" %}"> \
+						<span class="vote-count">'+feedItem.num_upvotes+'</span> \
+					</div> \
+					<div class="question-text">'+feedItem.text+'</div> ' + experts_html_string + 
+				'</div>';
+						
+				$('.content-feed').append(feedHTMLItem);
+			}
+
+			attachListeners();
+		}
+		feedItems = {{ feed_items | safe }}; // Get feedItems
+		populatePageFromFeedItems(); // Populate the page
 
 	</script>
 {% endblock %}
@@ -73,19 +189,19 @@
 			<img class="expert-picture" src="{% static 'mainapp/images/profile_pictures/' %}{{ shown_image_path }}">
 			<div class="count-section">
 				{% if shown_is_expert %}
-				<div class="count-item">
-					<span class="number-count follower-count">99</span>
+<!-- 				<div class="count-item">
+					<span class="number-count follower-count">0</span>
 					Followers
-				</div>
+				</div> -->
 				<div class="count-item">
-					<span class="number-count answer-count">26</span>
+					<span class="number-count answer-count">{{shown_num_answers}}</span>
 					Answers
 				</div>
 				{% else %}
-<!-- 				<div class="count-item">
-					<span class="number-count question-count">99</span>
+				<div class="count-item">
+					<span class="number-count question-count">{{shown_num_questions}}</span>
 					Questions
-				</div> -->
+				</div>
 				{% endif %}
 			</div>
 			
@@ -115,7 +231,6 @@
 			</div>
 			{% endif %}
 			<p class="expert-summary">
-				<!-- Dr. De Jonghe received his Ph.D. in Nutritional Sciences from the Pennsylvania State University in 2006, after which he entered a two-year Postdoctoral Fellowship in Neurophysiology at the Monell Chemical Senses Center to study nausea, vomiting and malaise. Dr. De Jonghe’s research focuses on the nutritional, physiological, neuronal, and cellular signaling controls of energy balance with relevance to obesity, type 2 diabetes, and chemotherapy-induced nausea and vomiting. -->
 			</p>
 			{% if shown_is_expert %}
 			<a class="website" target="_blank">
@@ -130,5 +245,13 @@
 			<span class="page-not-found">We could not find that page :(</span>
 		</div>
 		{% endif %}
+	</div>
+	{% if shown_is_expert %}
+	<div class="profile-questions-header">{{shown_first_name}}'s Answered Questions</div>
+	{% else %}
+	<div class="profile-questions-header">{{shown_first_name}}'s Asked Questions</div>
+	{% endif %}
+	<div class="content-feed profile-content-feed">
+		<!-- Feed items go here -->
 	</div>
 {% endblock %}

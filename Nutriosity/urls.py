@@ -6,13 +6,16 @@ from mainapp import endpoints
 urlpatterns = patterns('',
     
     # App pages
+    url(r'^feed/(?P<state>\d+)/(?P<current_page>\d+)/$', views.feed, name="feed"),
     url(r'^feed/', views.feed, name="feed"),
+
 
     # Favicon
     url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/images/favicon.ico'}),
 
     # About pages
     url(r'^$', views.landing, name="landing"),
+    url(r'^landing/', views.landing, name="landing"),
     url(r'^about/', views.about, name="about"),
     url(r'^mission/', views.mission2, name="mission"),
     url(r'^experts/', views.experts, name="experts"),
@@ -29,10 +32,12 @@ urlpatterns = patterns('',
     url(r'^profile/(?P<user_profile_pk>\d+)/$', views.profile, name="profile"),
     url(r'^discussion/(?P<pk>\d+)/', views.discussion, name="discussion"),
     url(r'^ask/', views.ask, name="ask"),
+    url(r'^my_account/', views.my_account, name="my_account"),
 
     url(r'^expert_update/', views.expert_update, name="expert_update"),
     url(r'^user_update/', views.user_update, name="user_update"),
     url(r'^answer_questions/', views.answer_questions, name="answer_questions"),
+    url(r'^update_password/', views.update_password, name="update_password"),
 
     # API Endpoints
     url(r'^api/email_signup/', endpoints.email_signup, name="email_signup"),
@@ -50,7 +55,13 @@ urlpatterns = patterns('',
     url(r'^api/upvote_question/', endpoints.upvote_question, name="upvote_question"),
     url(r'^api/remove_upvote_question/', endpoints.remove_upvote_question, name="remove_upvote_question"),
     url(r'^api/comment/', endpoints.comment, name="comment"),
+    url(r'^api/change_password/', endpoints.change_password, name="change_password"),
+    url(r'^api/update_member_profile/', endpoints.update_member_profile, name="update_member_profile"),
+    url(r'^api/update_expert_profile/', endpoints.update_expert_profile, name="update_expert_profile"),
 
+    # url(r'^api/get_feed_items/(?P<current_page>\d+)/$', endpoints.get_feed_items, name="get_feed_items"),
     url(r'^api/get_feed_items/', endpoints.get_feed_items, name="get_feed_items"),
+    url(r'^api/get_scores/', endpoints.get_scores, name="get_scores"),
+    url(r'^api/forgot_password/', endpoints.forgot_password, name="forgot_password"),
 
 )

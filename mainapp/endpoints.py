@@ -9,6 +9,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 import random
+import os
+from django.utils.timezone import utc
+from datetime import datetime
+import string
+import random
+import sendgrid
 
 # Error codes
 # 0 - Not a valid email
@@ -38,6 +44,9 @@ def email_signup(request):
 		return_object['error'] = 0
 	
 	return HttpResponse(json.dumps(return_object))
+
+def id_generator(size=6, chars=string.ascii_uppercase + string.digits):
+	return ''.join(random.choice(chars) for _ in range(size))
 
 def expert_interest_signup(request):
 	first_name = request.POST.get('first_name', None)
@@ -141,6 +150,11 @@ def authenticate_signin(request):
 	if user is not None:
 		login(request, user)
 		return_object['status'] = 1
+		user_profile = User_Profile.objects.get(user=user)
+		if user_profile.needs_to_update_password:
+			return_object['change_password'] = 1
+		else:
+			return_object['change_password'] = 0
 	else:
 		return_object['status'] = 0
 
@@ -295,7 +309,13 @@ def populate_expert_profile(request):
 		expert_profile.title = title
 	if organization:
 		expert_profile.organization = organization
-	if url:
+
+	# Make sure URL contains HTTPS 
+	if url and url != "":
+		try:
+			url.index('//')
+		except:
+			url = 'http://' + url
 		expert_profile.website = url
 	if bio:
 		expert_profile.bio = bio
@@ -559,7 +579,7 @@ def upload_profile_picture(request):
 		# Create filename and move file
 		r = random.randrange(0,1000000)
 		new_filename = str(r)+'_'+request.FILES['photo'].name
-		new_filepath = 'mainapp/static/mainapp/images/profile_pictures/' + new_filename
+		new_filepath = os.path.dirname(os.path.realpath(__file__)) + '/static/mainapp/images/profile_pictures/' + new_filename
 		handle_uploaded_file(request.FILES['photo'], new_filepath)
 
 		# Update profile picture path in db
@@ -581,10 +601,73 @@ def upload_profile_picture(request):
 		
 	return_object['status'] = 1
 	return_object['profile_picture_filename'] = new_filename
+	# return_object['os_path'] = os.path.dirname(os.path.realpath(__file__))
 
 	return HttpResponse(json.dumps(return_object))
 
-def get_feed_items(request):
+@csrf_exempt
+def get_scores(request):
+	return_object = {}
+	state = int(request.POST.get('state', None))
+
+	search_results = []
+
+	if state == 0: # Popularity
+		search_results = Question.popularity_sorted.all()
+	else: # Recent
+		search_results = Question.recent_sorted.all()
+
+	results = []
+	for q in search_results:
+		result_object = {}
+		result_object['text'] = q.text
+		result_object['timestamp'] = (datetime.utcnow().replace(tzinfo=utc) - q.timestamp).total_seconds()
+		result_object['upvotes'] = len(Upvote_Rel.objects.filter(question=q))
+		result_object['score'] = q.score
+		results.append(result_object)
+
+	return_object['status'] = 1
+	return_object['results'] = json.dumps(results)
+
+	return HttpResponse(json.dumps(return_object))
+
+def change_password(request):
+	return_object = {}
+
+	old_password = request.POST.get('old_password', None)
+	new_password = request.POST.get('new_password', None)
+	confirm_password = request.POST.get('confirm_password', None)
+
+	# Validate logged in
+	if not request.user.is_authenticated():
+		return_object['status'] = 0
+		return_object['error'] = 0 # Not logged in
+		return HttpResponse(json.dumps(return_object))
+
+	# Validate old password
+	if not request.user.check_password(old_password):
+		return_object['status'] = 0
+		return_object['error'] = 1
+		return HttpResponse(json.dumps(return_object))
+
+	# Validate passwords are equal
+	if not new_password == confirm_password:
+		return_object['status'] = 0
+		return_object['error'] = 2
+		return HttpResponse(json.dumps(return_object))
+
+	# Change password
+	request.user.set_password(new_password)
+	request.user.save()
+
+	user_profile = User_Profile.objects.get(user=request.user)
+	user_profile.needs_to_update_password = False
+	user_profile.save()
+
+	return_object['status'] = 1
+	return HttpResponse(json.dumps(return_object))
+
+def get_feed_items(request, current_page=0):
 	return_object = {}
 
 	state = int(request.POST.get('state', None))
@@ -592,40 +675,199 @@ def get_feed_items(request):
 	feed_items = []
 
 	# 0 = popularity, 1 = recent
+	search_results = []
+
 	if state == 0: # Popularity
-		feed_items = []
-		
+		search_results = Question.popularity_sorted.all()
 	else: # Recent
-		for q in Question.objects.order_by('timestamp'):
-			item = {}
-			# General info
-			item['pk'] = q.pk 
-			item['text'] = q.text
-			item['num_upvotes'] = len(Upvote_Rel.objects.filter(question=q))
+		search_results = Question.recent_sorted.all()
 
-			# Get pictures of experts who answered
-			experts_array = []
-			answers = Answer.objects.filter(question=q)
-			for a in answers:
-				expert_object = {}
-				expert = a.answered_by_user.expert_profile # Expert_Profile
-				expert_object['expert_profile_pk'] = expert.pk
-				expert_object['image_path'] = expert.image_path
-				experts_array.append(expert_object)
-			item['experts_array'] = experts_array 
+	# Paginate
+	current_page = int(current_page)
+	start_index = current_page * 12
+	end_index = (current_page + 1) * 12
+	if end_index > len(search_results):
+		return_object['next_exists'] = False
+		end_index = len(search_results)
+	elif end_index == len(search_results):
+		return_object['next_exists'] = False
+	else:
+		return_object['next_exists'] = True
+	search_results = search_results[start_index:end_index]
 
-			# Upvoted
-			if request.user.is_authenticated():
-				user = User_Profile.objects.get(user=request.user)
-				item['upvoted'] = Upvote_Rel.objects.filter(user_profile=user,question=q).count()
-			feed_items.append(item)
+	for q in search_results:
+		item = {}
+		# General info
+		item['pk'] = q.pk 
+		item['text'] = q.text
+		item['num_upvotes'] = len(Upvote_Rel.objects.filter(question=q))
+
+		# Get pictures of experts who answered
+		experts_array = []
+		answers = Answer.objects.filter(question=q)
+		for a in answers:
+			expert_object = {}
+			expert = a.answered_by_user.expert_profile # Expert_Profile
+			expert_object['expert_profile_pk'] = expert.pk
+			expert_object['image_path'] = expert.image_path
+			experts_array.append(expert_object)
+		item['experts_array'] = experts_array 
+
+		# Upvoted
+		if request.user.is_authenticated():
+			user = User_Profile.objects.get(user=request.user)
+			item['upvoted'] = Upvote_Rel.objects.filter(user_profile=user,question=q).count()
+		feed_items.append(item)
 
 	return_object['feed_items'] = json.dumps(feed_items)
 	return_object['status'] = 1
 	return_object['state'] = state
 
+	# Pagination values
+	return_object['current_page'] = current_page
+	return_object['page_number'] = current_page + 1
+	return_object['back_page'] = current_page-1
+	return_object['next_page'] = 1
+	if current_page == 0:
+		return_object['back_exists'] = False
+	else:
+		return_object['back_exists'] = True
+
 	return HttpResponse(json.dumps(return_object))
 
+def update_member_profile(request):
+	return_object = {}
+
+	five_words = request.POST.get('five_words', None)
+	bio = request.POST.get('bio', None)
+
+	# Validate logged in
+	if not request.user.is_authenticated():
+		return_object['status'] = 0
+		return_object['error'] = 0 # Not logged in
+		return HttpResponse(json.dumps(return_object))
+
+	member_profile = User_Profile.objects.get(user=request.user).member_profile
+	if five_words:
+		member_profile.five_words = five_words
+	if bio:
+		member_profile.bio = bio
+	member_profile.save()
+
+	return_object['status'] = 1
+	return HttpResponse(json.dumps(return_object)) 
+
+def forgot_password(request):
+	email = request.POST.get('email', None)
+
+	return_object = {}
+
+	# Get user
+	try:
+		user = User.objects.get(email=email)
+	except User.DoesNotExist:
+		# No user with given email exists
+		return_object['email'] = email
+		return_object['status'] = 0
+		return_object['error'] = 0
+		return HttpResponse(json.dumps(return_object))
+
+	# Generate random temporary password
+	random = id_generator()
+
+	# Change to temporary password
+	user.set_password(random)
+	user.save()
+
+	user_profile = User_Profile.objects.get(user=user)
+	user_profile.needs_to_update_password = True
+	user_profile.save()
+
+	sg = sendgrid.SendGridClient('benhsu75', 'nutriosity')
+
+	message = sendgrid.Mail()
+
+	message.add_to(user.first_name + " " + user.last_name + " <" + email + ">" )
+	message.set_subject('Nutriosity - Forgot Password')
+	html = 'Hi ' + user.first_name + ',<br>' \
+	'<br>' \
+	'Your temporary password is: <b>' + random + '</b>. Please login with it and then you will be prompted to change your password <a href="http://www.nutriosity.com/sign_in/">here</a>! <br>' \
+	'<br>' \
+	'Sincerely, <br>' \
+	'Team Nutriosity';
+
+	message.set_html(html)
+	message.set_from('Team Nutriosity <nutriosity@gmail.com>')
+	status, msg = sg.send(message)
+
+	return_object['status'] = 1
+	return_object['random'] = random
+	return HttpResponse(json.dumps(return_object)) 
+
+def update_expert_profile(request):
+	return_object = {}
+
+	accreditations = json.loads(request.POST.get('accreditations', None))
+	title = request.POST.get('title', None)
+	organization = request.POST.get('organization', None)
+	url = request.POST.get('url', None)
+	bio = request.POST.get('bio', None)
+	expertises = json.loads(request.POST.get('expertises', None))
+
+	# Validate logged in
+	if not request.user.is_authenticated():
+		return_object['status'] = 0
+		return_object['error'] = 0 # Not logged in
+		return HttpResponse(json.dumps(return_object))
+
+	expert_profile = User_Profile.objects.get(user=request.user).expert_profile
+
+	expert_profile.title = title
+	expert_profile.organization = organization
+	if url and url != "":
+		try:
+			url.index('//')
+		except:
+			url = 'http://' + url
+		expert_profile.website = url
+	expert_profile.bio = bio
+	expert_profile.save()
+
+	# Validate that accreditations are correct, add any if needed
+	for a in Expert_Profile_Accreditation_Rel.objects.filter(expert_profile=expert_profile):
+		temp_accred = a.accreditation
+		a.delete()
+		if len(Expert_Profile_Accreditation_Rel.objects.filter(accreditation=temp_accred)) == 0:
+			temp_accred.delete()
+	for a in accreditations:
+		accreditation = None
+		if len(Accreditation.objects.filter(name=a)) > 0:
+			accreditation = Accreditation.objects.get(name=a)
+		else:
+			accreditation = Accreditation(name=a)
+			accreditation.save()
+		rel = Expert_Profile_Accreditation_Rel(expert_profile=expert_profile, accreditation=accreditation)
+		rel.save()
+
+
+	# Validate that areas of expertise are right, and ditto
+	for e in Expert_Profile_Expertise_Rel.objects.filter(expert_profile=expert_profile):
+		temp_expertise = e.area_of_expertise
+		e.delete()
+		if len(Expert_Profile_Expertise_Rel.objects.filter(area_of_expertise=temp_expertise)) == 0:
+			temp_expertise.delete()
+	for e in expertises:
+		expertise = None
+		if len(Area_Of_Expertise.objects.filter(name=e)) > 0:
+			expertise = Area_Of_Expertise.objects.get(name=e)
+		else:
+			expertise = Area_Of_Expertise(name=e)
+			expertise.save()
+		rel = Expert_Profile_Expertise_Rel(expert_profile=expert_profile, area_of_expertise=expertise)
+		rel.save()
+
+	return_object['status'] = 1
+	return HttpResponse(json.dumps(return_object)) 
 
 # Helper method for uploading photo
 def handle_uploaded_file(f, new_filepath):

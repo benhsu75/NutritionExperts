@@ -31,6 +31,16 @@
 	<div class="n-header">
 		<div class="right-header-container">
 			<a class="logo" href="/">Nutriosity</a>
+			<div class="n-wrapper" style="display:block;">
+				<div class="right-header">
+					{% if user.is_authenticated %}
+					<div class="n-nav-item"><a href="/feed/">Home</a></div>
+					{% else %}
+					<div class="n-nav-item"><a href="/sign_up/">Sign Up</a></div>
+					<!-- <div class="n-nav-item"><a href="/sign_in/">Sign In</a></div> -->
+					{% endif %}
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="alert-bar red" style="display: none;">
@@ -88,8 +98,16 @@
 
 					</p>
 				</div>
+				<br>
+				<a class="go-to-profile-item" href="#">
+					<div class="center-wrapper">
+						<span>Go to profile</span>
+						<img src="{% static 'mainapp/images/blue-chevron.png' %}">
+					</div>
+				</a>
+				
 			</div>
-		
+			
 	</div>
 	
 </body>

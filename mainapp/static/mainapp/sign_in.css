@@ -19,16 +19,26 @@ body {
 	cursor: default;
 }
 
+.form-container {
+	position: relative;
+}
+
 .login-box {
+	font-family: OpenSans;
 	width: 500px;
 	text-align: center;
 	margin: 40px auto;
 
 	position: absolute;
-	top: 40%;
+	top: 30%;
 	left: 50%;
 	transform: translate(-50%,-50%);
 	-webkit-transform: translate(-50%,-50%);
+}
+
+.login-form {
+	position: absolute;
+	left: 50px;
 }
 
 .login-form > .text-field {
@@ -84,7 +94,47 @@ body {
 	transform: translateX(-50%);
 }
 
+.alert-bar.green {
+	border: 2px solid #d6e9c6;
+	background-color: #dff0d8;
+	color: #468847;
+}
 
+.above-form-area {
+	text-align: right;
+	width: 391px;
+	margin: 0 auto;
+}
+
+.above-form-area  > .forgot-password {
+	color: white;
+	/*text-decoration: none;*/
+}
+
+.above-form-area  > .forgot-password:hover {
+	opacity: .5;
+}
+
+.above-forgot-password-area {
+	text-align: left;
+	width: 391px;
+	margin: 0 auto;
+}
+
+.above-forgot-password-area > .back {
+	color: white;
+	/*text-decoration: none;*/
+}
+
+.above-forgot-password-area > .back:hover {
+	opacity: .5;
+}
+
+.forgot-password-info-text {
+	text-align: left;
+	color: white;
+	display: block;
+}
 
 /* FONTS */
 @font-face {

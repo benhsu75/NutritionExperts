@@ -36,6 +36,9 @@
 			return output;
 		}
 		$(document).ready(function() {
+			/* Make sure title text field is focused */
+			$('.title-text-area').focus();
+
 			$('#summernote').summernote({
 				height: 250,
 				minHeight: 250,             // set minimum height of editor
