@@ -708,6 +708,8 @@ a.logo:hover {
 	padding-right: 30px;
 	font-size: 18px;
 	cursor: pointer;
+	text-decoration: none;
+	color: black;
 }
 
 .notification-box {

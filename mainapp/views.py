@@ -28,6 +28,15 @@ def prepare_context(request):
 		context['first_name'] = request.user.first_name
 		context['my_last_name'] = request.user.last_name
 
+		if profile.is_expert:
+			accreditation_string = ""
+			accreditation_rels = Expert_Profile_Accreditation_Rel.objects.filter(expert_profile=profile.expert_profile)
+			for r in accreditation_rels:
+				accreditation_string += r.accreditation.name + ", "
+			go_till_index = 0
+			if len(accreditation_rels) > 0:
+				go_till_index = len(accreditation_string)-2
+			context['my_accreditations'] = accreditation_string[:go_till_index]
 
 		# Pass User Profile object
 		context['my_user_profile'] = profile
@@ -168,7 +177,7 @@ def feed(request, state=0, current_page=0):
 	feed_items = []
 
 	# Paginate
-	if state == 0:
+	if int(state) == 0:
 		page = Question.popularity_sorted.all()
 	else:
 		page = Question.recent_sorted.all()
@@ -183,7 +192,11 @@ def feed(request, state=0, current_page=0):
 		context['next_exists'] = False
 	else:
 		context['next_exists'] = True
+
 	page = page[start_index:end_index]
+
+	if len(page) == 0 and current_page != 0:
+		return HttpResponseRedirect('/feed/');
 
 	for q in page:
 		item = {}
@@ -366,6 +379,18 @@ def discussion(request, pk):
 			answer_object = {}
 
 			answer_object['object'] = a
+
+			answer_expert_profile = a.answered_by_user.expert_profile
+
+			accreditation_string = ""
+			accreditation_rels = Expert_Profile_Accreditation_Rel.objects.filter(expert_profile=answer_expert_profile)
+			for r in accreditation_rels:
+				accreditation_string += r.accreditation.name + ", "
+			go_till_index = 0
+			if len(accreditation_rels) > 0:
+				go_till_index = len(accreditation_string)-2
+
+			answer_object['accreditation'] = accreditation_string[:go_till_index]
 
 			comments_array = []
 			comments = Comment.objects.filter(answer=a)

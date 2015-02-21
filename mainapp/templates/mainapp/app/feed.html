@@ -158,17 +158,17 @@
 		/* Get profile picture */
 		var profile_picture = "{{ profile_picture }}";
 
-		$('.filter-type').click(function() {
-			if(!$(this).hasClass('selected')) {
-				/* Make bold */
-				$('.filter-type').removeClass('selected');
-				$(this).addClass('selected');
+		// $('.filter-type').click(function() {
+		// 	if(!$(this).hasClass('selected')) {
+		// 		/* Make bold */
+		// 		$('.filter-type').removeClass('selected');
+		// 		$(this).addClass('selected');
 
-				/* Reload page */
-				// toggleFeed($(this).data('state'));
-				window.location.href = "/feed/"+$(this).data('state')+"/0/";
-			}
-		});
+		// 		/* Reload page */
+		// 		// toggleFeed($(this).data('state'));
+		// 		window.location.href = "/feed/"+$(this).data('state')+"/0/";
+		// 	}
+		// });
 
 		var profile_path = '{% static "mainapp/images/profile_pictures/" %}';
 
@@ -241,8 +241,8 @@
 		<span style="font-family: OpenSans-Semibold;">Nutriosity is current in early alpha, but here's a sneak preview. Please give us your comments <a href="mailto:nutriosity@gmail.com" target="_blank" style="text-decoration: none; color: #3C8A96;">here</a>!</span>
 	</div>
 	<div class="filter-selector">
-		<span class="filter-type" data-state="0">Popular</span>
-		<span class="filter-type" data-state="1">Recent</span>
+		<a class="filter-type" data-state="0" href="/feed/0/0/">Popular</a>
+		<a class="filter-type" data-state="1" href="/feed/1/0/">Recent</a>
 	</div>
 	<div class="content-feed">
 		<!-- <div class="feed-item">
@@ -370,10 +370,10 @@
 			<a href="/feed/{{state}}/{{back_page}}/">Back</a>
 		</div>
 		{% else %}
-<!-- 		<div class="inactive-pagination-item" style="text-align: left; opacity: .3;">
-			<img src="{% static 'mainapp/images/black-chevron-left.png' %}">
-			<a href="#" onclick="return false;">Back</a>
-		</div> -->
+		<div class="inactive-pagination-item" style="text-align: left; opacity: .3;">
+			<!-- <img src="{% static 'mainapp/images/black-chevron-left.png' %}">
+			<a href="#" onclick="return false;">Back</a> -->
+		</div>
 		{% endif %}
 		<div class="pagination-current-item">
 			Page {{page_number}}
@@ -384,10 +384,10 @@
 			<img src="{% static 'mainapp/images/black-chevron.png' %}">
 		</div>
 		{% else %}
-		<!-- <div class="inactive-pagination-item" style="text-align: right; opacity: .3">
-			<a href="#" onclick="return false;">Next</a>
-			<img src="{% static 'mainapp/images/black-chevron.png' %}">
-		</div> -->
+		<div class="inactive-pagination-item" style="text-align: right; opacity: .3">
+			<!-- <a href="#" onclick="return false;">Next</a>
+			<img src="{% static 'mainapp/images/black-chevron.png' %}"> -->
+		</div>
 		{% endif %}
 	</div>
 

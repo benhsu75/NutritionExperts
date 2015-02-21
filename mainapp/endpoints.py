@@ -70,6 +70,7 @@ def expert_interest_signup(request):
 	return HttpResponse(json.dumps(return_object))
 
 # Sign's up a new user
+@csrf_exempt
 def sign_up_user(request):
 	first_name = request.POST.get('first_name', None)
 	last_name = request.POST.get('last_name', None)
@@ -140,6 +141,7 @@ def sign_up_user(request):
 	
 	return HttpResponse(json.dumps(return_object))
 
+@csrf_exempt
 def authenticate_signin(request):
 	email = request.POST.get('email', None)
 	password = request.POST.get('password', None)

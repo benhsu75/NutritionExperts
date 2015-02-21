@@ -359,7 +359,7 @@
 					<div class="expert-top-profile">
 						<div class="expert-image-wrapper"><img src="{% static 'mainapp/images/profile_pictures/' %}{{ my_user_profile.expert_profile.image_path }}"></div><div class="expert-right-info">
 							<span class="expert-name">{{ my_user_profile.user.first_name }} {{ my_user_profile.user.last_name }}</span>
-							<span class="expert-accreditation">PhD</span>
+							<span class="expert-accreditation">{{my_accreditations}}</span>
 							<img src="{% static 'mainapp/images/expert_badge.png' %}">
 						</div>
 					</div>
@@ -390,7 +390,7 @@
 				<div class="expert-top-profile">
 					<div class="expert-image-wrapper"><img src="{% static 'mainapp/images/profile_pictures/' %}{{ answer.object.answered_by_user.expert_profile.image_path | safe }}"></div><div class="expert-right-info">
 						<span class="expert-name">{{ answer.object.answered_by_user.user.first_name | safe }} {{ answer.object.answered_by_user.user.last_name | safe }}</span>
-						<span class="expert-accreditation">PhD</span>
+						<span class="expert-accreditation">{{answer.accreditation}}</span>
 						<img src="{% static 'mainapp/images/expert_badge.png' %}">
 					</div>
 				</div>

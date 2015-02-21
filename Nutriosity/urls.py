@@ -14,7 +14,7 @@ urlpatterns = patterns('',
     url(r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': '/static/images/favicon.ico'}),
 
     # About pages
-    url(r'^$', views.landing, name="landing"),
+    url(r'^$', views.feed, name="feed"),
     url(r'^landing/', views.landing, name="landing"),
     url(r'^about/', views.about, name="about"),
     url(r'^mission/', views.mission2, name="mission"),
