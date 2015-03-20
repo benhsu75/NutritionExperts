@@ -1,0 +1,30 @@
+.arabic-text {
+	width:600px;
+	margin: 0 auto;
+	line-height: 30px;
+	font-size: 20px;
+	margin-top: 100px;
+	min-height: 100px;
+	border-radius: 2px;
+	padding: 10px 10px 10px 10px;
+	border: 1px solid black;
+	text-align: right;
+}
+
+.ind-word {
+	display: inline-block;
+	padding: 0 2px 0 2px;
+}
+
+.ind-word:hover {
+	color: #D89D12;
+	cursor: pointer;
+
+}
+
+#tooltip-span {
+	position: absolute;
+	background: white;
+	padding: 3px 8px 3px 8px;
+	border: 1px solid gray;
+}

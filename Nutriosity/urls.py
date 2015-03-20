@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^privacy/', views.privacy, name="privacy"),
     url(r'^disclaimer/', views.disclaimer, name="disclaimer"),
     url(r'^expert_contact/', views.expert_contact, name="expert_contact"),
+    url(r'^arabic/', views.arabic, name="arabic"),
 
     # App pages
     url(r'^sign_in/', views.sign_in, name="sign_in"),
@@ -63,5 +64,6 @@ urlpatterns = patterns('',
     url(r'^api/get_feed_items/', endpoints.get_feed_items, name="get_feed_items"),
     url(r'^api/get_scores/', endpoints.get_scores, name="get_scores"),
     url(r'^api/forgot_password/', endpoints.forgot_password, name="forgot_password"),
+    url(r'^api/translate/', endpoints.translate, name="translate"),
 
 )

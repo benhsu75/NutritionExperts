@@ -538,6 +538,11 @@ def user_update(request):
 	else:
 		return HttpResponseRedirect('/feed/')
 
+def arabic(request):
+	template = loader.get_template('mainapp/app/arabic.html')
+	context = prepare_context(request)
+	return HttpResponse(template.render(context))
+
 
 
 

@@ -16,6 +16,9 @@ import string
 import random
 import sendgrid
 
+import goslate
+
+
 # Error codes
 # 0 - Not a valid email
 # 1 - Email already signed up
@@ -876,6 +879,27 @@ def handle_uploaded_file(f, new_filepath):
     with open(new_filepath, 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
+
+def translate(request):
+	english_phrase = request.POST.get('text', None)
+	gs = goslate.Goslate()
+	# arabic_translation = gs.translate(english_phrase, 'en')
+
+
+	# Split words and populate dictionary
+	dictionary = {}
+	words = english_phrase.split()
+	for w in words:
+		translated_word = gs.translate(w, 'en')
+		dictionary[w] = translated_word
+
+	return_object = {}
+	return_object['status'] = 1
+	return_object['dictionary'] = json.dumps(dictionary)
+
+	return HttpResponse(json.dumps(return_object)) 
+
+
 
 
 

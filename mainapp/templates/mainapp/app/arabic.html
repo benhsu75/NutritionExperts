@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Translator</title>
+	{% load staticfiles %}
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type="text/javascript" src="{% static 'mainapp/jquery.lettering.js' %}"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script type="text/javascript" src="{% static 'mainapp/js/helper.js' %}"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'mainapp/arabic.css' %}">
+
+	<!-- Javascript -->
+	<script type="text/javascript">
+		var dictionary = {};
+
+		$(document).ready(function() {
+			
+		});
+	</script>
+</head>
+<body>
+	<textarea>
+		
+	</textarea>
+	<button>Translate</button>
+
+	<div class="arabic-text" dir="rtl"></div>
+	<span id="tooltip-span" style="opacity:0;">
+        Hello
+    </span>
+
+</body>
+<script type="text/javascript">
+	$('button').click(function() {
+		console.log('value: ');
+		console.log($('textarea').val());
+
+		// Set arabic text
+		
+		var text = $('textarea').val();
+		$('.arabic-text').html("");
+		var split_text = text.split(" ");
+		for(var i in split_text) {
+			var span_element = '<span class="ind-word">'+split_text[i]+'</span>';
+			$('.arabic-text').append(span_element);
+		}
+
+		$('.ind-word').hover(function(e) {
+			var word = $(this).text();
+			if(word in dictionary) {
+				var translation = dictionary[word];
+				$('#tooltip-span').text(translation);
+				$('#tooltip-span').css('top', ($(this).offset().top-25) + 'px');
+    			$('#tooltip-span').css('left', $(this).offset().left + 'px');
+				$('#tooltip-span').css('opacity', 1);
+
+			}
+		}, function() {
+			$('#tooltip-span').css('opacity', 0);
+		});
+
+		// Translate
+		HELPER.post("/api/translate/", {'text': text}, function(data) {
+
+			var returnData = JSON.parse(data);
+
+			if(returnData.status == 1) { // Success
+				dictionary = JSON.parse(returnData.dictionary);
+				console.log(dictionary);
+
+				// $('body').append(returnData.translation);
+			}
+			else { // Failure
+				console.log('error');
+			}
+
+		}, function(data) {
+
+		});
+	});
+
+</script>
+	
+</html>
